@@ -1,0 +1,12 @@
+emergency_id,country,emergency
+mex_migration,Mexico,Migration flows
+gtm_eta,Guatemala,Eta-Iota
+gtm_migration,Guatemala,Migration flows
+hnd_eta,Honduras,Eta-Iota
+hnd_migration,Honduras,Migration flows
+nic_eta,Nicaragua,Eta-Iota
+nic_migration,Nicaragua,Migration flows
+pan_migration,Panama,Migration flows
+col_migration,Colombia,Migration flows
+per_migration,Peru,Migration flows
+bol_migration,Bolivia,Migration flows
