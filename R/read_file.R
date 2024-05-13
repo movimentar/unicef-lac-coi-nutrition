@@ -2,7 +2,7 @@
 read_file <- function(file) {
   if (file == "raw_data/intervention_list.csv") {
     read_csv(file,
-             col_types = list(intervention_id = col_factor())) %>%
+             col_types = list(intervention_id = readr::col_factor())) %>%
       return()
   } else{
     read_csv(file) %>%
