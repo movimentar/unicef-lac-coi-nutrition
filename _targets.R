@@ -125,5 +125,9 @@ list(
              calculate_curative_rates(coi_df)
   ),
   tar_target(coverage_costs,
-             calc_coverage_costs(coi_df, curative_rates))
+             calc_coverage_costs(coi_df, curative_rates)
+             ),
+  tar_target(list_input, 
+             build_list_input(coverage_costs, intervention_list)
+             )
 )
