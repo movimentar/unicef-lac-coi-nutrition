@@ -3,7 +3,8 @@
 # df is added and then the df is filtered to retain interventions in LiST only.
 build_list_input <- function(coverage_costs, intervention_list){
   coverage_costs %>% 
-    left_join(select(intervention_list, intervention_id, list_name), by = "intervention_id") %>% 
+    left_join(select(intervention_list, intervention_id, list_name, in_list), by = "intervention_id") %>% 
+    filter(in_list == TRUE) %>% 
     select(emergency, country, intervention_name, coverage, list_name) %>%
     filter(!is.na(list_name)) %>% 
     mutate(coverage = coverage * 100) %>% 
