@@ -6,6 +6,9 @@ build_list_input <- function(coverage_costs, intervention_list){
     left_join(select(intervention_list, intervention_id, list_name), by = "intervention_id") %>% 
     select(emergency, country, intervention_name, coverage, list_name) %>%
     filter(!is.na(list_name)) %>% 
+    mutate(coverage = coverage * 100) %>% 
+    filter(!is.na(coverage)) %>% 
+    relocate(target_group, .after = country) %>% 
     return()
 }
 
