@@ -9,7 +9,7 @@ library(targets)
 
 # Set target options:
 tar_option_set(
-  packages = c("tidyverse", "scales", "wpp2022") # Packages that your targets need for their tasks.
+  packages = c("tidyverse", "scales", "wpp2022", "gt") # Packages that your targets need for their tasks.
   # format = "qs", # Optionally set the default storage format. qs is fast.
   #
   # Pipelines that take a long time to run may benefit from
@@ -129,5 +129,8 @@ list(
              ),
   tar_target(list_input, 
              build_list_input(coverage_costs, intervention_list)
+             ),
+  tar_target(list_input_gt,
+             present_list_input(list_input)
              )
 )
