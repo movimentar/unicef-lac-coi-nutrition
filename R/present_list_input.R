@@ -6,6 +6,7 @@ present_list_input <- function(list_input){
     ungroup() %>% 
     # create gt object
     gt() %>% 
+    tab_header(title = "Input coverages used in LiST") %>% 
     cols_hide(intervention_id) %>% 
     cols_label( # rename colums
       emergency = "Emergency",
