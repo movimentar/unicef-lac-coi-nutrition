@@ -1,0 +1,385 @@
+country,emergency,coverage_type,baseline_multiplier,indicator_category,indicator,indicator_name,baseline_value,after_delivery_value,model_name
+Guatemala,Eta-Iota,0,1,mortality_rates,maternal_rate,"Maternal mortality rate (deaths per 100,000 women aged 15-49)",7.61,7.49,Guatemala_Eta-Iota
+Guatemala,Eta-Iota,0,1,mortality_rates,neonatal_rate,"Neonatal mortality rate (deaths per 1,000 live births)",11.19,11.19,Guatemala_Eta-Iota
+Guatemala,Eta-Iota,0,1,mortality_rates,u5_rate,"Under five mortality rate (deaths per 1,000 live births)",23.8,23.77,Guatemala_Eta-Iota
+Guatemala,Eta-Iota,0,1,mortality_rates,stillbirth_rate,"Stillbirth rate (stillbirths per 1,000 total births (live and stillbirths))",13.64,13.64,Guatemala_Eta-Iota
+Guatemala,Eta-Iota,0,1,absolute_deaths,maternal_deaths,Maternal deaths,359,360,Guatemala_Eta-Iota
+Guatemala,Eta-Iota,0,1,absolute_deaths,neonatal_deaths,Neonatal deaths,4230,4244,Guatemala_Eta-Iota
+Guatemala,Eta-Iota,0,1,absolute_deaths,u5_deaths,Child deaths (Total (0-59 months)),9129,9047,Guatemala_Eta-Iota
+Guatemala,Eta-Iota,0,1,absolute_deaths,stillbirths,Stillbirths,5153,5171,Guatemala_Eta-Iota
+Guatemala,Eta-Iota,0,1,nutrition,stunting_rate,Global stunting (<-2 SD) rate,47,47,Guatemala_Eta-Iota
+Guatemala,Eta-Iota,0,1,nutrition,wasting_rate,Global wasting (<-2 SD) rate,0.75,0.75,Guatemala_Eta-Iota
+Guatemala,Eta-Iota,0,1,breastfeeding,exclusive_breastfeeding_rate,Percent of children (<6 mo) exclusively breastfed,53.96,53.96,Guatemala_Eta-Iota
+Guatemala,Eta-Iota,0,1,breastfeeding,breastfeeding_initiation_rate,Prevalence of early initiation of breastfeeding,63.13,63.13,Guatemala_Eta-Iota
+Guatemala,Eta-Iota,0,1,anemia,pregnant_anemia,Percent of women with anemia - Pregnant women with anemia,25,25,Guatemala_Eta-Iota
+Guatemala,Eta-Iota,0,1,anemia,pregnant_iron_def,Percent of women with anemia - Pregnant women with iron-deficiency anemia,13.767,13.767,Guatemala_Eta-Iota
+Guatemala,Eta-Iota,0,1,anemia,women_anemia,Percent of women with anemia - Women of reproductive age with anemia,16.629,16.617,Guatemala_Eta-Iota
+Guatemala,Eta-Iota,0,1,anemia,women_iron_def,Percent of women with anemia - Women of reproductive age with iron-deficiency anemia,8.012,8.004,Guatemala_Eta-Iota
+Guatemala,Eta-Iota,30,1,mortality_rates,maternal_rate,"Maternal mortality rate (deaths per 100,000 women aged 15-49)",7.61,7.48,Guatemala_Eta-Iota
+Guatemala,Eta-Iota,30,1,mortality_rates,neonatal_rate,"Neonatal mortality rate (deaths per 1,000 live births)",11.19,10.9,Guatemala_Eta-Iota
+Guatemala,Eta-Iota,30,1,mortality_rates,u5_rate,"Under five mortality rate (deaths per 1,000 live births)",23.8,22.98,Guatemala_Eta-Iota
+Guatemala,Eta-Iota,30,1,mortality_rates,stillbirth_rate,"Stillbirth rate (stillbirths per 1,000 total births (live and stillbirths))",13.64,11.91,Guatemala_Eta-Iota
+Guatemala,Eta-Iota,30,1,absolute_deaths,maternal_deaths,Maternal deaths,359,360,Guatemala_Eta-Iota
+Guatemala,Eta-Iota,30,1,absolute_deaths,neonatal_deaths,Neonatal deaths,4230,4131,Guatemala_Eta-Iota
+Guatemala,Eta-Iota,30,1,absolute_deaths,u5_deaths,Child deaths (Total (0-59 months)),9129,8746,Guatemala_Eta-Iota
+Guatemala,Eta-Iota,30,1,absolute_deaths,stillbirths,Stillbirths,5153,4516,Guatemala_Eta-Iota
+Guatemala,Eta-Iota,30,1,nutrition,stunting_rate,Global stunting (<-2 SD) rate,46.78,46.09,Guatemala_Eta-Iota
+Guatemala,Eta-Iota,30,1,nutrition,wasting_rate,Global wasting (<-2 SD) rate,0.75,0.58,Guatemala_Eta-Iota
+Guatemala,Eta-Iota,30,1,breastfeeding,exclusive_breastfeeding_rate,Percent of children (<6 mo) exclusively breastfed,53.96,63.8,Guatemala_Eta-Iota
+Guatemala,Eta-Iota,30,1,breastfeeding,breastfeeding_initiation_rate,Prevalence of early initiation of breastfeeding,63.13,71.03,Guatemala_Eta-Iota
+Guatemala,Eta-Iota,30,1,anemia,pregnant_anemia,Percent of women with anemia - Pregnant women with anemia,25,20.471,Guatemala_Eta-Iota
+Guatemala,Eta-Iota,30,1,anemia,pregnant_iron_def,Percent of women with anemia - Pregnant women with iron-deficiency anemia,13.767,11.273,Guatemala_Eta-Iota
+Guatemala,Eta-Iota,30,1,anemia,women_anemia,Percent of women with anemia - Women of reproductive age with anemia,16.629,14.914,Guatemala_Eta-Iota
+Guatemala,Eta-Iota,30,1,anemia,women_iron_def,Percent of women with anemia - Women of reproductive age with iron-deficiency anemia,8.012,7.171,Guatemala_Eta-Iota
+Guatemala,Eta-Iota,95,1,mortality_rates,maternal_rate,"Maternal mortality rate (deaths per 100,000 women aged 15-49)",7.61,7.46,Guatemala_Eta-Iota
+Guatemala,Eta-Iota,95,1,mortality_rates,neonatal_rate,"Neonatal mortality rate (deaths per 1,000 live births)",11.19,10.28,Guatemala_Eta-Iota
+Guatemala,Eta-Iota,95,1,mortality_rates,u5_rate,"Under five mortality rate (deaths per 1,000 live births)",23.8,21.37,Guatemala_Eta-Iota
+Guatemala,Eta-Iota,95,1,mortality_rates,stillbirth_rate,"Stillbirth rate (stillbirths per 1,000 total births (live and stillbirths))",13.64,8.43,Guatemala_Eta-Iota
+Guatemala,Eta-Iota,95,1,absolute_deaths,maternal_deaths,Maternal deaths,359,359,Guatemala_Eta-Iota
+Guatemala,Eta-Iota,95,1,absolute_deaths,neonatal_deaths,Neonatal deaths,4230,3899,Guatemala_Eta-Iota
+Guatemala,Eta-Iota,95,1,absolute_deaths,u5_deaths,Child deaths (Total (0-59 months)),9129,8130,Guatemala_Eta-Iota
+Guatemala,Eta-Iota,95,1,absolute_deaths,stillbirths,Stillbirths,5153,3195,Guatemala_Eta-Iota
+Guatemala,Eta-Iota,95,1,nutrition,stunting_rate,Global stunting (<-2 SD) rate,46.78,44.8,Guatemala_Eta-Iota
+Guatemala,Eta-Iota,95,1,nutrition,wasting_rate,Global wasting (<-2 SD) rate,0.75,0.25,Guatemala_Eta-Iota
+Guatemala,Eta-Iota,95,1,breastfeeding,exclusive_breastfeeding_rate,Percent of children (<6 mo) exclusively breastfed,53.96,85.13,Guatemala_Eta-Iota
+Guatemala,Eta-Iota,95,1,breastfeeding,breastfeeding_initiation_rate,Prevalence of early initiation of breastfeeding,63.13,88.15,Guatemala_Eta-Iota
+Guatemala,Eta-Iota,95,1,anemia,pregnant_anemia,Percent of women with anemia - Pregnant women with anemia,25,10.657,Guatemala_Eta-Iota
+Guatemala,Eta-Iota,95,1,anemia,pregnant_iron_def,Percent of women with anemia - Pregnant women with iron-deficiency anemia,13.767,5.869,Guatemala_Eta-Iota
+Guatemala,Eta-Iota,95,1,anemia,women_anemia,Percent of women with anemia - Women of reproductive age with anemia,16.629,11.223,Guatemala_Eta-Iota
+Guatemala,Eta-Iota,95,1,anemia,women_iron_def,Percent of women with anemia - Women of reproductive age with iron-deficiency anemia,8.012,5.367,Guatemala_Eta-Iota
+Guatemala,Eta-Iota,implemented,1,mortality_rates,maternal_rate,"Maternal mortality rate (deaths per 100,000 women aged 15-49)",7.61,7.49,Guatemala_Eta-Iota
+Guatemala,Eta-Iota,implemented,1,mortality_rates,neonatal_rate,"Neonatal mortality rate (deaths per 1,000 live births)",11.19,11.16,Guatemala_Eta-Iota
+Guatemala,Eta-Iota,implemented,1,mortality_rates,u5_rate,"Under five mortality rate (deaths per 1,000 live births)",23.8,23.33,Guatemala_Eta-Iota
+Guatemala,Eta-Iota,implemented,1,mortality_rates,stillbirth_rate,"Stillbirth rate (stillbirths per 1,000 total births (live and stillbirths))",13.64,13.64,Guatemala_Eta-Iota
+Guatemala,Eta-Iota,implemented,1,absolute_deaths,maternal_deaths,Maternal deaths,359,360,Guatemala_Eta-Iota
+Guatemala,Eta-Iota,implemented,1,absolute_deaths,neonatal_deaths,Neonatal deaths,4230,4230,Guatemala_Eta-Iota
+Guatemala,Eta-Iota,implemented,1,absolute_deaths,u5_deaths,Child deaths (Total (0-59 months)),9129,8881,Guatemala_Eta-Iota
+Guatemala,Eta-Iota,implemented,1,absolute_deaths,stillbirths,Stillbirths,5153,5171,Guatemala_Eta-Iota
+Guatemala,Eta-Iota,implemented,1,nutrition,stunting_rate,Global stunting (<-2 SD) rate,46.78,46.23,Guatemala_Eta-Iota
+Guatemala,Eta-Iota,implemented,1,nutrition,wasting_rate,Global wasting (<-2 SD) rate,0.75,0.73,Guatemala_Eta-Iota
+Guatemala,Eta-Iota,implemented,1,breastfeeding,exclusive_breastfeeding_rate,Percent of children (<6 mo) exclusively breastfed,53.96,64.13,Guatemala_Eta-Iota
+Guatemala,Eta-Iota,implemented,1,breastfeeding,breastfeeding_initiation_rate,Prevalence of early initiation of breastfeeding,63.13,71.3,Guatemala_Eta-Iota
+Guatemala,Eta-Iota,implemented,1,anemia,pregnant_anemia,Percent of women with anemia - Pregnant women with anemia,25,25,Guatemala_Eta-Iota
+Guatemala,Eta-Iota,implemented,1,anemia,pregnant_iron_def,Percent of women with anemia - Pregnant women with iron-deficiency anemia,13.767,13.767,Guatemala_Eta-Iota
+Guatemala,Eta-Iota,implemented,1,anemia,women_anemia,Percent of women with anemia - Women of reproductive age with anemia,16.629,16.617,Guatemala_Eta-Iota
+Guatemala,Eta-Iota,implemented,1,anemia,women_iron_def,Percent of women with anemia - Women of reproductive age with iron-deficiency anemia,8.012,8.004,Guatemala_Eta-Iota
+Honduras,Eta-Iota,0,1,mortality_rates,maternal_rate,"Maternal mortality rate (deaths per 100,000 women aged 15-49)",4.99,4.92,Honduras_Eta-Iota
+Honduras,Eta-Iota,0,1,mortality_rates,neonatal_rate,"Neonatal mortality rate (deaths per 1,000 live births)",9.84,9.84,Honduras_Eta-Iota
+Honduras,Eta-Iota,0,1,mortality_rates,u5_rate,"Under five mortality rate (deaths per 1,000 live births)",17.14,17.14,Honduras_Eta-Iota
+Honduras,Eta-Iota,0,1,mortality_rates,stillbirth_rate,"Stillbirth rate (stillbirths per 1,000 total births (live and stillbirths))",8.37,8.37,Honduras_Eta-Iota
+Honduras,Eta-Iota,0,1,absolute_deaths,maternal_deaths,Maternal deaths,140,141,Honduras_Eta-Iota
+Honduras,Eta-Iota,0,1,absolute_deaths,neonatal_deaths,Neonatal deaths,2121,2133,Honduras_Eta-Iota
+Honduras,Eta-Iota,0,1,absolute_deaths,u5_deaths,Child deaths (Total (0-59 months)),3686,3706,Honduras_Eta-Iota
+Honduras,Eta-Iota,0,1,absolute_deaths,stillbirths,Stillbirths,1803,1813,Honduras_Eta-Iota
+Honduras,Eta-Iota,0,1,nutrition,stunting_rate,Global stunting (<-2 SD) rate,18.55,18.55,Honduras_Eta-Iota
+Honduras,Eta-Iota,0,1,nutrition,wasting_rate,Global wasting (<-2 SD) rate,1.9,1.9,Honduras_Eta-Iota
+Honduras,Eta-Iota,0,1,breastfeeding,exclusive_breastfeeding_rate,Percent of children (<6 mo) exclusively breastfed,29.1,29.1,Honduras_Eta-Iota
+Honduras,Eta-Iota,0,1,breastfeeding,breastfeeding_initiation_rate,Prevalence of early initiation of breastfeeding,51.37,51.37,Honduras_Eta-Iota
+Honduras,Eta-Iota,0,1,anemia,pregnant_anemia,Percent of women with anemia - Pregnant women with anemia,21.3,21.3,Honduras_Eta-Iota
+Honduras,Eta-Iota,0,1,anemia,pregnant_iron_def,Percent of women with anemia - Pregnant women with iron-deficiency anemia,13.37,13.37,Honduras_Eta-Iota
+Honduras,Eta-Iota,0,1,anemia,women_anemia,Percent of women with anemia - Women of reproductive age with anemia,17.884,17.88,Honduras_Eta-Iota
+Honduras,Eta-Iota,0,1,anemia,women_iron_def,Percent of women with anemia - Women of reproductive age with iron-deficiency anemia,9.905,9.902,Honduras_Eta-Iota
+Honduras,Eta-Iota,30,1,mortality_rates,maternal_rate,"Maternal mortality rate (deaths per 100,000 women aged 15-49)",4.99,4.92,Honduras_Eta-Iota
+Honduras,Eta-Iota,30,1,mortality_rates,neonatal_rate,"Neonatal mortality rate (deaths per 1,000 live births)",9.84,9.57,Honduras_Eta-Iota
+Honduras,Eta-Iota,30,1,mortality_rates,u5_rate,"Under five mortality rate (deaths per 1,000 live births)",17.14,16.56,Honduras_Eta-Iota
+Honduras,Eta-Iota,30,1,mortality_rates,stillbirth_rate,"Stillbirth rate (stillbirths per 1,000 total births (live and stillbirths))",8.37,7.39,Honduras_Eta-Iota
+Honduras,Eta-Iota,30,1,absolute_deaths,maternal_deaths,Maternal deaths,140,141,Honduras_Eta-Iota
+Honduras,Eta-Iota,30,1,absolute_deaths,neonatal_deaths,Neonatal deaths,2121,2074,Honduras_Eta-Iota
+Honduras,Eta-Iota,30,1,absolute_deaths,u5_deaths,Child deaths (Total (0-59 months)),3686,3579,Honduras_Eta-Iota
+Honduras,Eta-Iota,30,1,absolute_deaths,stillbirths,Stillbirths,1803,1602,Honduras_Eta-Iota
+Honduras,Eta-Iota,30,1,nutrition,stunting_rate,Global stunting (<-2 SD) rate,18.55,18.23,Honduras_Eta-Iota
+Honduras,Eta-Iota,30,1,nutrition,wasting_rate,Global wasting (<-2 SD) rate,1.9,1.52,Honduras_Eta-Iota
+Honduras,Eta-Iota,30,1,breastfeeding,exclusive_breastfeeding_rate,Percent of children (<6 mo) exclusively breastfed,29.1,41.26,Honduras_Eta-Iota
+Honduras,Eta-Iota,30,1,breastfeeding,breastfeeding_initiation_rate,Prevalence of early initiation of breastfeeding,51.37,61.16,Honduras_Eta-Iota
+Honduras,Eta-Iota,30,1,anemia,pregnant_anemia,Percent of women with anemia - Pregnant women with anemia,21.3,17.726,Honduras_Eta-Iota
+Honduras,Eta-Iota,30,1,anemia,pregnant_iron_def,Percent of women with anemia - Pregnant women with iron-deficiency anemia,13.37,11.126,Honduras_Eta-Iota
+Honduras,Eta-Iota,30,1,anemia,women_anemia,Percent of women with anemia - Women of reproductive age with anemia,17.884,16.224,Honduras_Eta-Iota
+Honduras,Eta-Iota,30,1,anemia,women_iron_def,Percent of women with anemia - Women of reproductive age with iron-deficiency anemia,9.905,8.975,Honduras_Eta-Iota
+Honduras,Eta-Iota,95,1,mortality_rates,maternal_rate,"Maternal mortality rate (deaths per 100,000 women aged 15-49)",4.99,4.92,Honduras_Eta-Iota
+Honduras,Eta-Iota,95,1,mortality_rates,neonatal_rate,"Neonatal mortality rate (deaths per 1,000 live births)",9.84,9.01,Honduras_Eta-Iota
+Honduras,Eta-Iota,95,1,mortality_rates,u5_rate,"Under five mortality rate (deaths per 1,000 live births)",17.14,15.38,Honduras_Eta-Iota
+Honduras,Eta-Iota,95,1,mortality_rates,stillbirth_rate,"Stillbirth rate (stillbirths per 1,000 total births (live and stillbirths))",8.37,5.43,Honduras_Eta-Iota
+Honduras,Eta-Iota,95,1,absolute_deaths,maternal_deaths,Maternal deaths,140,141,Honduras_Eta-Iota
+Honduras,Eta-Iota,95,1,absolute_deaths,neonatal_deaths,Neonatal deaths,2121,1953,Honduras_Eta-Iota
+Honduras,Eta-Iota,95,1,absolute_deaths,u5_deaths,Child deaths (Total (0-59 months)),3686,3323,Honduras_Eta-Iota
+Honduras,Eta-Iota,95,1,absolute_deaths,stillbirths,Stillbirths,1803,1177,Honduras_Eta-Iota
+Honduras,Eta-Iota,95,1,nutrition,stunting_rate,Global stunting (<-2 SD) rate,18.55,17.55,Honduras_Eta-Iota
+Honduras,Eta-Iota,95,1,nutrition,wasting_rate,Global wasting (<-2 SD) rate,1.9,0.75,Honduras_Eta-Iota
+Honduras,Eta-Iota,95,1,breastfeeding,exclusive_breastfeeding_rate,Percent of children (<6 mo) exclusively breastfed,29.1,67.6,Honduras_Eta-Iota
+Honduras,Eta-Iota,95,1,breastfeeding,breastfeeding_initiation_rate,Prevalence of early initiation of breastfeeding,51.37,82.35,Honduras_Eta-Iota
+Honduras,Eta-Iota,95,1,anemia,pregnant_anemia,Percent of women with anemia - Pregnant women with anemia,21.3,9.982,Honduras_Eta-Iota
+Honduras,Eta-Iota,95,1,anemia,pregnant_iron_def,Percent of women with anemia - Pregnant women with iron-deficiency anemia,13.37,6.266,Honduras_Eta-Iota
+Honduras,Eta-Iota,95,1,anemia,women_anemia,Percent of women with anemia - Women of reproductive age with anemia,17.884,12.637,Honduras_Eta-Iota
+Honduras,Eta-Iota,95,1,anemia,women_iron_def,Percent of women with anemia - Women of reproductive age with iron-deficiency anemia,9.905,6.967,Honduras_Eta-Iota
+Honduras,Eta-Iota,implemented,1,mortality_rates,maternal_rate,"Maternal mortality rate (deaths per 100,000 women aged 15-49)",4.99,4.92,Honduras_Eta-Iota
+Honduras,Eta-Iota,implemented,1,mortality_rates,neonatal_rate,"Neonatal mortality rate (deaths per 1,000 live births)",9.84,9.84,Honduras_Eta-Iota
+Honduras,Eta-Iota,implemented,1,mortality_rates,u5_rate,"Under five mortality rate (deaths per 1,000 live births)",17.14,17.07,Honduras_Eta-Iota
+Honduras,Eta-Iota,implemented,1,mortality_rates,stillbirth_rate,"Stillbirth rate (stillbirths per 1,000 total births (live and stillbirths))",8.37,8.37,Honduras_Eta-Iota
+Honduras,Eta-Iota,implemented,1,absolute_deaths,maternal_deaths,Maternal deaths,140,141,Honduras_Eta-Iota
+Honduras,Eta-Iota,implemented,1,absolute_deaths,neonatal_deaths,Neonatal deaths,2121,2131,Honduras_Eta-Iota
+Honduras,Eta-Iota,implemented,1,absolute_deaths,u5_deaths,Child deaths (Total (0-59 months)),3686,3690,Honduras_Eta-Iota
+Honduras,Eta-Iota,implemented,1,absolute_deaths,stillbirths,Stillbirths,1803,1813,Honduras_Eta-Iota
+Honduras,Eta-Iota,implemented,1,nutrition,stunting_rate,Global stunting (<-2 SD) rate,18.55,18.48,Honduras_Eta-Iota
+Honduras,Eta-Iota,implemented,1,nutrition,wasting_rate,Global wasting (<-2 SD) rate,1.9,1.89,Honduras_Eta-Iota
+Honduras,Eta-Iota,implemented,1,breastfeeding,exclusive_breastfeeding_rate,Percent of children (<6 mo) exclusively breastfed,29.1,32.75,Honduras_Eta-Iota
+Honduras,Eta-Iota,implemented,1,breastfeeding,breastfeeding_initiation_rate,Prevalence of early initiation of breastfeeding,51.37,54.31,Honduras_Eta-Iota
+Honduras,Eta-Iota,implemented,1,anemia,pregnant_anemia,Percent of women with anemia - Pregnant women with anemia,21.3,21.3,Honduras_Eta-Iota
+Honduras,Eta-Iota,implemented,1,anemia,pregnant_iron_def,Percent of women with anemia - Pregnant women with iron-deficiency anemia,13.37,13.37,Honduras_Eta-Iota
+Honduras,Eta-Iota,implemented,1,anemia,women_anemia,Percent of women with anemia - Women of reproductive age with anemia,17.884,17.88,Honduras_Eta-Iota
+Honduras,Eta-Iota,implemented,1,anemia,women_iron_def,Percent of women with anemia - Women of reproductive age with iron-deficiency anemia,9.905,9.902,Honduras_Eta-Iota
+Nicaragua,Eta-Iota,0,1,mortality_rates,maternal_rate,"Maternal mortality rate (deaths per 100,000 women aged 15-49)",7.35,7.26,Nicaragua_Eta-Iota
+Nicaragua,Eta-Iota,0,1,mortality_rates,neonatal_rate,"Neonatal mortality rate (deaths per 1,000 live births)",7.91,7.91,Nicaragua_Eta-Iota
+Nicaragua,Eta-Iota,0,1,mortality_rates,u5_rate,"Under five mortality rate (deaths per 1,000 live births)",14.03,14.07,Nicaragua_Eta-Iota
+Nicaragua,Eta-Iota,0,1,mortality_rates,stillbirth_rate,"Stillbirth rate (stillbirths per 1,000 total births (live and stillbirths))",10.04,10.04,Nicaragua_Eta-Iota
+Nicaragua,Eta-Iota,0,1,absolute_deaths,maternal_deaths,Maternal deaths,138,138,Nicaragua_Eta-Iota
+Nicaragua,Eta-Iota,0,1,absolute_deaths,neonatal_deaths,Neonatal deaths,1115,1114,Nicaragua_Eta-Iota
+Nicaragua,Eta-Iota,0,1,absolute_deaths,u5_deaths,Child deaths (Total (0-59 months)),1980,1981,Nicaragua_Eta-Iota
+Nicaragua,Eta-Iota,0,1,absolute_deaths,stillbirths,Stillbirths,1415,1415,Nicaragua_Eta-Iota
+Nicaragua,Eta-Iota,0,1,nutrition,stunting_rate,Global stunting (<-2 SD) rate,20.37,20.37,Nicaragua_Eta-Iota
+Nicaragua,Eta-Iota,0,1,nutrition,wasting_rate,Global wasting (<-2 SD) rate,1.44,1.44,Nicaragua_Eta-Iota
+Nicaragua,Eta-Iota,0,1,breastfeeding,exclusive_breastfeeding_rate,Percent of children (<6 mo) exclusively breastfed,30.67,30.67,Nicaragua_Eta-Iota
+Nicaragua,Eta-Iota,0,1,breastfeeding,breastfeeding_initiation_rate,Prevalence of early initiation of breastfeeding,0,0,Nicaragua_Eta-Iota
+Nicaragua,Eta-Iota,0,1,anemia,pregnant_anemia,Percent of women with anemia - Pregnant women with anemia,25.7,25.7,Nicaragua_Eta-Iota
+Nicaragua,Eta-Iota,0,1,anemia,pregnant_iron_def,Percent of women with anemia - Pregnant women with iron-deficiency anemia,12.935,12.935,Nicaragua_Eta-Iota
+Nicaragua,Eta-Iota,0,1,anemia,women_anemia,Percent of women with anemia - Women of reproductive age with anemia,16.635,16.625,Nicaragua_Eta-Iota
+Nicaragua,Eta-Iota,0,1,anemia,women_iron_def,Percent of women with anemia - Women of reproductive age with iron-deficiency anemia,9.49,9.486,Nicaragua_Eta-Iota
+Nicaragua,Eta-Iota,30,1,mortality_rates,maternal_rate,"Maternal mortality rate (deaths per 100,000 women aged 15-49)",7.35,7.25,Nicaragua_Eta-Iota
+Nicaragua,Eta-Iota,30,1,mortality_rates,neonatal_rate,"Neonatal mortality rate (deaths per 1,000 live births)",7.91,7.75,Nicaragua_Eta-Iota
+Nicaragua,Eta-Iota,30,1,mortality_rates,u5_rate,"Under five mortality rate (deaths per 1,000 live births)",14.03,13.71,Nicaragua_Eta-Iota
+Nicaragua,Eta-Iota,30,1,mortality_rates,stillbirth_rate,"Stillbirth rate (stillbirths per 1,000 total births (live and stillbirths))",10.04,9.71,Nicaragua_Eta-Iota
+Nicaragua,Eta-Iota,30,1,absolute_deaths,maternal_deaths,Maternal deaths,138,138,Nicaragua_Eta-Iota
+Nicaragua,Eta-Iota,30,1,absolute_deaths,neonatal_deaths,Neonatal deaths,1115,1091,Nicaragua_Eta-Iota
+Nicaragua,Eta-Iota,30,1,absolute_deaths,u5_deaths,Child deaths (Total (0-59 months)),1980,1931,Nicaragua_Eta-Iota
+Nicaragua,Eta-Iota,30,1,absolute_deaths,stillbirths,Stillbirths,1415,1368,Nicaragua_Eta-Iota
+Nicaragua,Eta-Iota,30,1,nutrition,stunting_rate,Global stunting (<-2 SD) rate,20.37,19.98,Nicaragua_Eta-Iota
+Nicaragua,Eta-Iota,30,1,nutrition,wasting_rate,Global wasting (<-2 SD) rate,1.44,1.17,Nicaragua_Eta-Iota
+Nicaragua,Eta-Iota,30,1,breastfeeding,exclusive_breastfeeding_rate,Percent of children (<6 mo) exclusively breastfed,30.67,38.09,Nicaragua_Eta-Iota
+Nicaragua,Eta-Iota,30,1,breastfeeding,breastfeeding_initiation_rate,Prevalence of early initiation of breastfeeding,63.75,67.49,Nicaragua_Eta-Iota
+Nicaragua,Eta-Iota,30,1,anemia,pregnant_anemia,Percent of women with anemia - Pregnant women with anemia,25.7,20.801,Nicaragua_Eta-Iota
+Nicaragua,Eta-Iota,30,1,anemia,pregnant_iron_def,Percent of women with anemia - Pregnant women with iron-deficiency anemia,12.935,10.47,Nicaragua_Eta-Iota
+Nicaragua,Eta-Iota,30,1,anemia,women_anemia,Percent of women with anemia - Women of reproductive age with anemia,16.635,14.839,Nicaragua_Eta-Iota
+Nicaragua,Eta-Iota,30,1,anemia,women_iron_def,Percent of women with anemia - Women of reproductive age with iron-deficiency anemia,9.49,8.479,Nicaragua_Eta-Iota
+Nicaragua,Eta-Iota,95,1,mortality_rates,maternal_rate,"Maternal mortality rate (deaths per 100,000 women aged 15-49)",7.35,7.24,Nicaragua_Eta-Iota
+Nicaragua,Eta-Iota,95,1,mortality_rates,neonatal_rate,"Neonatal mortality rate (deaths per 1,000 live births)",7.91,7.41,Nicaragua_Eta-Iota
+Nicaragua,Eta-Iota,95,1,mortality_rates,u5_rate,"Under five mortality rate (deaths per 1,000 live births)",14.03,12.98,Nicaragua_Eta-Iota
+Nicaragua,Eta-Iota,95,1,mortality_rates,stillbirth_rate,"Stillbirth rate (stillbirths per 1,000 total births (live and stillbirths))",10.04,9.01,Nicaragua_Eta-Iota
+Nicaragua,Eta-Iota,95,1,absolute_deaths,maternal_deaths,Maternal deaths,138,138,Nicaragua_Eta-Iota
+Nicaragua,Eta-Iota,95,1,absolute_deaths,neonatal_deaths,Neonatal deaths,1115,1043,Nicaragua_Eta-Iota
+Nicaragua,Eta-Iota,95,1,absolute_deaths,u5_deaths,Child deaths (Total (0-59 months)),1980,1827,Nicaragua_Eta-Iota
+Nicaragua,Eta-Iota,95,1,absolute_deaths,stillbirths,Stillbirths,1415,1268,Nicaragua_Eta-Iota
+Nicaragua,Eta-Iota,95,1,nutrition,stunting_rate,Global stunting (<-2 SD) rate,20.37,19.15,Nicaragua_Eta-Iota
+Nicaragua,Eta-Iota,95,1,nutrition,wasting_rate,Global wasting (<-2 SD) rate,1.44,0.62,Nicaragua_Eta-Iota
+Nicaragua,Eta-Iota,95,1,breastfeeding,exclusive_breastfeeding_rate,Percent of children (<6 mo) exclusively breastfed,30.67,54.16,Nicaragua_Eta-Iota
+Nicaragua,Eta-Iota,95,1,breastfeeding,breastfeeding_initiation_rate,Prevalence of early initiation of breastfeeding,63.75,75.58,Nicaragua_Eta-Iota
+Nicaragua,Eta-Iota,95,1,anemia,pregnant_anemia,Percent of women with anemia - Pregnant women with anemia,25.7,10.188,Nicaragua_Eta-Iota
+Nicaragua,Eta-Iota,95,1,anemia,pregnant_iron_def,Percent of women with anemia - Pregnant women with iron-deficiency anemia,12.935,5.128,Nicaragua_Eta-Iota
+Nicaragua,Eta-Iota,95,1,anemia,women_anemia,Percent of women with anemia - Women of reproductive age with anemia,16.635,10.967,Nicaragua_Eta-Iota
+Nicaragua,Eta-Iota,95,1,anemia,women_iron_def,Percent of women with anemia - Women of reproductive age with iron-deficiency anemia,9.49,6.296,Nicaragua_Eta-Iota
+Nicaragua,Eta-Iota,implemented,1,mortality_rates,maternal_rate,"Maternal mortality rate (deaths per 100,000 women aged 15-49)",7.35,7.25,Nicaragua_Eta-Iota
+Nicaragua,Eta-Iota,implemented,1,mortality_rates,neonatal_rate,"Neonatal mortality rate (deaths per 1,000 live births)",7.91,7.62,Nicaragua_Eta-Iota
+Nicaragua,Eta-Iota,implemented,1,mortality_rates,u5_rate,"Under five mortality rate (deaths per 1,000 live births)",14.03,13.62,Nicaragua_Eta-Iota
+Nicaragua,Eta-Iota,implemented,1,mortality_rates,stillbirth_rate,"Stillbirth rate (stillbirths per 1,000 total births (live and stillbirths))",10.04,9.52,Nicaragua_Eta-Iota
+Nicaragua,Eta-Iota,implemented,1,absolute_deaths,maternal_deaths,Maternal deaths,138,138,Nicaragua_Eta-Iota
+Nicaragua,Eta-Iota,implemented,1,absolute_deaths,neonatal_deaths,Neonatal deaths,1115,1074,Nicaragua_Eta-Iota
+Nicaragua,Eta-Iota,implemented,1,absolute_deaths,u5_deaths,Child deaths (Total (0-59 months)),1980,1919,Nicaragua_Eta-Iota
+Nicaragua,Eta-Iota,implemented,1,absolute_deaths,stillbirths,Stillbirths,1415,1341,Nicaragua_Eta-Iota
+Nicaragua,Eta-Iota,implemented,1,nutrition,stunting_rate,Global stunting (<-2 SD) rate,20.37,19.94,Nicaragua_Eta-Iota
+Nicaragua,Eta-Iota,implemented,1,nutrition,wasting_rate,Global wasting (<-2 SD) rate,1.44,1.4,Nicaragua_Eta-Iota
+Nicaragua,Eta-Iota,implemented,1,breastfeeding,exclusive_breastfeeding_rate,Percent of children (<6 mo) exclusively breastfed,30.67,37.84,Nicaragua_Eta-Iota
+Nicaragua,Eta-Iota,implemented,1,breastfeeding,breastfeeding_initiation_rate,Prevalence of early initiation of breastfeeding,63.75,67.36,Nicaragua_Eta-Iota
+Nicaragua,Eta-Iota,implemented,1,anemia,pregnant_anemia,Percent of women with anemia - Pregnant women with anemia,25.7,16.393,Nicaragua_Eta-Iota
+Nicaragua,Eta-Iota,implemented,1,anemia,pregnant_iron_def,Percent of women with anemia - Pregnant women with iron-deficiency anemia,12.935,8.251,Nicaragua_Eta-Iota
+Nicaragua,Eta-Iota,implemented,1,anemia,women_anemia,Percent of women with anemia - Women of reproductive age with anemia,16.635,15.936,Nicaragua_Eta-Iota
+Nicaragua,Eta-Iota,implemented,1,anemia,women_iron_def,Percent of women with anemia - Women of reproductive age with iron-deficiency anemia,9.49,9.14,Nicaragua_Eta-Iota
+Honduras,Migration flows,0,1,mortality_rates,maternal_rate,"Maternal mortality rate (deaths per 100,000 women aged 15-49)",8.5,8.45,Honduras_Migration flows
+Honduras,Migration flows,0,1,mortality_rates,neonatal_rate,"Neonatal mortality rate (deaths per 1,000 live births)",15,15,Honduras_Migration flows
+Honduras,Migration flows,0,1,mortality_rates,u5_rate,"Under five mortality rate (deaths per 1,000 live births)",24.23,24.21,Honduras_Migration flows
+Honduras,Migration flows,0,1,mortality_rates,stillbirth_rate,"Stillbirth rate (stillbirths per 1,000 total births (live and stillbirths))",10.7,10.7,Honduras_Migration flows
+Honduras,Migration flows,0,1,absolute_deaths,maternal_deaths,Maternal deaths,583,569,Honduras_Migration flows
+Honduras,Migration flows,0,1,absolute_deaths,neonatal_deaths,Neonatal deaths,6990,6815,Honduras_Migration flows
+Honduras,Migration flows,0,1,absolute_deaths,u5_deaths,Child deaths (Total (0-59 months)),11526,11138,Honduras_Migration flows
+Honduras,Migration flows,0,1,absolute_deaths,stillbirths,Stillbirths,4989,4864,Honduras_Migration flows
+Honduras,Migration flows,0,1,nutrition,stunting_rate,Global stunting (<-2 SD) rate,31.28,31.28,Honduras_Migration flows
+Honduras,Migration flows,0,1,nutrition,wasting_rate,Global wasting (<-2 SD) rate,10.75,10.75,Honduras_Migration flows
+Honduras,Migration flows,0,1,breastfeeding,exclusive_breastfeeding_rate,Percent of children (<6 mo) exclusively breastfed,53.96,53.96,Honduras_Migration flows
+Honduras,Migration flows,0,1,breastfeeding,breastfeeding_initiation_rate,Prevalence of early initiation of breastfeeding,63.13,63.13,Honduras_Migration flows
+Honduras,Migration flows,0,1,anemia,pregnant_anemia,Percent of women with anemia - Pregnant women with anemia,29.1,29.1,Honduras_Migration flows
+Honduras,Migration flows,0,1,anemia,pregnant_iron_def,Percent of women with anemia - Pregnant women with iron-deficiency anemia,16.881,16.881,Honduras_Migration flows
+Honduras,Migration flows,0,1,anemia,women_anemia,Percent of women with anemia - Women of reproductive age with anemia,23.974,23.971,Honduras_Migration flows
+Honduras,Migration flows,0,1,anemia,women_iron_def,Percent of women with anemia - Women of reproductive age with iron-deficiency anemia,13.19,13.188,Honduras_Migration flows
+Honduras,Migration flows,30,1,mortality_rates,maternal_rate,"Maternal mortality rate (deaths per 100,000 women aged 15-49)",8.5,8.45,Honduras_Migration flows
+Honduras,Migration flows,30,1,mortality_rates,neonatal_rate,"Neonatal mortality rate (deaths per 1,000 live births)",15,14.56,Honduras_Migration flows
+Honduras,Migration flows,30,1,mortality_rates,u5_rate,"Under five mortality rate (deaths per 1,000 live births)",24.23,23.24,Honduras_Migration flows
+Honduras,Migration flows,30,1,mortality_rates,stillbirth_rate,"Stillbirth rate (stillbirths per 1,000 total births (live and stillbirths))",10.7,10.22,Honduras_Migration flows
+Honduras,Migration flows,30,1,absolute_deaths,maternal_deaths,Maternal deaths,583,568,Honduras_Migration flows
+Honduras,Migration flows,30,1,absolute_deaths,neonatal_deaths,Neonatal deaths,6990,6614,Honduras_Migration flows
+Honduras,Migration flows,30,1,absolute_deaths,u5_deaths,Child deaths (Total (0-59 months)),11526,10692,Honduras_Migration flows
+Honduras,Migration flows,30,1,absolute_deaths,stillbirths,Stillbirths,4989,4642,Honduras_Migration flows
+Honduras,Migration flows,30,1,nutrition,stunting_rate,Global stunting (<-2 SD) rate,31.28,30.9,Honduras_Migration flows
+Honduras,Migration flows,30,1,nutrition,wasting_rate,Global wasting (<-2 SD) rate,10.75,10.23,Honduras_Migration flows
+Honduras,Migration flows,30,1,breastfeeding,exclusive_breastfeeding_rate,Percent of children (<6 mo) exclusively breastfed,53.96,63.8,Honduras_Migration flows
+Honduras,Migration flows,30,1,breastfeeding,breastfeeding_initiation_rate,Prevalence of early initiation of breastfeeding,63.13,71.03,Honduras_Migration flows
+Honduras,Migration flows,30,1,anemia,pregnant_anemia,Percent of women with anemia - Pregnant women with anemia,29.1,26.846,Honduras_Migration flows
+Honduras,Migration flows,30,1,anemia,pregnant_iron_def,Percent of women with anemia - Pregnant women with iron-deficiency anemia,16.881,15.574,Honduras_Migration flows
+Honduras,Migration flows,30,1,anemia,women_anemia,Percent of women with anemia - Women of reproductive age with anemia,23.974,23.819,Honduras_Migration flows
+Honduras,Migration flows,30,1,anemia,women_iron_def,Percent of women with anemia - Women of reproductive age with iron-deficiency anemia,13.19,13.1,Honduras_Migration flows
+Honduras,Migration flows,95,1,mortality_rates,maternal_rate,"Maternal mortality rate (deaths per 100,000 women aged 15-49)",8.5,8.45,Honduras_Migration flows
+Honduras,Migration flows,95,1,mortality_rates,neonatal_rate,"Neonatal mortality rate (deaths per 1,000 live births)",15,13.63,Honduras_Migration flows
+Honduras,Migration flows,95,1,mortality_rates,u5_rate,"Under five mortality rate (deaths per 1,000 live births)",24.23,21.27,Honduras_Migration flows
+Honduras,Migration flows,95,1,mortality_rates,stillbirth_rate,"Stillbirth rate (stillbirths per 1,000 total births (live and stillbirths))",10.7,9.2,Honduras_Migration flows
+Honduras,Migration flows,95,1,absolute_deaths,maternal_deaths,Maternal deaths,583,568,Honduras_Migration flows
+Honduras,Migration flows,95,1,absolute_deaths,neonatal_deaths,Neonatal deaths,6990,6195,Honduras_Migration flows
+Honduras,Migration flows,95,1,absolute_deaths,u5_deaths,Child deaths (Total (0-59 months)),11526,9777,Honduras_Migration flows
+Honduras,Migration flows,95,1,absolute_deaths,stillbirths,Stillbirths,4989,4179,Honduras_Migration flows
+Honduras,Migration flows,95,1,nutrition,stunting_rate,Global stunting (<-2 SD) rate,31.28,29.74,Honduras_Migration flows
+Honduras,Migration flows,95,1,nutrition,wasting_rate,Global wasting (<-2 SD) rate,10.75,9.09,Honduras_Migration flows
+Honduras,Migration flows,95,1,breastfeeding,exclusive_breastfeeding_rate,Percent of children (<6 mo) exclusively breastfed,53.96,85.13,Honduras_Migration flows
+Honduras,Migration flows,95,1,breastfeeding,breastfeeding_initiation_rate,Prevalence of early initiation of breastfeeding,63.13,88.15,Honduras_Migration flows
+Honduras,Migration flows,95,1,anemia,pregnant_anemia,Percent of women with anemia - Pregnant women with anemia,29.1,21.963,Honduras_Migration flows
+Honduras,Migration flows,95,1,anemia,pregnant_iron_def,Percent of women with anemia - Pregnant women with iron-deficiency anemia,16.881,12.741,Honduras_Migration flows
+Honduras,Migration flows,95,1,anemia,women_anemia,Percent of women with anemia - Women of reproductive age with anemia,23.974,23.489,Honduras_Migration flows
+Honduras,Migration flows,95,1,anemia,women_iron_def,Percent of women with anemia - Women of reproductive age with iron-deficiency anemia,13.19,12.908,Honduras_Migration flows
+Honduras,Migration flows,implemented,1,mortality_rates,maternal_rate,"Maternal mortality rate (deaths per 100,000 women aged 15-49)",8.5,8.45,Honduras_Migration flows
+Honduras,Migration flows,implemented,1,mortality_rates,neonatal_rate,"Neonatal mortality rate (deaths per 1,000 live births)",15,14.91,Honduras_Migration flows
+Honduras,Migration flows,implemented,1,mortality_rates,u5_rate,"Under five mortality rate (deaths per 1,000 live births)",24.23,23.88,Honduras_Migration flows
+Honduras,Migration flows,implemented,1,mortality_rates,stillbirth_rate,"Stillbirth rate (stillbirths per 1,000 total births (live and stillbirths))",10.7,10.62,Honduras_Migration flows
+Honduras,Migration flows,implemented,1,absolute_deaths,maternal_deaths,Maternal deaths,583,568,Honduras_Migration flows
+Honduras,Migration flows,implemented,1,absolute_deaths,neonatal_deaths,Neonatal deaths,6990,6774,Honduras_Migration flows
+Honduras,Migration flows,implemented,1,absolute_deaths,u5_deaths,Child deaths (Total (0-59 months)),11526,10986,Honduras_Migration flows
+Honduras,Migration flows,implemented,1,absolute_deaths,stillbirths,Stillbirths,4989,4826,Honduras_Migration flows
+Honduras,Migration flows,implemented,1,nutrition,stunting_rate,Global stunting (<-2 SD) rate,31.28,30.94,Honduras_Migration flows
+Honduras,Migration flows,implemented,1,nutrition,wasting_rate,Global wasting (<-2 SD) rate,10.75,10.73,Honduras_Migration flows
+Honduras,Migration flows,implemented,1,breastfeeding,exclusive_breastfeeding_rate,Percent of children (<6 mo) exclusively breastfed,53.96,62.49,Honduras_Migration flows
+Honduras,Migration flows,implemented,1,breastfeeding,breastfeeding_initiation_rate,Prevalence of early initiation of breastfeeding,63.13,69.98,Honduras_Migration flows
+Honduras,Migration flows,implemented,1,anemia,pregnant_anemia,Percent of women with anemia - Pregnant women with anemia,29.1,28.446,Honduras_Migration flows
+Honduras,Migration flows,implemented,1,anemia,pregnant_iron_def,Percent of women with anemia - Pregnant women with iron-deficiency anemia,16.881,16.502,Honduras_Migration flows
+Honduras,Migration flows,implemented,1,anemia,women_anemia,Percent of women with anemia - Women of reproductive age with anemia,23.974,23.927,Honduras_Migration flows
+Honduras,Migration flows,implemented,1,anemia,women_iron_def,Percent of women with anemia - Women of reproductive age with iron-deficiency anemia,13.19,13.162,Honduras_Migration flows
+Colombia,Migration flows,0,1,mortality_rates,maternal_rate,"Maternal mortality rate (deaths per 100,000 women aged 15-49)",8.5,8.45,Colombia_Migration flows
+Colombia,Migration flows,0,1,mortality_rates,neonatal_rate,"Neonatal mortality rate (deaths per 1,000 live births)",15,15,Colombia_Migration flows
+Colombia,Migration flows,0,1,mortality_rates,u5_rate,"Under five mortality rate (deaths per 1,000 live births)",24.23,24.21,Colombia_Migration flows
+Colombia,Migration flows,0,1,mortality_rates,stillbirth_rate,"Stillbirth rate (stillbirths per 1,000 total births (live and stillbirths))",10.7,10.7,Colombia_Migration flows
+Colombia,Migration flows,0,1,absolute_deaths,maternal_deaths,Maternal deaths,583,569,Colombia_Migration flows
+Colombia,Migration flows,0,1,absolute_deaths,neonatal_deaths,Neonatal deaths,6990,6815,Colombia_Migration flows
+Colombia,Migration flows,0,1,absolute_deaths,u5_deaths,Child deaths (Total (0-59 months)),11526,11138,Colombia_Migration flows
+Colombia,Migration flows,0,1,absolute_deaths,stillbirths,Stillbirths,4989,4864,Colombia_Migration flows
+Colombia,Migration flows,0,1,nutrition,stunting_rate,Global stunting (<-2 SD) rate,31.28,31.28,Colombia_Migration flows
+Colombia,Migration flows,0,1,nutrition,wasting_rate,Global wasting (<-2 SD) rate,10.75,10.75,Colombia_Migration flows
+Colombia,Migration flows,0,1,breastfeeding,exclusive_breastfeeding_rate,Percent of children (<6 mo) exclusively breastfed,53.96,53.96,Colombia_Migration flows
+Colombia,Migration flows,0,1,breastfeeding,breastfeeding_initiation_rate,Prevalence of early initiation of breastfeeding,63.13,63.13,Colombia_Migration flows
+Colombia,Migration flows,0,1,anemia,pregnant_anemia,Percent of women with anemia - Pregnant women with anemia,29.1,29.1,Colombia_Migration flows
+Colombia,Migration flows,0,1,anemia,pregnant_iron_def,Percent of women with anemia - Pregnant women with iron-deficiency anemia,16.881,16.881,Colombia_Migration flows
+Colombia,Migration flows,0,1,anemia,women_anemia,Percent of women with anemia - Women of reproductive age with anemia,23.974,23.971,Colombia_Migration flows
+Colombia,Migration flows,0,1,anemia,women_iron_def,Percent of women with anemia - Women of reproductive age with iron-deficiency anemia,13.19,13.188,Colombia_Migration flows
+Colombia,Migration flows,30,1,mortality_rates,maternal_rate,"Maternal mortality rate (deaths per 100,000 women aged 15-49)",8.5,8.45,Colombia_Migration flows
+Colombia,Migration flows,30,1,mortality_rates,neonatal_rate,"Neonatal mortality rate (deaths per 1,000 live births)",15,14.56,Colombia_Migration flows
+Colombia,Migration flows,30,1,mortality_rates,u5_rate,"Under five mortality rate (deaths per 1,000 live births)",24.23,23.24,Colombia_Migration flows
+Colombia,Migration flows,30,1,mortality_rates,stillbirth_rate,"Stillbirth rate (stillbirths per 1,000 total births (live and stillbirths))",10.7,10.22,Colombia_Migration flows
+Colombia,Migration flows,30,1,absolute_deaths,maternal_deaths,Maternal deaths,583,568,Colombia_Migration flows
+Colombia,Migration flows,30,1,absolute_deaths,neonatal_deaths,Neonatal deaths,6990,6614,Colombia_Migration flows
+Colombia,Migration flows,30,1,absolute_deaths,u5_deaths,Child deaths (Total (0-59 months)),11526,10692,Colombia_Migration flows
+Colombia,Migration flows,30,1,absolute_deaths,stillbirths,Stillbirths,4989,4642,Colombia_Migration flows
+Colombia,Migration flows,30,1,nutrition,stunting_rate,Global stunting (<-2 SD) rate,31.28,30.9,Colombia_Migration flows
+Colombia,Migration flows,30,1,nutrition,wasting_rate,Global wasting (<-2 SD) rate,10.75,10.23,Colombia_Migration flows
+Colombia,Migration flows,30,1,breastfeeding,exclusive_breastfeeding_rate,Percent of children (<6 mo) exclusively breastfed,53.96,63.8,Colombia_Migration flows
+Colombia,Migration flows,30,1,breastfeeding,breastfeeding_initiation_rate,Prevalence of early initiation of breastfeeding,63.13,71.03,Colombia_Migration flows
+Colombia,Migration flows,30,1,anemia,pregnant_anemia,Percent of women with anemia - Pregnant women with anemia,29.1,26.846,Colombia_Migration flows
+Colombia,Migration flows,30,1,anemia,pregnant_iron_def,Percent of women with anemia - Pregnant women with iron-deficiency anemia,16.881,15.574,Colombia_Migration flows
+Colombia,Migration flows,30,1,anemia,women_anemia,Percent of women with anemia - Women of reproductive age with anemia,23.974,23.819,Colombia_Migration flows
+Colombia,Migration flows,30,1,anemia,women_iron_def,Percent of women with anemia - Women of reproductive age with iron-deficiency anemia,13.19,13.1,Colombia_Migration flows
+Colombia,Migration flows,95,1,mortality_rates,maternal_rate,"Maternal mortality rate (deaths per 100,000 women aged 15-49)",8.5,8.45,Colombia_Migration flows
+Colombia,Migration flows,95,1,mortality_rates,neonatal_rate,"Neonatal mortality rate (deaths per 1,000 live births)",15,13.63,Colombia_Migration flows
+Colombia,Migration flows,95,1,mortality_rates,u5_rate,"Under five mortality rate (deaths per 1,000 live births)",24.23,21.27,Colombia_Migration flows
+Colombia,Migration flows,95,1,mortality_rates,stillbirth_rate,"Stillbirth rate (stillbirths per 1,000 total births (live and stillbirths))",10.7,9.2,Colombia_Migration flows
+Colombia,Migration flows,95,1,absolute_deaths,maternal_deaths,Maternal deaths,583,568,Colombia_Migration flows
+Colombia,Migration flows,95,1,absolute_deaths,neonatal_deaths,Neonatal deaths,6990,6195,Colombia_Migration flows
+Colombia,Migration flows,95,1,absolute_deaths,u5_deaths,Child deaths (Total (0-59 months)),11526,9777,Colombia_Migration flows
+Colombia,Migration flows,95,1,absolute_deaths,stillbirths,Stillbirths,4989,4179,Colombia_Migration flows
+Colombia,Migration flows,95,1,nutrition,stunting_rate,Global stunting (<-2 SD) rate,31.28,29.74,Colombia_Migration flows
+Colombia,Migration flows,95,1,nutrition,wasting_rate,Global wasting (<-2 SD) rate,10.75,9.09,Colombia_Migration flows
+Colombia,Migration flows,95,1,breastfeeding,exclusive_breastfeeding_rate,Percent of children (<6 mo) exclusively breastfed,53.96,85.13,Colombia_Migration flows
+Colombia,Migration flows,95,1,breastfeeding,breastfeeding_initiation_rate,Prevalence of early initiation of breastfeeding,63.13,88.15,Colombia_Migration flows
+Colombia,Migration flows,95,1,anemia,pregnant_anemia,Percent of women with anemia - Pregnant women with anemia,29.1,21.963,Colombia_Migration flows
+Colombia,Migration flows,95,1,anemia,pregnant_iron_def,Percent of women with anemia - Pregnant women with iron-deficiency anemia,16.881,12.741,Colombia_Migration flows
+Colombia,Migration flows,95,1,anemia,women_anemia,Percent of women with anemia - Women of reproductive age with anemia,23.974,23.489,Colombia_Migration flows
+Colombia,Migration flows,95,1,anemia,women_iron_def,Percent of women with anemia - Women of reproductive age with iron-deficiency anemia,13.19,12.908,Colombia_Migration flows
+Colombia,Migration flows,implemented,1,mortality_rates,maternal_rate,"Maternal mortality rate (deaths per 100,000 women aged 15-49)",8.5,8.45,Colombia_Migration flows
+Colombia,Migration flows,implemented,1,mortality_rates,neonatal_rate,"Neonatal mortality rate (deaths per 1,000 live births)",15,14.97,Colombia_Migration flows
+Colombia,Migration flows,implemented,1,mortality_rates,u5_rate,"Under five mortality rate (deaths per 1,000 live births)",24.23,24.15,Colombia_Migration flows
+Colombia,Migration flows,implemented,1,mortality_rates,stillbirth_rate,"Stillbirth rate (stillbirths per 1,000 total births (live and stillbirths))",10.7,10.69,Colombia_Migration flows
+Colombia,Migration flows,implemented,1,absolute_deaths,maternal_deaths,Maternal deaths,583,568,Colombia_Migration flows
+Colombia,Migration flows,implemented,1,absolute_deaths,neonatal_deaths,Neonatal deaths,6990,6804,Colombia_Migration flows
+Colombia,Migration flows,implemented,1,absolute_deaths,u5_deaths,Child deaths (Total (0-59 months)),11526,11112,Colombia_Migration flows
+Colombia,Migration flows,implemented,1,absolute_deaths,stillbirths,Stillbirths,4989,4856,Colombia_Migration flows
+Colombia,Migration flows,implemented,1,nutrition,stunting_rate,Global stunting (<-2 SD) rate,31.28,31.17,Colombia_Migration flows
+Colombia,Migration flows,implemented,1,nutrition,wasting_rate,Global wasting (<-2 SD) rate,10.75,10.74,Colombia_Migration flows
+Colombia,Migration flows,implemented,1,breastfeeding,exclusive_breastfeeding_rate,Percent of children (<6 mo) exclusively breastfed,53.96,53.96,Colombia_Migration flows
+Colombia,Migration flows,implemented,1,breastfeeding,breastfeeding_initiation_rate,Prevalence of early initiation of breastfeeding,63.13,63.13,Colombia_Migration flows
+Colombia,Migration flows,implemented,1,anemia,pregnant_anemia,Percent of women with anemia - Pregnant women with anemia,29.1,28.957,Colombia_Migration flows
+Colombia,Migration flows,implemented,1,anemia,pregnant_iron_def,Percent of women with anemia - Pregnant women with iron-deficiency anemia,16.881,16.799,Colombia_Migration flows
+Colombia,Migration flows,implemented,1,anemia,women_anemia,Percent of women with anemia - Women of reproductive age with anemia,23.974,23.962,Colombia_Migration flows
+Colombia,Migration flows,implemented,1,anemia,women_iron_def,Percent of women with anemia - Women of reproductive age with iron-deficiency anemia,13.19,13.182,Colombia_Migration flows
+Peru,Migration flows,0,1,mortality_rates,maternal_rate,"Maternal mortality rate (deaths per 100,000 women aged 15-49)",8.5,8.45,Peru_Migration flows
+Peru,Migration flows,0,1,mortality_rates,neonatal_rate,"Neonatal mortality rate (deaths per 1,000 live births)",15,15,Peru_Migration flows
+Peru,Migration flows,0,1,mortality_rates,u5_rate,"Under five mortality rate (deaths per 1,000 live births)",24.23,24.21,Peru_Migration flows
+Peru,Migration flows,0,1,mortality_rates,stillbirth_rate,"Stillbirth rate (stillbirths per 1,000 total births (live and stillbirths))",10.7,10.7,Peru_Migration flows
+Peru,Migration flows,0,1,absolute_deaths,maternal_deaths,Maternal deaths,583,569,Peru_Migration flows
+Peru,Migration flows,0,1,absolute_deaths,neonatal_deaths,Neonatal deaths,6990,6815,Peru_Migration flows
+Peru,Migration flows,0,1,absolute_deaths,u5_deaths,Child deaths (Total (0-59 months)),11526,11138,Peru_Migration flows
+Peru,Migration flows,0,1,absolute_deaths,stillbirths,Stillbirths,4989,4864,Peru_Migration flows
+Peru,Migration flows,0,1,nutrition,stunting_rate,Global stunting (<-2 SD) rate,31.28,31.28,Peru_Migration flows
+Peru,Migration flows,0,1,nutrition,wasting_rate,Global wasting (<-2 SD) rate,10.75,10.75,Peru_Migration flows
+Peru,Migration flows,0,1,breastfeeding,exclusive_breastfeeding_rate,Percent of children (<6 mo) exclusively breastfed,53.96,53.96,Peru_Migration flows
+Peru,Migration flows,0,1,breastfeeding,breastfeeding_initiation_rate,Prevalence of early initiation of breastfeeding,63.13,63.13,Peru_Migration flows
+Peru,Migration flows,0,1,anemia,pregnant_anemia,Percent of women with anemia - Pregnant women with anemia,29.1,29.1,Peru_Migration flows
+Peru,Migration flows,0,1,anemia,pregnant_iron_def,Percent of women with anemia - Pregnant women with iron-deficiency anemia,16.881,16.881,Peru_Migration flows
+Peru,Migration flows,0,1,anemia,women_anemia,Percent of women with anemia - Women of reproductive age with anemia,23.974,23.971,Peru_Migration flows
+Peru,Migration flows,0,1,anemia,women_iron_def,Percent of women with anemia - Women of reproductive age with iron-deficiency anemia,13.19,13.188,Peru_Migration flows
+Peru,Migration flows,30,1,mortality_rates,maternal_rate,"Maternal mortality rate (deaths per 100,000 women aged 15-49)",8.5,8.45,Peru_Migration flows
+Peru,Migration flows,30,1,mortality_rates,neonatal_rate,"Neonatal mortality rate (deaths per 1,000 live births)",15,14.56,Peru_Migration flows
+Peru,Migration flows,30,1,mortality_rates,u5_rate,"Under five mortality rate (deaths per 1,000 live births)",24.23,23.24,Peru_Migration flows
+Peru,Migration flows,30,1,mortality_rates,stillbirth_rate,"Stillbirth rate (stillbirths per 1,000 total births (live and stillbirths))",10.7,10.22,Peru_Migration flows
+Peru,Migration flows,30,1,absolute_deaths,maternal_deaths,Maternal deaths,583,568,Peru_Migration flows
+Peru,Migration flows,30,1,absolute_deaths,neonatal_deaths,Neonatal deaths,6990,6614,Peru_Migration flows
+Peru,Migration flows,30,1,absolute_deaths,u5_deaths,Child deaths (Total (0-59 months)),11526,10692,Peru_Migration flows
+Peru,Migration flows,30,1,absolute_deaths,stillbirths,Stillbirths,4989,4642,Peru_Migration flows
+Peru,Migration flows,30,1,nutrition,stunting_rate,Global stunting (<-2 SD) rate,31.28,30.9,Peru_Migration flows
+Peru,Migration flows,30,1,nutrition,wasting_rate,Global wasting (<-2 SD) rate,10.75,10.23,Peru_Migration flows
+Peru,Migration flows,30,1,breastfeeding,exclusive_breastfeeding_rate,Percent of children (<6 mo) exclusively breastfed,53.96,63.8,Peru_Migration flows
+Peru,Migration flows,30,1,breastfeeding,breastfeeding_initiation_rate,Prevalence of early initiation of breastfeeding,63.13,71.03,Peru_Migration flows
+Peru,Migration flows,30,1,anemia,pregnant_anemia,Percent of women with anemia - Pregnant women with anemia,29.1,26.846,Peru_Migration flows
+Peru,Migration flows,30,1,anemia,pregnant_iron_def,Percent of women with anemia - Pregnant women with iron-deficiency anemia,16.881,15.574,Peru_Migration flows
+Peru,Migration flows,30,1,anemia,women_anemia,Percent of women with anemia - Women of reproductive age with anemia,23.974,23.819,Peru_Migration flows
+Peru,Migration flows,30,1,anemia,women_iron_def,Percent of women with anemia - Women of reproductive age with iron-deficiency anemia,13.19,13.1,Peru_Migration flows
+Peru,Migration flows,95,1,mortality_rates,maternal_rate,"Maternal mortality rate (deaths per 100,000 women aged 15-49)",8.5,8.45,Peru_Migration flows
+Peru,Migration flows,95,1,mortality_rates,neonatal_rate,"Neonatal mortality rate (deaths per 1,000 live births)",15,13.63,Peru_Migration flows
+Peru,Migration flows,95,1,mortality_rates,u5_rate,"Under five mortality rate (deaths per 1,000 live births)",24.23,21.27,Peru_Migration flows
+Peru,Migration flows,95,1,mortality_rates,stillbirth_rate,"Stillbirth rate (stillbirths per 1,000 total births (live and stillbirths))",10.7,9.2,Peru_Migration flows
+Peru,Migration flows,95,1,absolute_deaths,maternal_deaths,Maternal deaths,583,568,Peru_Migration flows
+Peru,Migration flows,95,1,absolute_deaths,neonatal_deaths,Neonatal deaths,6990,6195,Peru_Migration flows
+Peru,Migration flows,95,1,absolute_deaths,u5_deaths,Child deaths (Total (0-59 months)),11526,9777,Peru_Migration flows
+Peru,Migration flows,95,1,absolute_deaths,stillbirths,Stillbirths,4989,4179,Peru_Migration flows
+Peru,Migration flows,95,1,nutrition,stunting_rate,Global stunting (<-2 SD) rate,31.28,29.74,Peru_Migration flows
+Peru,Migration flows,95,1,nutrition,wasting_rate,Global wasting (<-2 SD) rate,10.75,9.09,Peru_Migration flows
+Peru,Migration flows,95,1,breastfeeding,exclusive_breastfeeding_rate,Percent of children (<6 mo) exclusively breastfed,53.96,85.13,Peru_Migration flows
+Peru,Migration flows,95,1,breastfeeding,breastfeeding_initiation_rate,Prevalence of early initiation of breastfeeding,63.13,88.15,Peru_Migration flows
+Peru,Migration flows,95,1,anemia,pregnant_anemia,Percent of women with anemia - Pregnant women with anemia,29.1,21.963,Peru_Migration flows
+Peru,Migration flows,95,1,anemia,pregnant_iron_def,Percent of women with anemia - Pregnant women with iron-deficiency anemia,16.881,12.741,Peru_Migration flows
+Peru,Migration flows,95,1,anemia,women_anemia,Percent of women with anemia - Women of reproductive age with anemia,23.974,23.489,Peru_Migration flows
+Peru,Migration flows,95,1,anemia,women_iron_def,Percent of women with anemia - Women of reproductive age with iron-deficiency anemia,13.19,12.908,Peru_Migration flows
+Peru,Migration flows,implemented,1,mortality_rates,maternal_rate,"Maternal mortality rate (deaths per 100,000 women aged 15-49)",8.5,8.45,Peru_Migration flows
+Peru,Migration flows,implemented,1,mortality_rates,neonatal_rate,"Neonatal mortality rate (deaths per 1,000 live births)",15,14.99,Peru_Migration flows
+Peru,Migration flows,implemented,1,mortality_rates,u5_rate,"Under five mortality rate (deaths per 1,000 live births)",24.23,24.18,Peru_Migration flows
+Peru,Migration flows,implemented,1,mortality_rates,stillbirth_rate,"Stillbirth rate (stillbirths per 1,000 total births (live and stillbirths))",10.7,10.7,Peru_Migration flows
+Peru,Migration flows,implemented,1,absolute_deaths,maternal_deaths,Maternal deaths,583,569,Peru_Migration flows
+Peru,Migration flows,implemented,1,absolute_deaths,neonatal_deaths,Neonatal deaths,6990,6812,Peru_Migration flows
+Peru,Migration flows,implemented,1,absolute_deaths,u5_deaths,Child deaths (Total (0-59 months)),11526,11125,Peru_Migration flows
+Peru,Migration flows,implemented,1,absolute_deaths,stillbirths,Stillbirths,4989,4864,Peru_Migration flows
+Peru,Migration flows,implemented,1,nutrition,stunting_rate,Global stunting (<-2 SD) rate,31.28,31.28,Peru_Migration flows
+Peru,Migration flows,implemented,1,nutrition,wasting_rate,Global wasting (<-2 SD) rate,10.75,10.75,Peru_Migration flows
+Peru,Migration flows,implemented,1,breastfeeding,exclusive_breastfeeding_rate,Percent of children (<6 mo) exclusively breastfed,53.96,55.3,Peru_Migration flows
+Peru,Migration flows,implemented,1,breastfeeding,breastfeeding_initiation_rate,Prevalence of early initiation of breastfeeding,63.13,64.21,Peru_Migration flows
+Peru,Migration flows,implemented,1,anemia,pregnant_anemia,Percent of women with anemia - Pregnant women with anemia,29.1,29.1,Peru_Migration flows
+Peru,Migration flows,implemented,1,anemia,pregnant_iron_def,Percent of women with anemia - Pregnant women with iron-deficiency anemia,16.881,16.881,Peru_Migration flows
+Peru,Migration flows,implemented,1,anemia,women_anemia,Percent of women with anemia - Women of reproductive age with anemia,23.974,23.971,Peru_Migration flows
+Peru,Migration flows,implemented,1,anemia,women_iron_def,Percent of women with anemia - Women of reproductive age with iron-deficiency anemia,13.19,13.188,Peru_Migration flows
