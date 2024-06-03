@@ -8,12 +8,23 @@ coverage_costs <- coverage_costs %>%
                                          total_beneficiaries
                                          ))
 
+# coverages
+coi_coverages <- coverage_costs %>% 
+  group_by(emergency, intervention_name) %>% 
+  summarise(total_beneficiaries = sum(total_beneficiaries, na.rm = TRUE),
+            ideal_delivered = sum(ideal_delivered, na.rm = TRUE)) %>% 
+  mutate(coverage = total_beneficiaries / ideal_delivered) %>% 
+  pivot_wider(names_from = emergency,
+              values_from = c("total_beneficiaries", "ideal_delivered", "coverage"))
+
 # costs
 # should summarize table to drop country and summarize by emergency as in
 # current table in report
 coi_costs <- coverage_costs %>% 
-  group_by(emergency, target_group, intervention_id, intervention_name) %>% 
-  summarise()
+  group_by(emergency, intervention_name) %>% 
+  summarise(total_beneficiaries = sum(total_beneficiaries, na.rm = TRUE),
+            ideal_delivered = sum(ideal_delivered, na.rm = TRUE)) %>% 
+  mutate(coverage = total_beneficiaries / ideal_delivered)
 
 # benefits
 # should calculate benefits using LiST outputs. See line 1006
