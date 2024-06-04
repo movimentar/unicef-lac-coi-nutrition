@@ -39,11 +39,24 @@ coi_costs <- coverage_costs %>%
   mutate(global_coverage = (total_beneficiaries / ideal_delivered) * 100)
 
 # benefits
+
+# prepare list output
+benef_indicators <- list_output %>% 
+  filter(!(
+    indicator %in% c(
+      "maternal_deaths",
+      "neonatal_deaths",
+      "stillbirths",
+      "u5_deaths"
+    ))) %>% 
+  left_join(list_metadata, by = c("indicator", "indicator_category", "indicator_name"))
+
 # should calculate benefits using LiST outputs. See line 1006
 coi_benefits <- coverage_costs %>% 
   group_by(emergency, country, target_group) %>% 
   summarise(total_pin = unique(total_pin)) %>% 
-  filter(!is.na(total_pin))
-  
+  filter(!is.na(total_pin)) %>% 
+  left_join(benef_indicators, by = c("country", "emergency", "target_group" = "related_target_group"))
+  # to-do: multiply indicator rates by respective population
   
 
