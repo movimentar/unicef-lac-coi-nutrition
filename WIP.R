@@ -85,3 +85,5 @@ coi_benefits <- coverage_costs %>%
       indicator == "women_anemia" ~ final_reduced_rates * total_pin,
       indicator == "women_iron_def" ~ final_reduced_rates * total_pin
     ))
+  
+
