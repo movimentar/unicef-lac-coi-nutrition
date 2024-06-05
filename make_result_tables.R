@@ -1,4 +1,4 @@
-tar_load(c("list_output", "list_metadata", "coverage_costs", "list_metadata", "list_output", "intervention_list"))
+tar_load(c("list_output", "list_metadata", "coverage_costs", "list_metadata", "list_output"))
 
 
 # trim exess delivered (over 100% delivery) to ideal_delivered
@@ -41,6 +41,8 @@ coi_costs <- coverage_costs %>%
 # benefits
 
 # prepare list output
+# filter indicators that are not used anymore.
+# convert after delivery values to rates 
 benef_indicators <- list_output %>% 
   filter(!(
     indicator %in% c(
@@ -49,14 +51,20 @@ benef_indicators <- list_output %>%
       "stillbirths",
       "u5_deaths"
     ))) %>% 
-  left_join(list_metadata, by = c("indicator", "indicator_category", "indicator_name"))
+  left_join(list_metadata, by = c("indicator", "indicator_category", "indicator_name")) %>% 
+  mutate(final_reduced_rates = case_when(
+    indicator == "maternal_rate" ~ after_delivery_value / 100000,
+    indicator == "neonatal_rate" ~ after_delivery_value / 1000,
+    indicator == "u5_rate" ~ after_delivery_value / 1000,
+    indicator == "stillbirth_rate" ~ after_delivery_value / 1000,
+    indicator_category != "mortality_rates" ~ after_delivery_value / 100
+  ))
 
-# should calculate benefits using LiST outputs. See line 1006
+# calculate benefits using LiST outputs.
 coi_benefits <- coverage_costs %>% 
   group_by(emergency, country, target_group) %>% 
   summarise(total_pin = unique(total_pin)) %>% 
   filter(!is.na(total_pin)) %>% 
   left_join(benef_indicators, by = c("country", "emergency", "target_group" = "related_target_group"))
-  # to-do: multiply indicator rates by respective population
   
 
