@@ -151,5 +151,8 @@ list(
              ),
   tar_target(coi_coverages,
              estimate_coverages(trimmed_coverage_costs)
+             ),
+  tar_target(coi_costs,
+             estimate_costs(trimmed_coverage_costs)
              )
 )
