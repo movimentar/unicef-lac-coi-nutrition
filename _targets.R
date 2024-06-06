@@ -147,5 +147,9 @@ list(
              read_file(list_indicator_file)
   ),
   tar_target(trimmed_coverage_costs,
-             trim_beneficiaries(coverage_costs))
+             trim_beneficiaries(coverage_costs)
+             ),
+  tar_target(coi_coverages,
+             estimate_coverages(trimmed_coverage_costs)
+             )
 )
