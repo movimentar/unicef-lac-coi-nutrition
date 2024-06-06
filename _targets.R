@@ -145,5 +145,7 @@ list(
              ),
   tar_target(list_metadata,
              read_file(list_indicator_file)
-  )
+  ),
+  tar_target(trimmed_coverage_costs,
+             trim_beneficiaries(coverage_costs))
 )
