@@ -85,3 +85,28 @@ coi_benefits <- coverage_costs %>%
       indicator == "women_anemia" ~ final_reduced_rates * total_pin,
       indicator == "women_iron_def" ~ final_reduced_rates * total_pin
     ))
+
+# wrangle benefit table for presentation
+# coverages to columns, and cases avoided respective to 0 estimated.
+coi_avoided <- coi_benefits %>% 
+  group_by(emergency,
+           coverage_type,
+           indicator_category,
+           indicator_name_absolute) %>%
+  summarise(absolute_values = sum(absolute_values, na.rm = TRUE)) %>% 
+  pivot_wider(names_from = coverage_type,
+              names_prefix = "coverage_",
+              values_from = absolute_values) %>% 
+  mutate(saved_implemented = coverage_0 - coverage_implemented,
+         saved_30 = coverage_0 - coverage_30,
+         saved_95 = coverage_0 - coverage_95) %>% 
+  select(-coverage_30, -coverage_95, -coverage_implemented)
+
+# separate main tables in two according to avoided value sign
+coi_avoided_mm <-  coi_avoided %>% 
+  filter(indicator_category != "breastfeeding")
+
+coi_avoided_bf <- coi_avoided %>% 
+  filter(indicator_category == "breastfeeding")
+  
+  
