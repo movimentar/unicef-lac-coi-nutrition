@@ -1,17 +1,17 @@
-indicator,indicator_category,indicator_name,related_target_group
-maternal_rate,mortality_rates,"Maternal mortality rate (deaths per 100,000 women aged 15-49)",Pregnant and lactating women
-neonatal_rate,mortality_rates,"Neonatal mortality rate (deaths per 1,000 live births)",Pregnant and lactating women
-u5_rate,mortality_rates,"Under five mortality rate (deaths per 1,000 live births)",Children under 5
-stillbirth_rate,mortality_rates,"Stillbirth rate (stillbirths per 1,000 total births (live and stillbirths))",Pregnant and lactating women
-maternal_deaths,absolute_deaths,Maternal deaths,Pregnant and lactating women
-neonatal_deaths,absolute_deaths,Neonatal deaths,Pregnant and lactating women
-u5_deaths,absolute_deaths,Child deaths (Total (0-59 months)),Children under 5
-stillbirths,absolute_deaths,Stillbirths,Pregnant and lactating women
-stunting_rate,nutrition,Global stunting (<-2 SD) rate,Children under 5
-wasting_rate,nutrition,Global wasting (<-2 SD) rate,Children under 5
-exclusive_breastfeeding_rate,breastfeeding,Percent of children (<6 mo) exclusively breastfed,Children under 5
-breastfeeding_initiation_rate,breastfeeding,Prevalence of early initiation of breastfeeding,Children under 5
-pregnant_anemia,anemia,Percent of women with anemia - Pregnant women with anemia,Pregnant and lactating women
-pregnant_iron_def,anemia,Percent of women with anemia - Pregnant women with iron-deficiency anemia,Pregnant and lactating women
-women_anemia,anemia,Percent of women with anemia - Women of reproductive age with anemia,Pregnant and lactating women
-women_iron_def,anemia,Percent of women with anemia - Women of reproductive age with iron-deficiency anemia,Pregnant and lactating women
+indicator,indicator_category,indicator_name,related_target_group,indicator_name_absolute
+maternal_rate,mortality_rates,"Maternal mortality rate (deaths per 100,000 women aged 15-49)",Pregnant and lactating women,Maternal mortality
+neonatal_rate,mortality_rates,"Neonatal mortality rate (deaths per 1,000 live births)",Pregnant and lactating women,Neonatal mortality
+u5_rate,mortality_rates,"Under five mortality rate (deaths per 1,000 live births)",Children under 5,Under five mortality
+stillbirth_rate,mortality_rates,"Stillbirth rate (stillbirths per 1,000 total births (live and stillbirths))",Pregnant and lactating women,Stillbirths
+maternal_deaths,absolute_deaths,Maternal deaths,Pregnant and lactating women,Maternal mortality
+neonatal_deaths,absolute_deaths,Neonatal deaths,Pregnant and lactating women,Neonatal mortality
+u5_deaths,absolute_deaths,Child deaths (Total (0-59 months)),Children under 5,Under five mortality
+stillbirths,absolute_deaths,Stillbirths,Pregnant and lactating women,Stillbirths
+stunting_rate,nutrition,Global stunting (<-2 SD) rate,Children under 5,Children under five stunting - cases
+wasting_rate,nutrition,Global wasting (<-2 SD) rate,Children under 5,Children under five wasting - cases
+exclusive_breastfeeding_rate,breastfeeding,Percent of children (<6 mo) exclusively breastfed,Children under 5,Exclusively breastfed children
+breastfeeding_initiation_rate,breastfeeding,Prevalence of early initiation of breastfeeding,Children under 5,Early initiation of breast feeding - cases
+pregnant_anemia,anemia,Percent of women with anemia - Pregnant women with anemia,Pregnant and lactating women,Pregnant women with anemia
+pregnant_iron_def,anemia,Percent of women with anemia - Pregnant women with iron-deficiency anemia,Pregnant and lactating women,Pregnant women with iron-deficiency anemia
+women_anemia,anemia,Percent of women with anemia - Women of reproductive age with anemia,Pregnant and lactating women,Women of reproductive age with anemia
+women_iron_def,anemia,Percent of women with anemia - Women of reproductive age with iron-deficiency anemia,Pregnant and lactating women,Women of reproductive age with iron-deficiency anemia

@@ -138,7 +138,8 @@ list(
              format = "file"
              ),
   tar_target(list_indicator_file,
-             "raw_data/list_indicator_metadata.csv"),
+             "raw_data/list_indicator_metadata.csv",
+             format = "file"),
   tar_target(list_output,
              read_file(list_output_file)
              ),
