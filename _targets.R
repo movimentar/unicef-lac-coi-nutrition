@@ -8,8 +8,14 @@ library(targets)
 library(tarchetypes)
 
 # Set target options:
-tar_option_set(
-  packages = c("tidyverse", "scales", "wpp2022", "gt") # Packages that your targets need for their tasks.
+tar_option_set(packages = c(
+  "tidyverse",
+  "scales",
+  "wpp2022",
+  "gt",
+  "FactoMineR",
+  "factoextra"
+) # Packages that your targets need for their tasks.
   # format = "qs", # Optionally set the default storage format. qs is fast.
   #
   # Pipelines that take a long time to run may benefit from
