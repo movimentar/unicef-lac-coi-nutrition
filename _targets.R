@@ -167,5 +167,8 @@ list(
                                    list_metadata)
              ),
   tar_target(coi_pca,
-             run_pca(coverage_costs, emergency_list))
+             run_pca(coverage_costs, emergency_list)
+             ),
+  tar_target(list_output_exploration,
+             check_list_output(list_output))
 )
