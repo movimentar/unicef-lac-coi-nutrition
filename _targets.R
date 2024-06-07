@@ -164,5 +164,8 @@ list(
   tar_target(coi_dir_benefits,
              estimate_dir_benefits(trimmed_coverage_costs,
                                    list_output,
-                                   list_metadata))
+                                   list_metadata)
+             ),
+  tar_target(coi_pca,
+             run_pca(coverage_costs, emergency_list))
 )
