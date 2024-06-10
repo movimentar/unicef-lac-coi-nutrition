@@ -196,5 +196,13 @@ list(
              read_file(mean_earnings_file)
              ),
   tar_target(formula_packages,
-             calculate_formula_packages())
+             calculate_formula_packages()),
+  tar_target(coi_indir_benefits,
+             calculate_indir_benefits(coi_dir_benefits,
+                                      mean_earnings,
+                                      income_share,
+                                      gni_forecast,
+                                      formula_price,
+                                      formula_packages)
+             )
 )
