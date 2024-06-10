@@ -170,5 +170,31 @@ list(
              run_pca(coverage_costs, emergency_list)
              ),
   tar_target(list_output_exploration,
-             check_list_output(list_output))
+             check_list_output(list_output)),
+  tar_target(formula_price_file,
+             "raw_data/formula_price.csv",
+             format = "file"),
+  tar_target(gni_forecast_file,
+             "raw_data/gni_forecast.csv",
+             format = "file"),
+  tar_target(income_share_file,
+             "raw_data/income_share.csv",
+             format = "file"),
+  tar_target(mean_earnings_file,
+             "raw_data/mean_earnings.csv",
+             format = "file"),
+  tar_target(formula_price,
+             read_file(formula_price_file)
+             ),
+  tar_target(gni_forecast,
+             read_file(gni_forecast_file)
+             ),
+  tar_target(income_share,
+             read_file(income_share_file)
+             ),
+  tar_target(mean_earnings,
+             read_file(mean_earnings_file)
+             ),
+  tar_target(formula_packages,
+             calculate_formula_packages())
 )
