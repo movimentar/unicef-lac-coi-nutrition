@@ -3,23 +3,155 @@ title: "CoI Results"
 format: html
 ---
 
-## Quarto
-
-Quarto enables you to weave together content and executable code into a finished document. To learn more about Quarto see <https://quarto.org>.
-
-## Running Code
-
-When you click the **Render** button a document will be generated that includes both content and the output of embedded code. You can embed code like this:
-
 ```{r}
-tar_read(list_input_gt)
+tar_load(intervention_list)
 ```
 
-You can add options to executable code like this 
 
-```{r}
-#| echo: false
-2 * 2
+# Result tables and figures
+
+```{r aarange_by_int_fun}
+arrange_by_int_name <- function(df, intervention_list){
+    df %>% 
+    left_join(select(intervention_list, intervention_id, intervention_name),
+              by = "intervention_name") %>% 
+    arrange(intervention_id) %>% 
+    select(-intervention_id) %>% 
+    return()
+}
 ```
 
-The `echo: false` option disables the printing of code (only output is displayed).
+## LiST model coverage inputs
+
+```{r list_input}
+tar_read(list_input) %>% 
+    # prepare data for gt package
+    ungroup() %>% 
+    # create gt object
+    gt() %>% 
+    tab_header(title = "Input coverages used in LiST") %>% 
+    cols_hide(intervention_id) %>% 
+    cols_label( # rename colums
+      emergency = "Emergency",
+      country = "Country",
+      target_group = "Target group",
+      intervention_name = "Intervention name",
+      coverage = "Coverage (%)",
+      list_name = "Intervention name in LiST"
+    ) %>% 
+    fmt_number( # format column
+      columns = coverage,
+      decimals = 2
+    ) %>% 
+  cols_align(align = "center", columns = everything())
+```
+
+## Coverage of interventions needed respective to nutrition needs
+
+```{r intervention_coverage}
+tar_read(coi_coverages) %>% 
+  arrange_by_int_name(intervention_list) %>% 
+  ungroup() %>% 
+  gt() %>% 
+  tab_header(
+    title = "Coverage of interventions needed respective to nutrition needs"
+  ) %>% 
+  tab_spanner(
+    label = "Eta-Iota",
+    columns = contains("Eta-Iota")
+  ) %>% 
+  tab_spanner(
+    label = "Migration flows",
+    columns = contains("Migration")
+  ) %>% 
+  cols_label(
+    intervention_name = "Intervention name",
+    `total_beneficiaries_Eta-Iota` = "Interventions delivered",
+    `ideal_delivered_Eta-Iota` = "Interventions needed",
+    `coverage_Eta-Iota` = "coverage %",
+    `total_beneficiaries_Migration flows` = "Interventions delivered",
+    `ideal_delivered_Migration flows` = "Interventions needed",
+    `coverage_Migration flows` = "coverage %",
+  ) %>% 
+  fmt_number(
+    columns = everything(),
+    decimals = 0
+  ) %>% 
+  fmt_number( # format column
+      columns = contains("coverage"),
+      decimals = 2
+  ) %>% 
+  cols_align("center")
+```
+
+## Principal Component Analysis results
+```{r pca_results}
+tar_load(coi_pca)
+
+# display/format figures and tables
+coi_pca$pca_biplot
+coi_pca$var_contributions %>% 
+  gt(rowname_col = "intervention_id") %>% 
+  tab_header(title = "PCA variable contributions") %>% 
+  fmt_number(columns = everything(),
+             decimals = 4)
+coi_pca$screeplot
+coi_pca$clusters
+coi_pca$dendogram
+```
+
+## Needs and assistance cost summary
+```{r cost_summary}
+tar_read(coi_costs) %>%
+  ungroup() %>%
+  select(
+    target_group,
+    emergency,
+    total_beneficiaries,
+    total_cost,
+    ideal_delivered,
+    ideal_cost,
+    funding_gap,
+    global_coverage
+  ) %>%
+  gt(rowname_col = "target_group", groupname_col = "emergency") %>%
+  tab_header(
+    title = "Needs and assistance cost summary"
+  ) %>% 
+  summary_rows(
+    groups = everything(),
+    columns = c(
+      "total_beneficiaries",
+      "ideal_delivered",
+      "total_cost",
+      "ideal_cost",
+      "funding_gap",
+      "global_coverage"
+    ),
+    fns = list(Total = ~ sum(.)),
+    fmt = list( ~ fmt_number(., decimals = 0))
+  ) %>%
+  fmt_number(columns = everything(),
+             decimals = 0) %>% 
+  tab_spanner(
+    label = "Implemented response",
+    columns = c("total_beneficiaries", "total_cost")
+  ) %>% 
+  tab_spanner(
+    label = "Ideal response",
+    columns = c("ideal_delivered", "ideal_cost", "funding_gap")
+  ) %>% 
+  cols_align("center") %>% 
+  cols_label(
+    total_beneficiaries = "Interventions delivered",
+    global_coverage = "Global coverage (%)",
+    total_cost = "Costs (USD)",
+    ideal_delivered = "Interventions needed",
+    ideal_cost = "Costs (USD)",
+    funding_gap = "Funding gap (USD)"
+  )
+  
+  
+```
+
+
