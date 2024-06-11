@@ -136,9 +136,6 @@ list(
   tar_target(list_input, 
              build_list_input(coverage_costs, intervention_list)
              ),
-  tar_target(list_input_gt,
-             present_list_input(list_input)
-             ),
   tar_target(list_output_file,
              "raw_data/list_output_outdated.csv",
              format = "file"
