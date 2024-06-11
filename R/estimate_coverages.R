@@ -5,7 +5,7 @@
       group_by(emergency, intervention_name) %>% 
       summarise(total_beneficiaries = sum(trimmed_beneficiaries, na.rm = TRUE),
                 ideal_delivered = sum(ideal_delivered, na.rm = TRUE)) %>% 
-      mutate(coverage = total_beneficiaries / ideal_delivered) %>% 
+      mutate(coverage = (total_beneficiaries / ideal_delivered) * 100) %>% 
       pivot_wider(names_from = emergency,
                   values_from = c("total_beneficiaries", "ideal_delivered", "coverage")) %>% 
       select(intervention_name,
