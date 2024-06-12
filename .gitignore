@@ -36,4 +36,8 @@ po/*~
 rsconnect/
 # targets package
 _targets/
+# folder for temporary files
 temp
+# others
+Rplots.pdf
+*.docx
