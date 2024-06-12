@@ -1,16 +1,28 @@
 ---
 title: "CoI Results"
-format: html
+execute: 
+  echo: false
+format: docx
 ---
 
 ```{r}
-tar_load(intervention_list)
+#| label: setup
+#| include: false
+library(tidyverse)
+library(targets)
+library(gt)
+tar_load(intervention_list) # used by custom function
 ```
 
+The objective of this document is to render the necessary figures and tables for the COI report.
 
 # Result tables and figures
 
-```{r aarange_by_int_fun}
+```{r}
+#| label: custom-functions
+#| include: false
+
+# function arranges df by intervention name using factors from intervention_id
 arrange_by_int_name <- function(df, intervention_list){
     df %>% 
     left_join(select(intervention_list, intervention_id, intervention_name),
@@ -23,7 +35,7 @@ arrange_by_int_name <- function(df, intervention_list){
 
 ## LiST model coverage inputs
 
-```{r list_input}
+```{r list-input}
 tar_read(list_input) %>% 
     # prepare data for gt package
     ungroup() %>% 
@@ -154,9 +166,10 @@ tar_read(coi_costs) %>%
   
 ```
 
-```{r direct_benefits}
-tar_read(coi_dir_benefits)
+## Direct benefits
 
+```{r direct_benefits}
+# malnutrition indicators
 tar_read(coi_dir_benefits)$malnutrition %>%
   ungroup() %>%
   filter(!(
@@ -176,5 +189,79 @@ tar_read(coi_dir_benefits)$malnutrition %>%
     saved_95 = "Cases prevented by 95% coverage"
   )
 
+# breastfeeding indicators
+tar_read(coi_dir_benefits)$breastfeeding %>%
+  ungroup() %>%
+  filter(indicator_category == "breastfeeding") %>%
+  # changing improvement sign to match the improvement logic
+  mutate(
+    saved_implemented = abs(saved_implemented),
+    saved_30 = abs(saved_30),
+    saved_95 = abs(saved_95)
+  ) %>% 
+  gt(groupname_col = "emergency") %>%
+  tab_header(title = "Estimated improvements in breastfeeding indicators by nutrition responce scenario per emergency using the LiST model") %>%
+  cols_hide("indicator_category") %>%
+  fmt_number(columns = everything(),
+             decimals = 0) %>%
+  cols_align("center") %>%
+  cols_label(
+    indicator_name_absolute = "Indicator name",
+    coverage_0 = "Improvements in no response scenario (0% coverage)",
+    saved_implemented = "Improvements by UNICEF response",
+    saved_30 = "Improvements by 30% coverage",
+    saved_95 = "Improvements by 95% coverage"
+  )
+```
+
+## Indirect benefits
+
+```{r indirect benefits}
+tar_read(coi_indir_benefits) %>% 
+  ungroup() %>% 
+  mutate(
+    `Eta-Iota_implemented` = abs(`Eta-Iota_implemented`),
+    `Eta-Iota_30` = abs(`Eta-Iota_30`),
+    `Eta-Iota_95` = abs(`Eta-Iota_95`),
+    `Migration flows_implemented` = abs(`Migration flows_implemented`),
+    `Migration flows_30` = abs(`Migration flows_30`),
+    `Migration flows_95` = abs(`Migration flows_95`)
+  ) %>% 
+  gt(rowname_col = "indicator_name_absolute") %>% 
+  tab_header(title = "
+Estimated indirect benefits by nutrition responce scenario per emergency from exclusive breastfeeding improvements") %>% 
+  cols_hide(indicator_name) %>% 
+  fmt_number(columns = everything(),
+             decimal = 0) %>% 
+  cols_align("center") %>% 
+  tab_spanner(
+    label = "Eta-Iota",
+    columns = contains("Eta")
+  ) %>% 
+  tab_spanner(
+    label = "Migration flows",
+    columns = contains("Migration")
+  ) %>% 
+  grand_summary_rows(
+    columns = c("Eta-Iota_implemented",
+                "Eta-Iota_30",
+                "Eta-Iota_95",
+                "Migration flows_implemented",
+                "Migration flows_30",
+                "Migration flows_95"),
+    fns = list(Total = ~sum(.)),
+    fmt = ~fmt_number(., decimals = 0)
+  ) %>% 
+  cols_label(
+    `Eta-Iota_implemented` = "USD saved by UNICEF response",
+    `Eta-Iota_30` = "USD saved by 30% coverage",
+    `Eta-Iota_95` = "USD saved by 95% coverage",
+    `Migration flows_implemented` = "USD saved by UNICEF response",
+    `Migration flows_30` = "USD saved by 30% coverage",
+    `Migration flows_95` = "USD saved by 95% coverage"
+  )
+
+
+  
 ```
 
