@@ -154,4 +154,27 @@ tar_read(coi_costs) %>%
   
 ```
 
+```{r direct_benefits}
+tar_read(coi_dir_benefits)
+
+tar_read(coi_dir_benefits)$malnutrition %>%
+  ungroup() %>%
+  filter(!(
+    indicator_name_absolute %in% c("Maternal mortality", "Neonatal mortality")
+  )) %>%
+  gt(groupname_col = "emergency") %>%
+  tab_header(title = "Estimated malnutrition and mortality cases prevented by nutrition responce scenario per emergency using the LiST model") %>%
+  cols_hide("indicator_category") %>%
+  fmt_number(columns = everything(),
+             decimals = 0) %>%
+  cols_align("center") %>%
+  cols_label(
+    indicator_name_absolute = "Indicator name",
+    coverage_0 = "Cases in no response scenario (0% coverage)",
+    saved_implemented = "Cases prevented by UNICEF response",
+    saved_30 = "Cases prevented by 30% coverage",
+    saved_95 = "Cases prevented by 95% coverage"
+  )
+
+```
 
