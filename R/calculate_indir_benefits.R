@@ -96,19 +96,24 @@ coi_indir_benefits <- coi_dir_benefits[["breastfeeding"]] %>%
     )
   )
 
-coi_indir_benefits %>% 
-  ungroup() %>% 
-  select(-value, -indicator_category) %>% 
-  pivot_longer(cols = c("formula_cost", "cognitive_cost"),
-               names_to = "indicator_name",
-               values_to = "value") %>% 
-  mutate(indicator_name_absolute = if_else(
-    indicator_name == "formula_cost",
-    "Cost of feeding a child with formula for the first 2 years",
-    "	Potential future income lost due to cognitive losses"
-  )) %>% 
-pivot_wider(names_from = c("emergency", "coverage_type"),
-            values_from = value)
+# wrangle data for presentation
+coi_indir_benefits <- coi_indir_benefits %>%
+  ungroup() %>%
+  select(-value,-indicator_category) %>%
+  pivot_longer(
+    cols = c("formula_cost", "cognitive_cost"),
+    names_to = "indicator_name",
+    values_to = "value"
+  ) %>%
+  mutate(
+    indicator_name_absolute = if_else(
+      indicator_name == "formula_cost",
+      "Cost of feeding a child with formula for the first 2 years",
+      "Potential future income lost due to cognitive losses"
+    )
+  ) %>%
+  pivot_wider(names_from = c("emergency", "coverage_type"),
+              values_from = value)
 
 return(coi_indir_benefits)
 }
