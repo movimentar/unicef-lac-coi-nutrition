@@ -40,7 +40,7 @@ run_pca <- function(coverage_costs, emergency_list) {
   screeplot <- factoextra::fviz_screeplot(coverage_pca)
   
   # Get PCA clustered and dendogram object
-  intervention_hcpc <- FactoMineR::HCPC(coverage_pca, nb.clust = 4, graph = FALSE)
+  intervention_hcpc <- FactoMineR::HCPC(coverage_pca, nb.clust = 3, graph = FALSE)
   
   # Return PCA results
   pca_results <- list(
