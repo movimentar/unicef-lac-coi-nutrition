@@ -261,7 +261,5 @@ Estimated indirect benefits by nutrition responce scenario per emergency from ex
     `Migration flows_95` = "USD saved by 95% coverage"
   )
 
-
-  
 ```
 
