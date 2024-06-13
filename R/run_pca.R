@@ -1,12 +1,3 @@
-# Load necessary libraries
-library(dplyr)
-library(tidyr)
-library(FactoMineR)
-library(factoextra)
-library(gt)
-library(tibble)
-library(ggplot2)
-
 # Function to perform PCA and hierarchical clustering on coverage costs data
 # from coverage_costs and emergency_list, runs PCA and hierarchical clustering
 # analyses. Outputs a list with a PCA Biplot, eigenvalues table, variable
@@ -37,20 +28,27 @@ run_pca <- function(coverage_costs, emergency_list) {
     tibble::rownames_to_column(var = "intervention_id")
   
   # Get screeplot
-  screeplot <- factoextra::fviz_screeplot(coverage_pca)
+  screeplot <- factoextra::fviz_screeplot(coverage_pca) + 
+    guides(scale = "none")
   
   # Get PCA clustered and dendogram object
   intervention_hcpc <- FactoMineR::HCPC(coverage_pca, nb.clust = 4, graph = FALSE)
   
-  # Return PCA results
-  pca_results <- list(
-    pca_biplot = factoextra::fviz_pca_biplot(coverage_pca, addEllipses = FALSE),
-    eigenvalues = eigenvalues,
-    var_contributions = var_contributions,
-    screeplot = screeplot,
-    clusters = factoextra::fviz_cluster(intervention_hcpc, show.clust.cent = FALSE),
-    dendogram = factoextra::fviz_dend(intervention_hcpc, show.labels = FALSE)
-  )
+  # Suppress specific ggplot2 warning
+  suppressWarnings({
+    # Return PCA results
+    pca_results <- list(
+      pca_biplot = factoextra::fviz_pca_biplot(coverage_pca) + 
+        guides(scale = "none"),
+      eigenvalues = eigenvalues,
+      var_contributions = var_contributions,
+      screeplot = screeplot,
+      clusters = factoextra::fviz_cluster(intervention_hcpc) + 
+        guides(scale = "none"),
+      dendogram = factoextra::fviz_dend(intervention_hcpc) + 
+        guides(scale = "none")
+    )
+  })
   
   return(pca_results)
 }
