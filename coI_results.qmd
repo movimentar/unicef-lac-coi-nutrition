@@ -1,7 +1,9 @@
 ---
-title: "CoI Results"
-execute: 
-  echo: false
+title: "Results - Cost of Inaction"
+author: "movimentar GmbH"
+date: "`r format(Sys.time(), '%d %B %Y')`"
+execute:
+  echo: false  # Do not display code in the output
 format: docx
 ---
 
