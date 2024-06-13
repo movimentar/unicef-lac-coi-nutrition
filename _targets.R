@@ -137,7 +137,7 @@ list(
              build_list_input(coverage_costs, intervention_list)
              ),
   tar_target(list_output_file,
-             "raw_data/list_output_outdated.csv",
+             "raw_data/list_output.csv",
              format = "file"
              ),
   tar_target(list_indicator_file,
@@ -148,6 +148,10 @@ list(
              ),
   tar_target(list_metadata,
              read_file(list_indicator_file)
+             ),
+  tar_target(
+    list_output_clean,
+    clean_list_output(list_output)
   ),
   tar_target(trimmed_coverage_costs,
              trim_beneficiaries(coverage_costs)
@@ -160,14 +164,14 @@ list(
              ),
   tar_target(coi_dir_benefits,
              estimate_dir_benefits(trimmed_coverage_costs,
-                                   list_output,
+                                   list_output_clean,
                                    list_metadata)
              ),
   tar_target(coi_pca,
              run_pca(coverage_costs, emergency_list)
              ),
   tar_target(list_output_exploration,
-             check_list_output(list_output)),
+             check_list_output(list_output_clean)),
   tar_target(formula_price_file,
              "raw_data/formula_price.csv",
              format = "file"),

@@ -4,7 +4,12 @@ read_file <- function(file) {
     read_csv(file,
              col_types = list(intervention_id = readr::col_factor())) %>%
       return()
-  } else{
+    
+  } else if (file == "raw_data/list_output.csv") {
+    read_csv(file, skip = 1)
+      
+    
+  } else {
     read_csv(file) %>%
       return()
   }
