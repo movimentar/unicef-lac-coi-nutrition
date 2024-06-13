@@ -5,13 +5,12 @@ library(FactoMineR)
 library(factoextra)
 library(gt)
 library(tibble)
-library(ggplot2) # Ensure ggplot2 is loaded
+library(ggplot2)
 
 # Function to perform PCA and hierarchical clustering on coverage costs data
 # from coverage_costs and emergency_list, runs PCA and hierarchical clustering
 # analyses. Outputs a list with a PCA Biplot, eigenvalues table, variable
 # contributions, screeplot, PCA clustered plot, and dendogram.
-
 run_pca <- function(coverage_costs, emergency_list) {
   # Prepare data for PCA
   coverages_pca_data <- coverage_costs %>%
@@ -26,7 +25,7 @@ run_pca <- function(coverage_costs, emergency_list) {
   coverages_pca_data[is.na(coverages_pca_data)] <- 0 # Replace NAs with 0s
   
   # Create PCA object
-  coverage_pca <- FactoMineR::PCA(coverages_pca_data, scale.unit = FALSE)
+  coverage_pca <- FactoMineR::PCA(coverages_pca_data, scale.unit = FALSE, graph = FALSE)
   
   # Get eigenvalue table
   eigenvalues <- factoextra::get_eigenvalue(coverage_pca) %>%
@@ -41,23 +40,17 @@ run_pca <- function(coverage_costs, emergency_list) {
   screeplot <- factoextra::fviz_screeplot(coverage_pca)
   
   # Get PCA clustered and dendogram object
-  intervention_hcpc <- FactoMineR::HCPC(coverage_pca, nb.clust = 4)
+  intervention_hcpc <- FactoMineR::HCPC(coverage_pca, nb.clust = 4, graph = FALSE)
   
-  # Suppress specific ggplot2 warning
-  suppressWarnings({
-    # Return PCA results
-    pca_results <- list(
-      pca_biplot = factoextra::fviz_pca_biplot(coverage_pca) + 
-        guides(scale = "none"),
-      eigenvalues = eigenvalues,
-      var_contributions = var_contributions,
-      screeplot = screeplot,
-      clusters = factoextra::fviz_cluster(intervention_hcpc) + 
-        guides(scale = "none"),
-      dendogram = factoextra::fviz_dend(intervention_hcpc) + 
-        guides(scale = "none")
-    )
-  })
+  # Return PCA results
+  pca_results <- list(
+    pca_biplot = factoextra::fviz_pca_biplot(coverage_pca, addEllipses = FALSE),
+    eigenvalues = eigenvalues,
+    var_contributions = var_contributions,
+    screeplot = screeplot,
+    clusters = factoextra::fviz_cluster(intervention_hcpc, show.clust.cent = FALSE),
+    dendogram = factoextra::fviz_dend(intervention_hcpc, show.labels = FALSE)
+  )
   
   return(pca_results)
 }
