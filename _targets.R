@@ -187,6 +187,8 @@ list(
   tar_target(formula_price,
              read_file(formula_price_file)
              ),
+  tar_target(mean_formula_price,
+             average_formula_prices(formula_price)),
   tar_target(gni_forecast,
              read_file(gni_forecast_file)
              ),
@@ -203,7 +205,7 @@ list(
                                       mean_earnings,
                                       income_share,
                                       gni_forecast,
-                                      formula_price,
+                                      mean_formula_price,
                                       formula_packages)
              )
 )

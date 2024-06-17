@@ -6,7 +6,7 @@ calculate_indir_benefits <- function(coi_dir_benefits,
                                      mean_earnings,
                                      income_share,
                                      gni_forecast,
-                                     formula_price,
+                                     mean_formula_price,
                                      formula_packages) {
   # filter relevant labour incomes contries for study
 labour_income_filtered <- income_share %>% 
@@ -27,27 +27,6 @@ labour_income_filtered <- income_share %>%
 # calculate mean labour income of countries filtered
 countries_labour_income <- mean(pull(labour_income_filtered, obs_value))
 
-# prepare formula price data
-mean_formula_price <- formula_price %>%
-  rename(country = Country,
-         formula_unit_cost = `Unit cost for price of lowest economy brand of formula per 900-gram container (US$)`) %>% 
-  # replace "Not Available by NA"
-  mutate(
-    formula_unit_cost = 
-      if_else(formula_unit_cost == "Not Available",
-              NA,
-              formula_unit_cost)) %>% 
-  mutate(formula_unit_cost = as.double(formula_unit_cost)) %>% 
-  # filter countries of study
-  filter(country %in% c(
-    "Guatemala",
-    "Honduras",
-    "Nicaragua",
-    "Colombia",
-    "Peru"
-  )) %>% 
-  pull(formula_unit_cost) %>% 
-  mean(na.rm = TRUE)
 
 # gni for working years only
 gni_working_years <- gni_forecast %>% 
