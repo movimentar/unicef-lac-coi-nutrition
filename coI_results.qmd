@@ -219,6 +219,8 @@ tar_read(coi_dir_benefits)$breastfeeding %>%
 ## Indirect benefits
 
 ```{r indirect benefits}
+tar_load(c("mean_formula_price", "formula_packages"))
+
 tar_read(coi_indir_benefits) %>% 
   ungroup() %>% 
   mutate(
@@ -229,9 +231,9 @@ tar_read(coi_indir_benefits) %>%
     `Migration flows_30` = abs(`Migration flows_30`),
     `Migration flows_95` = abs(`Migration flows_95`)
   ) %>% 
-  gt(rowname_col = "indicator_name_absolute") %>% 
+  gt() %>% 
   tab_header(title = "
-Estimated indirect benefits by nutrition response scenario per emergency from exclusive breastfeeding improvements until 2080") %>% 
+Estimated indirect benefits by nutrition response scenario per emergency from exclusive breastfeeding improvements") %>% 
   cols_hide(indicator_name) %>% 
   fmt_number(columns = everything(),
              decimal = 0) %>% 
@@ -255,12 +257,23 @@ Estimated indirect benefits by nutrition response scenario per emergency from ex
     fmt = ~fmt_number(., decimals = 0)
   ) %>% 
   cols_label(
+    indicator_name_absolute = "Indicator name",
     `Eta-Iota_implemented` = "USD saved by UNICEF response",
     `Eta-Iota_30` = "USD saved by 30% coverage",
     `Eta-Iota_95` = "USD saved by 95% coverage",
     `Migration flows_implemented` = "USD saved by UNICEF response",
     `Migration flows_30` = "USD saved by 30% coverage",
     `Migration flows_95` = "USD saved by 95% coverage"
+  ) %>% 
+  tab_footnote(
+    footnote = "Costs calculated for years between 2038 - 2080",
+    locations = cells_body(columns = indicator_name_absolute, rows = 1)
+  ) %>% 
+    tab_footnote(
+    footnote = paste0("Based on the estimation that two years of baby formula would cost ",
+                      format(mean_formula_price * formula_packages, digits = 1, big.mark = ","),
+                      " USD"),
+    locations = cells_body(columns = indicator_name_absolute, rows = 2)
   )
 
 ```
