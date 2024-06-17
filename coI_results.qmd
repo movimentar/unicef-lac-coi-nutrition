@@ -178,7 +178,7 @@ tar_read(coi_dir_benefits)$malnutrition %>%
     indicator_name_absolute %in% c("Maternal mortality", "Neonatal mortality")
   )) %>%
   gt(groupname_col = "emergency") %>%
-  tab_header(title = "Estimated malnutrition and mortality cases prevented by nutrition responce scenario per emergency using the LiST model") %>%
+  tab_header(title = "Estimated direct benefits in malnutrition and mortality cases prevented by nutrition response scenario per emergency using the LiST model (2020-2022)") %>%
   cols_hide("indicator_category") %>%
   fmt_number(columns = everything(),
              decimals = 0) %>%
@@ -202,7 +202,7 @@ tar_read(coi_dir_benefits)$breastfeeding %>%
     saved_95 = abs(saved_95)
   ) %>% 
   gt(groupname_col = "emergency") %>%
-  tab_header(title = "Estimated improvements in breastfeeding indicators by nutrition responce scenario per emergency using the LiST model") %>%
+  tab_header(title = "Estimated direct benefits in breastfeeding indicators by nutrition response scenario per emergency using the LiST model (2020-2022)") %>%
   cols_hide("indicator_category") %>%
   fmt_number(columns = everything(),
              decimals = 0) %>%
@@ -231,7 +231,7 @@ tar_read(coi_indir_benefits) %>%
   ) %>% 
   gt(rowname_col = "indicator_name_absolute") %>% 
   tab_header(title = "
-Estimated indirect benefits by nutrition responce scenario per emergency from exclusive breastfeeding improvements") %>% 
+Estimated indirect benefits by nutrition response scenario per emergency from exclusive breastfeeding improvements until 2080") %>% 
   cols_hide(indicator_name) %>% 
   fmt_number(columns = everything(),
              decimal = 0) %>% 

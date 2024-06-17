@@ -59,6 +59,8 @@ calculate_formula_cost <- function(dependent_children, formula_units_needed, for
 }
 
 # function to calculate potential future income lost due to cognitive losses
+# See : https://www.aliveandthrive.org/sites/default/files/1360-the-cost-of-not-breastfeeding-faq-v4-.pdf
+
 calculate_cognitive_costs <-
   function(children_not_breastfed,
            gni,
