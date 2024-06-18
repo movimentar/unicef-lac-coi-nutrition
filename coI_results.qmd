@@ -16,7 +16,7 @@ library(gt)
 tar_load(intervention_list) # used by custom function
 ```
 
-The objective of this document is to render the necessary figures and tables for the COI report.
+The objective of this document is to render the necessary figures and tables for the COI report as well as respective support tables.
 
 # Result tables and figures
 
@@ -274,6 +274,82 @@ Estimated indirect benefits by nutrition response scenario per emergency from ex
                       " USD"),
     locations = cells_stub(rows = 2)
   )
+
+```
+
+# Support tables 
+
+```{r}
+#| label: list-inputs
+
+tar_read(list_input) %>% 
+  ungroup() %>% 
+  gt() %>% 
+  tab_header(title = "Input coverages used in LiST models") %>% 
+  cols_hide(intervention_id) %>% 
+  cols_label()
+```
+
+
+```{r}
+#| label: baby formula prices
+
+tar_read(formula_price) %>% 
+  filter(Country %in% c(
+      "Guatemala",
+      "Honduras",
+      "Nicaragua",
+      "Colombia",
+      "Peru"
+    )) %>%
+  mutate(`Unit cost for price of lowest economy brand of formula per 900-gram container (US$)` = if_else(
+    `Unit cost for price of lowest economy brand of formula per 900-gram container (US$)`== "Not Available",
+    NA,
+    as.double(`Unit cost for price of lowest economy brand of formula per 900-gram container (US$)`)
+  )) %>% 
+  gt(rowname_col = "Country") %>% 
+  tab_header(title = "Price data of baby formula containers in countries of study from the 'Cost of Not Breastfeeding Tool'") %>% 
+  grand_summary_rows(columns = `Unit cost for price of lowest economy brand of formula per 900-gram container (US$)`,
+                     fns = list(Mean = ~mean(., na.rm = TRUE)))
+```
+
+
+```{r}
+#| label: median-costs
+
+tar_read(median_costs_cleaned) %>%
+  left_join(select(intervention_list, intervention_id, intervention_name),
+            by = "intervention_id") %>% 
+  relocate(intervention_name, .after = emergency) %>% 
+  pivot_wider(names_from = emergency, 
+              values_from = median_cost_person) %>% 
+  select(-intervention_id) %>% 
+  arrange_by_int_name(intervention_list) %>% 
+  gt(rowname_col = "intervention_name") %>% 
+  tab_header(title = "Cleaned median intervention delivery costs (USD) per person used in estimations") %>% 
+  fmt_number(columns = everything(),
+             decimals = 2) %>% 
+  tab_spanner(
+    label = "USD costs",
+    columns = c("Eta-Iota", "Migration flows")
+  )
+  
+```
+
+
+```{r}
+#| label: baby-formula-packages
+
+data.frame(
+  Period_Weeks = c("1-2", "3-4", "5-8", "9-16", "17-20 (5 months)", "21-24 (6+ months)"),
+  Formula_Grams_per_Bottle = c(8.8, 13.2, 17.6, 22, 26.4, 26.4),
+  Bottles_per_Day = c(7, 5, 5, 5, 4, 2),
+  Feeding_Duration_Weeks = c(2, 2, 4, 8, 4, 72)
+) %>% 
+  gt() %>% 
+  tab_header(title = "Baby Formula Feeding Schedule as per manufacturer's instructions used in estimations") %>% 
+  tab_source_note(source_note = "Source: Löwezahn organics, https://bit.ly/42bNli8")
+
 
 ```
 
