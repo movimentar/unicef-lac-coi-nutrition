@@ -16,6 +16,7 @@ format:
 library(tidyverse)
 library(targets)
 library(gt)
+
 tar_load(intervention_list) # used by custom function
 ```
 
@@ -60,7 +61,7 @@ tar_read(list_input) %>%
     ) %>% 
     fmt_number( # format column
       columns = coverage,
-      decimals = 2
+      decimals = 1
     ) %>% 
   cols_align(align = "center", columns = everything())
 ```
@@ -271,32 +272,47 @@ Estimated indirect benefits by nutrition response scenario per emergency from ex
   ) %>% 
   tab_footnote(
     footnote = "Costs calculated for years between 2038 - 2080",
-    locations = cells_stub( rows = 1)
+    locations = cells_stub(rows = "Cost of feeding a child with formula for the first 2 years")
   ) %>% 
     tab_footnote(
     footnote = paste0("Based on the estimation that two years of baby formula would cost ",
                       format(mean_formula_price * formula_packages, digits = 1, big.mark = ","),
                       " USD"),
-    locations = cells_stub(rows = 2)
+    locations = cells_stub(rows = "Potential future income lost due to cognitive losses")
   )
 
 ```
+
+\newpage
 
 # Support tables 
 
 ```{r}
 #| label: list-inputs
+#| # This is the same table as under list-input
 
 tar_read(list_input) %>% 
   ungroup() %>% 
   gt() %>% 
   tab_header(title = "Input coverages used in LiST models") %>% 
   cols_hide(intervention_id) %>% 
-  cols_label()
+  cols_label( # rename columns
+      emergency = "Emergency",
+      country = "Country",
+      target_group = "Target group",
+      intervention_name = "Intervention name",
+      coverage = "Coverage (%)",
+      list_name = "Intervention name in LiST"
+    ) %>% 
+    fmt_number( # format column
+      columns = coverage,
+      decimals = 1
+    ) %>% 
+  cols_align(align = "center", columns = everything())
 ```
 
 
-```{r}
+```{r, warning=FALSE}
 #| label: baby formula prices
 
 tar_read(formula_price) %>% 
