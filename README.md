@@ -1,27 +1,42 @@
-# Study - The cost of inaction on nutrition in emergencies in Latin America and the Caribbean
-Repository in support of the Study - The cost of inaction on nutrition in emergencies in Latin America and the Caribbean
+# Study – The cost of inaction on nutrition in emergencies in Latin America and the Caribbean
 
-The Latin America and the Caribbean (LAC) region is highly susceptible to natural disasters, due to structural poverty, inequality, and pervasive violence. This affects millions of vulnerable people every year, especially the nutritional status of children under five years of age and pregnant and lactating women (PLW), with humanitarian needs. Additionally, the region experiences significant migration flows, making LAC a region with a high per capita number of migrants, including refugees and displaced persons. Disasters and humanitarian crises severely impact nutritional status, especially among children under five and PLW, leading to increased risks of infectious diseases, malnutrition, and long-term cognitive and physical impairments. Despite the critical importance of nutrition responses in emergencies, global funding often prioritises other sectors over direct nutritional interventions, overlooking the nuanced needs of the population groups most vulnerable to malnutrition  and the long-term benefits of nutritional support. UNICEF emphasises the importance of prioritising, funding and implementing nutrition interventions in response to an emergency to prevent malnutrition and its severe outcomes, highlighting the need for increased political and financial support for nutrition-specific interventions to address the challenges faced by the most vulnerable in LAC. The primary objective of this multi-country study was to assess the human and economic implications of failing to fund and therefore implement a nutrition-focused response in specific emergencies in the Latin American and Caribbean (LAC) region targeting children under five years old, with an additional emphasis on those under two, as well as pregnant and lactating women.
+This repository supports the study *“The Cost of Inaction on Nutrition in Emergencies in Latin America and the Caribbean (LAC)”*, implemented by movimentar GmbH in collaboration with UNICEF.
 
-See more at: https://movimentar.eu.teamwork.com/app/projects/536205/
+The LAC region faces high exposure to natural disasters, compounded by structural poverty, inequality, and pervasive violence. These challenges affect millions, particularly children under five and pregnant and lactating women (PLW), increasing the risk of malnutrition, infectious diseases, and long-term developmental impairments.
 
-## Instructions for running the scripts
-The projects uses the package "targets" to define a reproducible and organized pipeline, for more info on its use please consult [their user manual](https://books.ropensci.org/targets/).
+The region also experiences substantial migration flows, with a high per capita number of migrants, refugees, and displaced persons. Despite the urgency of addressing nutrition in such emergencies, global humanitarian funding tends to prioritise other sectors, often overlooking the specific nutritional needs of vulnerable populations.
 
-The current pipeline has been built and run with R version 4.2.3 (2023-03-15 ucrt) -- "Shortstop Beagle"
+UNICEF advocates for prioritising, funding, and implementing nutrition-specific interventions to prevent severe outcomes during crises. This study aims to assess the human and economic consequences of failing to fund and implement adequate nutrition responses in selected emergencies across the LAC region, with a focus on children under five—particularly those under two—and PLW.
 
-The pipeline is run from the _targets.R file located on the root of the project. To run the pipeline, first install the packages indicated in the tar_option_set() function in the _targets.R file, from those packages, ["wpp2022"](https://github.com/PPgp/wpp2022) needs to be [installed from github](https://cran.r-project.org/web/packages/githubinstall/vignettes/githubinstall.html).
+For more background and project documentation, visit the [project workspace](https://movimentar.eu.teamwork.com/app/projects/536205/).
 
-After the necessary packages have been installed, you can check the pipeline and then run it following the instructions in the [sections 2.4 and 2.5 of the user manual](https://books.ropensci.org/targets/walkthrough.html#inspect-the-pipeline).
+---
 
-A target is equivalent to an intermediate step in the pipeline, these can be data frames, lists, individual values, plots or any other R object. To retrieve them and inspect them, check the target names with the tar_visnetwork() function and load the target you want to check to the environment using the tar_load() function.
+## Reproducibility and pipeline structure
 
-The main target in the project is the "coi_df" target which contains a data frame with the necesary information for calculating nutrition intervention coverages and estimated monetary costs of reaching the people in need indicated by the data collection. All targets preceding the coi_df can be considered data cleaning and calibration steps, while all steps following the same target can be considered steps to obtain output tables and results.
+This project uses the [`targets`](https://books.ropensci.org/targets/) package to define a structured and reproducible pipeline in R.
 
-There is a portion of the pipeline corresponding to the LiST model that has to be run manually. This paragrgraph will be updated as that section is finished.
+* **R version**: 4.2.3 (2023-03-15 ucrt) – "Shortstop Beagle"
+* **Main script**: `_targets.R` at the project root
+* **Main output**: `coi_df`, a data frame containing intervention coverage estimates and associated cost calculations
 
+To run the pipeline:
 
+1. **Install dependencies**
+   Packages required are listed in the `tar_option_set()` call in `_targets.R`.
+   One package, [`wpp2022`](https://github.com/PPgp/wpp2022), must be [installed from GitHub](https://cran.r-project.org/web/packages/githubinstall/vignettes/githubinstall.html).
 
+2. **Run the pipeline**
+   Follow sections [2.4](https://books.ropensci.org/targets/walkthrough.html#inspect-the-pipeline) and [2.5](https://books.ropensci.org/targets/walkthrough.html#run-the-pipeline) of the `targets` manual to:
+
+   * Inspect the pipeline with `tar_visnetwork()`
+   * Execute the full workflow using `tar_make()`
+
+3. **Review and inspect results**
+   Each **target** represents an intermediate object (e.g. data frame, list, value, plot). Use `tar_load("target_name")` to load a specific object into your environment. The `coi_df` target is the core output; targets upstream of it prepare and clean data, while downstream targets generate tables and summaries.
+
+4. **LiST model integration**
+   A portion of the analysis using the Lives Saved Tool (LiST) is run externally and integrated into the pipeline manually. 
 
 
 
