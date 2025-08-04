@@ -4,7 +4,10 @@ author: "movimentar GmbH"
 date: "`r format(Sys.time(), '%d %B %Y')`"
 execute:
   echo: false  # Do not display code in the output
-format: docx
+format:
+  docx:
+    toc: true
+    toc-depth: 2
 ---
 
 ```{r}
@@ -16,7 +19,7 @@ library(gt)
 tar_load(intervention_list) # used by custom function
 ```
 
-The objective of this document is to render the necessary figures and tables for the COI report as well as respective support tables.
+This document compiles the core figures and tables supporting the final Cost of Inaction (CoI) study, structured by analytical component. It is intended to support reporting and review, not for direct publication.
 
 # Result tables and figures
 
@@ -36,6 +39,8 @@ arrange_by_int_name <- function(df, intervention_list){
 ```
 
 ## LiST model coverage inputs
+
+These inputs represent the baseline and targeted intervention coverage values used in LiST simulations for each emergency scenario.
 
 ```{r list-input}
 tar_read(list_input) %>% 
@@ -82,10 +87,10 @@ tar_read(coi_coverages) %>%
     intervention_name = "Intervention name",
     `total_beneficiaries_Eta-Iota` = "Interventions delivered",
     `ideal_delivered_Eta-Iota` = "Interventions needed",
-    `coverage_Eta-Iota` = "coverage %",
+    `coverage_Eta-Iota` = "Eta-Iota coverage (%)",
     `total_beneficiaries_Migration flows` = "Interventions delivered",
     `ideal_delivered_Migration flows` = "Interventions needed",
-    `coverage_Migration flows` = "coverage %",
+    `coverage_Migration flows` = "Migration coverage (%)",
   ) %>% 
   fmt_number(
     columns = everything(),
