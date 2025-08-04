@@ -32,7 +32,7 @@ run_pca <- function(coverage_costs, emergency_list) {
     guides(scale = "none")
   
   # Get PCA clustered and dendogram object
-  intervention_hcpc <- FactoMineR::HCPC(coverage_pca, nb.clust = 4, graph = FALSE)
+  intervention_hcpc <- FactoMineR::HCPC(coverage_pca, nb.clust = 3, graph = FALSE)
   
   # Suppress specific ggplot2 warning
   suppressWarnings({

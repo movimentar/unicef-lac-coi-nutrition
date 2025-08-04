@@ -4,7 +4,10 @@ author: "movimentar GmbH"
 date: "`r format(Sys.time(), '%d %B %Y')`"
 execute:
   echo: false  # Do not display code in the output
-format: docx
+format:
+  docx:
+    toc: true
+    toc-depth: 2
 ---
 
 ```{r}
@@ -16,7 +19,7 @@ library(gt)
 tar_load(intervention_list) # used by custom function
 ```
 
-The objective of this document is to render the necessary figures and tables for the COI report.
+This document compiles the core figures and tables supporting the final Cost of Inaction (CoI) study, structured by analytical component. It is intended to support reporting and review, not for direct publication.
 
 # Result tables and figures
 
@@ -36,6 +39,8 @@ arrange_by_int_name <- function(df, intervention_list){
 ```
 
 ## LiST model coverage inputs
+
+These inputs represent the baseline and targeted intervention coverage values used in LiST simulations for each emergency scenario.
 
 ```{r list-input}
 tar_read(list_input) %>% 
@@ -82,10 +87,10 @@ tar_read(coi_coverages) %>%
     intervention_name = "Intervention name",
     `total_beneficiaries_Eta-Iota` = "Interventions delivered",
     `ideal_delivered_Eta-Iota` = "Interventions needed",
-    `coverage_Eta-Iota` = "coverage %",
+    `coverage_Eta-Iota` = "Eta-Iota coverage (%)",
     `total_beneficiaries_Migration flows` = "Interventions delivered",
     `ideal_delivered_Migration flows` = "Interventions needed",
-    `coverage_Migration flows` = "coverage %",
+    `coverage_Migration flows` = "Migration coverage (%)",
   ) %>% 
   fmt_number(
     columns = everything(),
@@ -178,7 +183,7 @@ tar_read(coi_dir_benefits)$malnutrition %>%
     indicator_name_absolute %in% c("Maternal mortality", "Neonatal mortality")
   )) %>%
   gt(groupname_col = "emergency") %>%
-  tab_header(title = "Estimated malnutrition and mortality cases prevented by nutrition responce scenario per emergency using the LiST model") %>%
+  tab_header(title = "Estimated direct benefits in malnutrition and mortality cases prevented by nutrition response scenario per emergency using the LiST model (2020-2022)") %>%
   cols_hide("indicator_category") %>%
   fmt_number(columns = everything(),
              decimals = 0) %>%
@@ -202,7 +207,7 @@ tar_read(coi_dir_benefits)$breastfeeding %>%
     saved_95 = abs(saved_95)
   ) %>% 
   gt(groupname_col = "emergency") %>%
-  tab_header(title = "Estimated improvements in breastfeeding indicators by nutrition responce scenario per emergency using the LiST model") %>%
+  tab_header(title = "Estimated direct benefits in breastfeeding indicators by nutrition response scenario per emergency using the LiST model (2020-2022)") %>%
   cols_hide("indicator_category") %>%
   fmt_number(columns = everything(),
              decimals = 0) %>%
@@ -219,6 +224,8 @@ tar_read(coi_dir_benefits)$breastfeeding %>%
 ## Indirect benefits
 
 ```{r indirect benefits}
+tar_load(c("mean_formula_price", "formula_packages"))
+
 tar_read(coi_indir_benefits) %>% 
   ungroup() %>% 
   mutate(
@@ -231,7 +238,7 @@ tar_read(coi_indir_benefits) %>%
   ) %>% 
   gt(rowname_col = "indicator_name_absolute") %>% 
   tab_header(title = "
-Estimated indirect benefits by nutrition responce scenario per emergency from exclusive breastfeeding improvements") %>% 
+Estimated indirect benefits by nutrition response scenario per emergency from exclusive breastfeeding improvements") %>% 
   cols_hide(indicator_name) %>% 
   fmt_number(columns = everything(),
              decimal = 0) %>% 
@@ -261,7 +268,93 @@ Estimated indirect benefits by nutrition responce scenario per emergency from ex
     `Migration flows_implemented` = "USD saved by UNICEF response",
     `Migration flows_30` = "USD saved by 30% coverage",
     `Migration flows_95` = "USD saved by 95% coverage"
+  ) %>% 
+  tab_footnote(
+    footnote = "Costs calculated for years between 2038 - 2080",
+    locations = cells_stub( rows = 1)
+  ) %>% 
+    tab_footnote(
+    footnote = paste0("Based on the estimation that two years of baby formula would cost ",
+                      format(mean_formula_price * formula_packages, digits = 1, big.mark = ","),
+                      " USD"),
+    locations = cells_stub(rows = 2)
   )
+
+```
+
+# Support tables 
+
+```{r}
+#| label: list-inputs
+
+tar_read(list_input) %>% 
+  ungroup() %>% 
+  gt() %>% 
+  tab_header(title = "Input coverages used in LiST models") %>% 
+  cols_hide(intervention_id) %>% 
+  cols_label()
+```
+
+
+```{r}
+#| label: baby formula prices
+
+tar_read(formula_price) %>% 
+  filter(Country %in% c(
+      "Guatemala",
+      "Honduras",
+      "Nicaragua",
+      "Colombia",
+      "Peru"
+    )) %>%
+  mutate(`Unit cost for price of lowest economy brand of formula per 900-gram container (US$)` = if_else(
+    `Unit cost for price of lowest economy brand of formula per 900-gram container (US$)`== "Not Available",
+    NA,
+    as.double(`Unit cost for price of lowest economy brand of formula per 900-gram container (US$)`)
+  )) %>% 
+  gt(rowname_col = "Country") %>% 
+  tab_header(title = "Price data of baby formula containers in countries of study from the 'Cost of Not Breastfeeding Tool'") %>% 
+  grand_summary_rows(columns = `Unit cost for price of lowest economy brand of formula per 900-gram container (US$)`,
+                     fns = list(Mean = ~mean(., na.rm = TRUE)))
+```
+
+
+```{r}
+#| label: median-costs
+
+tar_read(median_costs_cleaned) %>%
+  left_join(select(intervention_list, intervention_id, intervention_name),
+            by = "intervention_id") %>% 
+  relocate(intervention_name, .after = emergency) %>% 
+  pivot_wider(names_from = emergency, 
+              values_from = median_cost_person) %>% 
+  select(-intervention_id) %>% 
+  arrange_by_int_name(intervention_list) %>% 
+  gt(rowname_col = "intervention_name") %>% 
+  tab_header(title = "Cleaned median intervention delivery costs (USD) per person used in estimations") %>% 
+  fmt_number(columns = everything(),
+             decimals = 2) %>% 
+  tab_spanner(
+    label = "USD costs",
+    columns = c("Eta-Iota", "Migration flows")
+  )
+  
+```
+
+
+```{r}
+#| label: baby-formula-packages
+
+data.frame(
+  Period_Weeks = c("1-2", "3-4", "5-8", "9-16", "17-20 (5 months)", "21-24 (6+ months)"),
+  Formula_Grams_per_Bottle = c(8.8, 13.2, 17.6, 22, 26.4, 26.4),
+  Bottles_per_Day = c(7, 5, 5, 5, 4, 2),
+  Feeding_Duration_Weeks = c(2, 2, 4, 8, 4, 72)
+) %>% 
+  gt() %>% 
+  tab_header(title = "Baby Formula Feeding Schedule as per manufacturer's instructions used in estimations") %>% 
+  tab_source_note(source_note = "Source: Löwezahn organics, https://bit.ly/42bNli8")
+
 
 ```
 

@@ -10,6 +10,9 @@ build_list_input <- function(coverage_costs, intervention_list){
     mutate(coverage = coverage * 100) %>% 
     filter(!is.na(coverage)) %>% 
     relocate(target_group, .after = country) %>% 
+    mutate(coverage = if_else(coverage > 95, # make 95 the max coverage
+                              95,
+                              coverage)) %>% 
     return()
 }
 
