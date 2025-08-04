@@ -374,3 +374,119 @@ data.frame(
 
 ```
 
+
+```{r excel_export}
+# Function to arrange dataframes by intervention name using factors from intervention_id
+arrange_by_int_name <- function(df, intervention_list){
+    df %>% 
+    left_join(select(intervention_list, intervention_id, intervention_name),
+              by = "intervention_name") %>% 
+    arrange(intervention_id) %>% 
+    select(-intervention_id) %>% 
+    return()
+}
+
+
+# Input data summary (PIN, people reached, coverage, funding)
+input_table_df <- tar_read(coi_costs) %>%
+  ungroup() %>%
+  select(
+    Emergency = emergency,
+    `Population group` = target_group,
+    `People reached` = total_beneficiaries,
+    `Interventions needed` = ideal_delivered,
+    `Coverage (%)` = global_coverage,
+    `Funds allocated (USD)` = total_cost
+  )
+
+# Intervention coverage (intervention-level)
+coverage_df <- tar_read(coi_coverages) %>%
+  arrange_by_int_name(intervention_list) %>%
+  ungroup() %>%
+  select(
+    `Intervention name` = intervention_name,
+    `Interventions delivered (Eta-Iota)` = `total_beneficiaries_Eta-Iota`,
+    `Interventions needed (Eta-Iota)` = `ideal_delivered_Eta-Iota`,
+    `Coverage (%) Eta-Iota` = `coverage_Eta-Iota`,
+    `Interventions delivered (Migration)` = `total_beneficiaries_Migration flows`,
+    `Interventions needed (Migration)` = `ideal_delivered_Migration flows`,
+    `Coverage (%) Migration` = `coverage_Migration flows`
+  )
+
+# Funding summary
+cost_summary_df <- tar_read(coi_costs) %>%
+  ungroup() %>%
+  select(
+    Emergency = emergency,
+    `Population group` = target_group,
+    `Interventions delivered` = total_beneficiaries,
+    `Costs (USD)` = total_cost,
+    `Interventions needed` = ideal_delivered,
+    `Costs needed (USD)` = ideal_cost,
+    `Funding gap (USD)` = funding_gap,
+    `Global coverage (%)` = global_coverage
+  )
+
+# Direct benefits – mortality and malnutrition
+direct_benefits_mortality_df <- tar_read(coi_dir_benefits)$malnutrition %>%
+  ungroup() %>%
+  filter(!indicator_name_absolute %in% c("Maternal mortality", "Neonatal mortality")) %>%
+  select(
+    Emergency = emergency,
+    `Indicator name` = indicator_name_absolute,
+    `Cases in 0% coverage` = coverage_0,
+    `Cases prevented by UNICEF response` = saved_implemented,
+    `Cases prevented by 30% coverage` = saved_30,
+    `Cases prevented by 95% coverage` = saved_95
+  )
+
+# Direct benefits – breastfeeding
+direct_benefits_bf_df <- tar_read(coi_dir_benefits)$breastfeeding %>%
+  ungroup() %>%
+  filter(indicator_category == "breastfeeding") %>%
+  mutate(across(
+    .cols = c(saved_implemented, saved_30, saved_95),
+    .fns = abs
+  )) %>%
+  select(
+    Emergency = emergency,
+    `Indicator name` = indicator_name_absolute,
+    `Improvements in 0% coverage` = coverage_0,
+    `Improvements by UNICEF response` = saved_implemented,
+    `Improvements by 30% coverage` = saved_30,
+    `Improvements by 95% coverage` = saved_95
+  )
+
+# Indirect benefits
+indirect_df <- tar_read(coi_indir_benefits) %>%
+  ungroup() %>%
+  mutate(across(contains("Eta-Iota"), abs),
+         across(contains("Migration"), abs)) %>%
+  select(
+    `Indicator name` = indicator_name_absolute,
+    `Eta-Iota – UNICEF response` = `Eta-Iota_implemented`,
+    `Eta-Iota – 30% coverage` = `Eta-Iota_30`,
+    `Eta-Iota – 95% coverage` = `Eta-Iota_95`,
+    `Migration – UNICEF response` = `Migration flows_implemented`,
+    `Migration – 30% coverage` = `Migration flows_30`,
+    `Migration – 95% coverage` = `Migration flows_95`
+  )
+
+
+
+library(writexl)
+write_xlsx(
+  list(
+    "Input data summary" = input_table_df,
+    "Intervention coverage" = coverage_df,
+    "Funding summary" = cost_summary_df,
+    "Direct benefits - mortality" = direct_benefits_mortality_df,
+    "Direct benefits - breastfeeding" = direct_benefits_bf_df,
+    "Indirect benefits" = indirect_df
+  ),
+  path = "CoI_results_summary.xlsx"
+)
+
+
+```
+
