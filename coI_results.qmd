@@ -13,6 +13,7 @@ format:
 ```{r}
 #| label: setup
 #| include: false
+#| message: false
 
 # A function to install packages if they are not already installed.
 install_if_missing <- function(p) {
@@ -65,14 +66,37 @@ This document compiles the core figures and tables supporting the final Cost of 
 #| label: custom-functions
 #| include: false
 
-# function arranges df by intervention name using factors from intervention_id
-arrange_by_int_name <- function(df, intervention_list){
-    df %>% 
+# Function to arrange df by intervention name
+arrange_by_int_name <- function(df, intervention_list) {
+  df %>%
     left_join(select(intervention_list, intervention_id, intervention_name),
-              by = "intervention_name") %>% 
-    arrange(intervention_id) %>% 
-    select(-intervention_id) %>% 
+      by = "intervention_name"
+    ) %>%
+    arrange(intervention_id) %>%
+    select(-intervention_id) %>%
     return()
+}
+
+# New function to format the LiST input table
+format_list_input_gt <- function(df) {
+  df %>%
+    ungroup() %>%
+    gt() %>%
+    tab_header(title = "Input coverages used in LiST") %>%
+    cols_hide(intervention_id) %>%
+    cols_label(
+      emergency = "Emergency",
+      country = "Country",
+      target_group = "Target group",
+      intervention_name = "Intervention name",
+      coverage = "Coverage (%)",
+      list_name = "Intervention name in LiST"
+    ) %>%
+    fmt_number(
+      columns = coverage,
+      decimals = 1
+    ) %>%
+    cols_align(align = "center", columns = everything())
 }
 ```
 
@@ -81,26 +105,8 @@ arrange_by_int_name <- function(df, intervention_list){
 These inputs represent the baseline and targeted intervention coverage values used in LiST simulations for each emergency scenario.
 
 ```{r list-input}
-tar_read(list_input) %>% 
-    # prepare data for gt package
-    ungroup() %>% 
-    # create gt object
-    gt() %>% 
-    tab_header(title = "Input coverages used in LiST") %>% 
-    cols_hide(intervention_id) %>% 
-    cols_label( # rename colums
-      emergency = "Emergency",
-      country = "Country",
-      target_group = "Target group",
-      intervention_name = "Intervention name",
-      coverage = "Coverage (%)",
-      list_name = "Intervention name in LiST"
-    ) %>% 
-    fmt_number( # format column
-      columns = coverage,
-      decimals = 1
-    ) %>% 
-  cols_align(align = "center", columns = everything())
+tar_read(list_input) %>%
+  format_list_input_gt()
 ```
 
 ## Coverage of interventions needed respective to nutrition needs
