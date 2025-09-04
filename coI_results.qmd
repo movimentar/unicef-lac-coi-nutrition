@@ -1,15 +1,15 @@
 ---
-  title: "Results - Cost of Inaction"
+title: "Results - Cost of Inaction"
 author: "movimentar GmbH"
 date: "`r format(Sys.time(), '%d %B %Y')`"
 execute:
-  echo: false
+  echo: false  # Do not display code in the output
 format:
-  docx:
-  toc: true
-toc-depth: 2
+  html:
+    toc: true
+    toc-depth: 2
 ---
-  
+
 ```{r}
 #| label: setup-dependencies
 #| include: false
@@ -46,16 +46,16 @@ if (!requireNamespace("wpp2022", quietly = TRUE)) {
 }
 ```
 
+
 ```{r}
 #| label: setup
 #| include: false
-library(targets)
-library(tarchetypes)
 library(tidyverse)
+library(targets)
 library(gt)
+library(tarchetypes)
 
-# Load target objects required for the document
-tar_load(intervention_list)
+tar_load(intervention_list) # used by custom function
 ```
 
 This document compiles the core figures and tables supporting the final Cost of Inaction (CoI) study, structured by analytical component. It is intended to support reporting and review, not for direct publication.
