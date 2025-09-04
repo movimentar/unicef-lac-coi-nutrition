@@ -1,23 +1,61 @@
 ---
-title: "Results - Cost of Inaction"
+  title: "Results - Cost of Inaction"
 author: "movimentar GmbH"
 date: "`r format(Sys.time(), '%d %B %Y')`"
 execute:
-  echo: false  # Do not display code in the output
+  echo: false
 format:
   docx:
-    toc: true
-    toc-depth: 2
+  toc: true
+toc-depth: 2
 ---
+  
+```{r}
+#| label: setup-dependencies
+#| include: false
+
+# A function to install packages if they are not already installed.
+install_if_missing <- function(p) {
+  if (!requireNamespace(p, quietly = TRUE)) {
+    install.packages(p, dependencies = TRUE)
+  }
+}
+
+# List of packages from CRAN
+cran_packages <- c(
+  "targets",
+  "tarchetypes",
+  "tidyverse",
+  "scales",
+  "gt",
+  "FactoMineR",
+  "factoextra"
+)
+
+# Install CRAN packages
+for (package in cran_packages) {
+  install_if_missing(package)
+}
+
+# Install wpp2022 from GitHub as specified in documentation
+if (!requireNamespace("remotes", quietly = TRUE)) {
+  install.packages("remotes")
+}
+if (!requireNamespace("wpp2022", quietly = TRUE)) {
+  remotes::install_github("PPgp/wpp2022")
+}
+```
 
 ```{r}
 #| label: setup
 #| include: false
-library(tidyverse)
 library(targets)
+library(tarchetypes)
+library(tidyverse)
 library(gt)
 
-tar_load(intervention_list) # used by custom function
+# Load target objects required for the document
+tar_load(intervention_list)
 ```
 
 This document compiles the core figures and tables supporting the final Cost of Inaction (CoI) study, structured by analytical component. It is intended to support reporting and review, not for direct publication.
