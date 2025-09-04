@@ -11,7 +11,7 @@ format:
 ---
 
 ```{r}
-#| label: setup-dependencies
+#| label: setup
 #| include: false
 
 # A function to install packages if they are not already installed.
@@ -21,8 +21,8 @@ install_if_missing <- function(p) {
   }
 }
 
-# List of packages from CRAN
-cran_packages <- c(
+# List of all packages required for the document.
+required_packages <- c(
   "targets",
   "tarchetypes",
   "tidyverse",
@@ -33,7 +33,7 @@ cran_packages <- c(
 )
 
 # Install CRAN packages
-for (package in cran_packages) {
+for (package in required_packages) {
   install_if_missing(package)
 }
 
@@ -44,18 +44,17 @@ if (!requireNamespace("remotes", quietly = TRUE)) {
 if (!requireNamespace("wpp2022", quietly = TRUE)) {
   remotes::install_github("PPgp/wpp2022")
 }
-```
 
+# Load all required packages after installation check.
+for (package in required_packages) {
+  library(package, character.only = TRUE)
+}
 
-```{r}
-#| label: setup
-#| include: false
-library(tidyverse)
-library(targets)
-library(gt)
-library(tarchetypes)
+# Remove dplyr from the list since it's loaded with tidyverse.
+library(dplyr)
 
-tar_load(intervention_list) # used by custom function
+# Load target objects required for the document
+tar_load(intervention_list) 
 ```
 
 This document compiles the core figures and tables supporting the final Cost of Inaction (CoI) study, structured by analytical component. It is intended to support reporting and review, not for direct publication.
