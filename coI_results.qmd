@@ -5,7 +5,7 @@ date: "`r format(Sys.time(), '%d %B %Y')`"
 execute:
   echo: false  # Do not display code in the output
 format:
-  html:
+  html: # Change to docx to get the word version
     toc: true
     toc-depth: 2
 ---
