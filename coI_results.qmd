@@ -5,7 +5,7 @@ date: "`r format(Sys.time(), '%d %B %Y')`"
 execute:
   echo: false  # Do not display code in the output
 format:
-  html: # Change to docx to get the word version
+  docx: # Change to docx to get the word version
     toc: true
     toc-depth: 2
 ---
@@ -270,73 +270,55 @@ tar_read(coi_dir_benefits)$breastfeeding %>%
 ## Indirect benefits
 
 ```{r indirect benefits}
-# tar_load(c("mean_formula_price", "formula_packages"))
-# 
-# tar_read(coi_indir_benefits) %>% 
-#   ungroup() %>% 
-#   mutate(
-#     `Eta-Iota_implemented` = abs(`Eta-Iota_implemented`),
-#     `Eta-Iota_30` = abs(`Eta-Iota_30`),
-#     `Eta-Iota_95` = abs(`Eta-Iota_95`),
-#     `Migration flows_implemented` = abs(`Migration flows_implemented`),
-#     `Migration flows_30` = abs(`Migration flows_30`),
-#     `Migration flows_95` = abs(`Migration flows_95`)
-#   ) %>% 
-#   gt(rowname_col = "indicator_name_absolute") %>% 
-#   tab_header(title = "
-# Estimated indirect benefits by nutrition response scenario per emergency from exclusive breastfeeding improvements") %>% 
-#   cols_hide(indicator_name) %>% 
-#   fmt_number(columns = everything(),
-#              decimal = 0) %>% 
-#   cols_align("center") %>% 
-#   tab_spanner(
-#     label = "Eta-Iota",
-#     columns = contains("Eta")
-#   ) %>% 
-#   tab_spanner(
-#     label = "Migration flows",
-#     columns = contains("Migration")
-#   ) %>% 
-#   grand_summary_rows(
-#     columns = c("Eta-Iota_implemented",
-#                 "Eta-Iota_30",
-#                 "Eta-Iota_95",
-#                 "Migration flows_implemented",
-#                 "Migration flows_30",
-#                 "Migration flows_95"),
-#     fns = list(Total = ~sum(.)),
-#     fmt = ~fmt_number(., decimals = 0)
-#   ) %>% 
-#   cols_label(
-#     `Eta-Iota_implemented` = "USD saved by UNICEF response",
-#     `Eta-Iota_30` = "USD saved by 30% coverage",
-#     `Eta-Iota_95` = "USD saved by 95% coverage",
-#     `Migration flows_implemented` = "USD saved by UNICEF response",
-#     `Migration flows_30` = "USD saved by 30% coverage",
-#     `Migration flows_95` = "USD saved by 95% coverage"
-#   ) %>% 
-#   tab_footnote(
-#     footnote = "Costs calculated for years between 2038 - 2080",
-#     locations = cells_stub(rows = "Cost of feeding a child with formula for the first 2 years")
-#   ) %>% 
-#     tab_footnote(
-#     footnote = paste0("Based on the estimation that two years of baby formula would cost ",
-#                       format(mean_formula_price * formula_packages, digits = 1, big.mark = ","),
-#                       " USD"),
-#     locations = cells_stub(rows = "Potential future income lost due to cognitive losses")
-#   )
+tar_load(c("mean_formula_price", "formula_packages"))
 
-# Find rows (you already have these)
-formula_row <- which(grepl("^Cost of feeding a child with formula", indir_main$indicator_name_absolute))
-cog_undisc_row <- which(grepl("^Potential future income lost due to cognitive losses", indir_main$indicator_name_absolute) &
-                        !grepl("\\bPV\\b", indir_main$indicator_name_absolute))
+# Build the main (undiscounted) table source
+indir_all <- tar_read(coi_indir_benefits) |>
+  dplyr::ungroup() |>
+  dplyr::mutate(
+    dplyr::across(dplyr::contains("Eta-Iota"), abs),
+    dplyr::across(dplyr::contains("Migration"), abs)
+  )
 
+# Keep formula + UNDISCOUNTED cognitive-income rows only
+indir_main <- indir_all |>
+  dplyr::filter(
+    indicator_name_absolute %in% c(
+      "Cost of feeding a child with formula for the first 2 years",
+      "Potential future income lost due to cognitive losses",
+      "Potential future income lost due to cognitive losses (undiscounted)"
+    )
+  ) |>
+  # If both cognitive labels exist, keep the undiscounted one
+  dplyr::filter(!grepl("\\bPV\\b", indicator_name_absolute))
+
+# Numeric row indices (robust)
+formula_idx <- which(grepl("^Cost of feeding a child with formula", indir_main$indicator_name_absolute))
+cog_idx <- which(grepl("^Potential future income lost due to cognitive losses( \\(undiscounted\\))?$",
+                       indir_main$indicator_name_absolute))
+
+# Precompute footnote strings (avoid inline evaluation glitches)
+fn_formula_price <- sprintf(
+  "Formula price assumption = %s USD per child over 24 months.",
+  format(mean_formula_price * formula_packages, big.mark = ",", digits = 1)
+)
+fn_formula_expl <- "Two-year formula outlays avoided for additional EBF children (undiscounted)."
+fn_cog <- "Cognitive-income preserved for additional EBF children (undiscounted). Earnings uplift ≈ 2.796% per EBF child (2.62 IQ points × 1.067% earnings per IQ point)."
+fn_title <- "Related intervention: breastfeeding counselling/promotion (EBF support). Figures are undiscounted; discounted present values (3–5% real) can be provided in sensitivity analysis."
+
+# Build table
 tbl <- indir_main |>
   gt::gt(rowname_col = "indicator_name_absolute") |>
   gt::tab_header(
-    title = "Estimated indirect benefits from exclusive breastfeeding improvements — undiscounted (2010 USD)"
-  ) |>
-  gt::cols_hide(columns = c("indicator_name")) |>
+    title = "Estimated indirect benefits from exclusive breastfeeding improvements — undiscounted (2015 USD)"
+  )
+
+# Hide helper column if it exists
+if ("indicator_name" %in% names(indir_main)) {
+  tbl <- tbl |> gt::cols_hide(columns = "indicator_name")
+}
+
+tbl <- tbl |>
   gt::fmt_number(columns = where(is.numeric), decimals = 0, use_seps = TRUE) |>
   gt::cols_align("center") |>
   gt::tab_spanner(label = "Eta-Iota",        columns = dplyr::contains("Eta")) |>
@@ -356,36 +338,24 @@ tbl <- indir_main |>
     `Migration flows_95`          = "USD saved by 95% coverage"
   )
 
-# Footnotes in the right places
-if (length(formula_row) > 0) {
+# Footnotes by numeric index (no tidy-eval in rows)
+if (length(formula_idx) > 0L) {
   tbl <- tbl |>
-    gt::tab_footnote(
-      footnote = paste0(
-        "Formula price assumption = ",
-        format(mean_formula_price * formula_packages, big.mark = ",", digits = 1),
-        " USD per child over 24 months."
-      ),
-      locations = gt::cells_stub(rows = formula_row)
-    ) |>
-    gt::tab_footnote(
-      footnote = "Two-year formula outlays avoided for additional EBF children (undiscounted).",
-      locations = gt::cells_stub(rows = formula_row)
-    )
+    gt::tab_footnote(footnote = fn_formula_price,
+                     locations = gt::cells_stub(rows = formula_idx)) |>
+    gt::tab_footnote(footnote = fn_formula_expl,
+                     locations = gt::cells_stub(rows = formula_idx))
 }
-if (length(cog_undisc_row) > 0) {
+if (length(cog_idx) > 0L) {
   tbl <- tbl |>
-    gt::tab_footnote(
-      footnote = "Cognitive-income preserved for additional EBF children (undiscounted). Earnings uplift ≈ 2.796% per EBF child (2.62 IQ points × 1.067% earnings per IQ point).",
-      locations = gt::cells_stub(rows = cog_undisc_row)
-    )
+    gt::tab_footnote(footnote = fn_cog,
+                     locations = gt::cells_stub(rows = cog_idx))
 }
 
-# Keep a general caveat on the title (optional)
+# Optional title-level caveat
 tbl <- tbl |>
-  gt::tab_footnote(
-    footnote = "Related intervention: breastfeeding counselling/promotion (EBF support). Figures are undiscounted; discounted present values (3–5% real) are available in Annex on request.",
-    locations = gt::cells_title(groups = "title")
-  )
+  gt::tab_footnote(footnote = fn_title,
+                   locations = gt::cells_title(groups = "title"))
 
 tbl
 
@@ -395,54 +365,116 @@ tbl
 #| label: indirect-benefits-pv
 #| warning: false
 
-# Build the full indirect benefits table (if not already built upstream)
-indir_pv <- indir_all |>
-  dplyr::filter(stringr::str_detect(indicator_name_absolute, "PV,")) |>
-  dplyr::arrange(
-    dplyr::case_when(
-      stringr::str_detect(indicator_name_absolute, "PV, 3%") ~ 1L,
-      stringr::str_detect(indicator_name_absolute, "PV, 5%") ~ 2L,
-      TRUE ~ 99L
-    )
+library(dplyr)
+library(tidyr)
+library(purrr)
+library(gt)
+library(stringr)
+library(targets)
+
+# --- Inputs from targets ---
+dir_b <- tar_read(coi_dir_benefits)
+gni    <- tar_read(gni_forecast)    # emergency, year, real_gni_pc_const_usd, pop_group
+ishare <- tar_read(income_share)    # labour income share % of GDP
+
+# Mean labour-income share across study countries (2020)
+countries_labour_income <- ishare %>%
+  filter(ref_area %in% c("GTM","HND","NIC","COL","PER"), time == "2020") %>%
+  pull(obs_value) %>%
+  mean(na.rm = TRUE)
+
+# Emergency-specific real GNI per-capita streams (2015 USD) for 2038–2080
+gni_by_em <- gni %>%
+  filter(year >= 2038, year <= 2080) %>%
+  select(emergency, year, real_gni_pc_const_usd) %>%
+  group_by(emergency) %>%
+  summarise(
+    years  = list(year),
+    gni_pc = list(real_gni_pc_const_usd),
+    .groups = "drop"
   )
 
-# scale to millions (optional)
-indir_pv_m <- indir_pv |>
-  dplyr::mutate(dplyr::across(tidyselect::where(is.numeric), ~ . / 1e6))
+# Earnings uplift per additional EBF child (2.62 IQ * 1.067% per IQ point ≈ 2.796%)
+EARNINGS_UPLIFT <- 2.62 * 0.01067
 
-indir_pv_m |>
-  gt::gt(rowname_col = "indicator_name_absolute") |>
-  gt::tab_header(
-    title = "Indirect benefits — present values under social discounting (millions, 2010 USD)"
-  ) |>
-  gt::cols_hide(columns = "indicator_name") |>                   # hide helper col
-  gt::fmt_number(columns = tidyselect::where(is.numeric), decimals = 1) |>
-  gt::cols_align("center") |>
-  gt::cols_move_to_start(columns = c("Eta-Iota_implemented","Eta-Iota_30","Eta-Iota_95")) |>
-  gt::cols_move(columns = c("Migration flows_implemented","Migration flows_30","Migration flows_95"),
-                after = "Eta-Iota_95") |>
-  gt::tab_spanner(label = "Eta-Iota",       columns = dplyr::contains("Eta-Iota")) |>
-  gt::tab_spanner(label = "Migration flows", columns = dplyr::contains("Migration flows")) |>
-  gt::grand_summary_rows(
-    columns = c("Eta-Iota_implemented","Eta-Iota_30","Eta-Iota_95",
-                "Migration flows_implemented","Migration flows_30","Migration flows_95"),
-    fns = list(Total = ~ sum(., na.rm = TRUE)),
-    fmt = ~ gt::fmt_number(., decimals = 1)
-  ) |>
-  gt::cols_label(
+cognitive_pv <- function(n_children, gni_pc_vec, years_vec,
+                         labour_share_pct, rate, base_year = 2022,
+                         uplift = EARNINGS_UPLIFT) {
+  annual <- gni_pc_vec * (labour_share_pct / 100) * uplift * n_children
+  df     <- (1 + rate)^(years_vec - base_year)
+  sum(annual / df, na.rm = TRUE)
+}
+
+# Build PV rows from the additional EBF children
+indir_pv <- dir_b$breastfeeding %>%
+  ungroup() %>%                                   # remove any prior grouping
+  filter(indicator_name_absolute == "Exclusively breastfed children") %>%
+  select(-coverage_0, -indicator_category) %>%    # drop grouping col so gt won't group
+  pivot_longer(
+    cols = saved_implemented:saved_95,
+    names_to     = "coverage_type",
+    names_prefix = "saved_",
+    values_to    = "n_children"
+  ) %>%
+  mutate(n_children = abs(n_children)) %>%        # ensure benefits are positive
+  left_join(gni_by_em, by = "emergency") %>%
+  mutate(
+    cognitive_cost_pv_3 = pmap_dbl(
+      list(n_children, gni_pc, years),
+      ~ cognitive_pv(..1, ..2, ..3, countries_labour_income, rate = 0.03)
+    ),
+    cognitive_cost_pv_5 = pmap_dbl(
+      list(n_children, gni_pc, years),
+      ~ cognitive_pv(..1, ..2, ..3, countries_labour_income, rate = 0.05)
+    )
+  ) %>%
+  select(-n_children, -gni_pc, -years) %>%
+  pivot_longer(
+    c(cognitive_cost_pv_3, cognitive_cost_pv_5),
+    names_to = "metric", values_to = "value"
+  ) %>%
+  mutate(
+    indicator_name_absolute = case_when(
+      metric == "cognitive_cost_pv_3" ~ "Potential future income lost due to cognitive losses (PV, 3%)",
+      metric == "cognitive_cost_pv_5" ~ "Potential future income lost due to cognitive losses (PV, 5%)",
+      TRUE ~ metric
+    )
+  ) %>%
+  select(-metric) %>%
+  pivot_wider(
+    names_from  = c("emergency", "coverage_type"),
+    values_from = value
+  ) %>%
+  arrange(match(indicator_name_absolute,
+                c("Potential future income lost due to cognitive losses (PV, 3%)",
+                  "Potential future income lost due to cognitive losses (PV, 5%)")))
+
+# Display in millions (2015 USD) — no "grand total" across 3% and 5%
+indir_pv %>%
+  mutate(across(where(is.numeric), ~ . / 1e6)) %>%
+  gt(rowname_col = "indicator_name_absolute") %>%
+  tab_header(
+    title = "Indirect benefits — Present values under social discounting (millions, 2015 USD)"
+  ) %>%
+  fmt_number(columns = where(is.numeric), decimals = 1) %>%
+  cols_align("center") %>%
+  # keep Eta-Iota block first, then Migration flows
+  cols_move_to_start(columns = c("Eta-Iota_implemented","Eta-Iota_30","Eta-Iota_95")) %>%
+  cols_move(columns = c("Migration flows_implemented","Migration flows_30","Migration flows_95"),
+            after = "Eta-Iota_95") %>%
+  tab_spanner(label = "Eta-Iota",        columns = contains("Eta-Iota")) %>%
+  tab_spanner(label = "Migration flows", columns = contains("Migration flows")) %>%
+  cols_label(
     `Eta-Iota_implemented`        = "PV (UNICEF response)",
     `Eta-Iota_30`                 = "PV (30% coverage)",
     `Eta-Iota_95`                 = "PV (95% coverage)",
     `Migration flows_implemented` = "PV (UNICEF response)",
     `Migration flows_30`          = "PV (30% coverage)",
     `Migration flows_95`          = "PV (95% coverage)"
-  ) |>
-  gt::tab_footnote(
-    footnote = "PV computed with real social discount rates of 3% and 5%; base year = 2022; earnings uplift ≈ 2.796% per additional EBF child.",
-    locations = gt::cells_title(groups = "title")
-  ) |>
-  gt::tab_source_note(
-    source_note = "Cognitive-income PV uses real per-capita GNI stream (2010 USD) for 2038–2080 and mean labour-income share across study countries."
+  ) %>%
+  tab_footnote(
+    footnote = "Present values computed with real social discount rates of 3% and 5%; base year = 2022; earnings uplift ≈ 2.796% per additional EBF child.",
+    locations = cells_title(groups = "title")
   )
 
 ```

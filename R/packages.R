@@ -17,7 +17,13 @@ packages <- c(
   "targets",
   "visNetwork",
   "tidyverse",
-  "gt"
+  "gt",
+  "WDI",
+  "tidyverse",
+  "forecast",
+  "tseries",
+  "wpp2022",
+  "devtools"
 )
 
 # Custom package (source: https://github.com/PPgp/wpp2022/tree/main)
