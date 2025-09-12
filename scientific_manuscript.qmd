@@ -1,42 +1,39 @@
 ---
-
 title: "The Cost of Inaction on Nutrition in Emergencies in Latin America and the Caribbean: A Multi-Country Quantitative Assessment"
 author:
-
-* name: "Eduardo Wirthmann Ferreira"
-  affiliation: "movimentar GmbH"
-  email: "[support@movimentar.eu](mailto:support@movimentar.eu)"
-  abstract: |
+  - name: "Eduardo Wirthmann Ferreira"
+    affiliation: "movimentar GmbH"
+    email: "support@movimentar.eu"
+abstract: |-
   **Background**  Nutrition in Emergencies (NiE) is central to humanitarian action but remains chronically underfunded in Latin America and the Caribbean (LAC). Evidence quantifying the humanitarian and economic implications of under-delivery is limited.
 
-**Methods**  We adapted a cost of inaction (CoI) framework to compare four coverage scenarios (0%, implemented, 30%, 95%) for NiE packages across two crisis typologies (Hurricanes Eta/Iota; regional migration flows) between 2020–2022. Direct effects (mortality and malnutrition) were estimated using the Lives Saved Tool (LiST). Indirect effects monetised exclusive‑breastfeeding (EBF) gains via avoided household spending on breast‑milk substitutes and preserved future income linked to cognition. Costs were harmonised to constant 2015 USD. Principal components analysis (PCA) explored delivery feasibility clusters.
+  **Methods**  We adapted a cost of inaction (CoI) framework to compare four coverage scenarios (0%, implemented, 30%, 95%) for NiE packages across two crisis typologies (Hurricanes Eta/Iota; regional migration flows) between 2020–2022. Direct effects (mortality and malnutrition) were estimated using the Lives Saved Tool (LiST). Indirect effects monetised exclusive-breastfeeding (EBF) gains via avoided household spending on breast-milk substitutes and preserved future income linked to cognition. Costs were harmonised to constant 2015 USD. Principal components analysis (PCA) explored delivery feasibility clusters.
 
-**Results**  Implemented coverage averaged \~31% in Eta/Iota settings and \~2.7% in migration contexts. Scaling to 95% coverage could avert additional child deaths and stillbirths and materially expand EBF. The undiscounted indirect benefits of full coverage were on the order of tens to hundreds of millions of USD across settings. PCA identified three delivery clusters: (1) universally feasible child‑preventive services; (2) diagnostics and treatment dependent on functional systems; (3) maternal iron/IFA contingent on antenatal platforms.
+  **Results**  Implemented coverage averaged ~31% in Eta/Iota settings and ~2.7% in migration contexts. Scaling to 95% coverage could avert additional child deaths and stillbirths and materially expand EBF. The undiscounted indirect benefits of full coverage were on the order of tens to hundreds of millions of USD across settings. PCA identified three delivery clusters: (1) universally feasible child-preventive services; (2) diagnostics and treatment dependent on functional systems; (3) maternal iron/IFA contingent on antenatal platforms.
 
-**Conclusions**  Underinvestment in NiE leads to preventable mortality and foregone human capital. Scenario‑based budgeting and phased packages aligned with system readiness can increase humanitarian effectiveness. Findings are relevant to programming, monitoring and evaluation in humanitarian action.
+  **Conclusions**  Underinvestment in NiE leads to preventable mortality and foregone human capital. Scenario-based budgeting and phased packages aligned with system readiness can increase humanitarian effectiveness. Findings are relevant to programming, monitoring and evaluation in humanitarian action.
 keywords:
-
-* nutrition in emergencies
-* humanitarian action
-* cost of inaction
-* Latin America and the Caribbean
-* exclusive breastfeeding
-* child mortality
-* humanitarian financing
-* programme evaluation
-  date: last-modified
-  format:
+  - nutrition in emergencies
+  - humanitarian action
+  - cost of inaction
+  - Latin America and the Caribbean
+  - exclusive breastfeeding
+  - child mortality
+  - humanitarian financing
+  - programme evaluation
+date: last-modified
+format:
   docx:
-  toc: true
-  toc-depth: 2
-  number-sections: true
-  fig-cap-location: bottom
-  tbl-cap-location: top
-  reference-location: margin
-  bibliography: references.bib
-  csl: harvard.csl
-
+    toc: true
+    toc-depth: 2
+    number-sections: true
+    fig-cap-location: bottom
+    tbl-cap-location: top
+    reference-location: margin
+bibliography: references.bib
+csl: harvard.csl
 ---
+
 
 > **Plain language summary**  Under‑funding nutrition services during crises in Latin America and the Caribbean results in preventable child deaths and lost economic potential. Using scenarios from “no response” to “near‑universal coverage”, we estimate how many deaths could be averted and what financial benefits families and societies could gain, particularly through higher exclusive‑breastfeeding. We also identify which services are most feasible to start first, and which require stronger health systems.
 
