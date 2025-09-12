@@ -5,13 +5,10 @@ author:
     affiliation: "movimentar GmbH"
     email: "support@movimentar.eu"
 abstract: |-
-  **Background**:  Nutrition in Emergencies (NiE) is central to humanitarian action but remains chronically underfunded in Latin America and the Caribbean (LAC). Evidence quantifying the humanitarian and economic implications of under-delivery is limited.
-
-  **Methods**:  We adapted a cost of inaction (CoI) framework to compare four coverage scenarios (0%, implemented, 30%, 95%) for NiE packages across two crisis typologies (Hurricanes Eta/Iota; regional migration flows) between 2020–2022. Direct effects (mortality and malnutrition) were estimated using the Lives Saved Tool (LiST). Indirect effects monetised exclusive-breastfeeding (EBF) gains via avoided household spending on breast-milk substitutes and preserved future income linked to cognition. Costs were harmonised to constant 2015 USD. Principal components analysis (PCA) explored delivery feasibility clusters.
-
-  **Results**: Implemented coverage averaged ~31% in Eta/Iota settings and ~2.7% in migration contexts. Scaling to 95% coverage could avert additional child deaths and stillbirths and materially expand EBF. The undiscounted indirect benefits of full coverage were on the order of tens to hundreds of millions of USD across settings. PCA identified three delivery clusters: (1) universally feasible child-preventive services; (2) diagnostics and treatment dependent on functional systems; (3) maternal iron/IFA contingent on antenatal platforms.
-
-  **Conclusions**:  Underinvestment in NiE leads to preventable mortality and foregone human capital. Scenario-based budgeting and phased packages aligned with system readiness can increase humanitarian effectiveness. Findings are relevant to programming, monitoring and evaluation in humanitarian action.
+  This multi-country study, commissioned by UNICEF Latin America and Caribbean Regional Office (LACRO), quantifies the human and economic costs of under-delivery of nutrition-specific services during emergencies (2020–2022). Using a Cost of Inaction framework, we compare four coverage scenarios—0% (no action), implemented, 30%, and 95%—for two crisis typologies: the Eta–Iota hurricane response and regional migration flows. Direct benefits (stillbirths and under-five deaths averted; changes in wasting, stunting, and exclusive breastfeeding) were estimated using the Lives Saved Tool (LiST). Indirect benefits monetise exclusive-breastfeeding gains as avoided household expenditure on breast-milk substitutes and preserved future income linked to cognition. Costs were standardised to constant 2015 USD, with present values for cognition calculated from a 2022 base year at 3–5% real discount rates. 
+  Implemented coverage averaged ~31% in Eta–Iota settings and ~2.7% in migration contexts, with expenditures representing only 17% and 14% of the investment required for 95% coverage, respectively. Scaling to 95% coverage would avert additional stillbirths and child deaths and increase exclusive breastfeeding substantially. Undiscounted indirect benefits would rise to ~US$68.3 million (Eta–Iota) and ~US$336.9 million (migration). Principal component and cluster analyses identify a pragmatic sequencing of services—from universally feasible child-preventive functions to diagnostics/treatment and maternal iron/IFA dependent on system readiness.
+  
+  Underinvestment in Nutrition in Emergencies generates measurable and avoidable losses. Scenario-based budgets and phased packages aligned with readiness triggers provide a practical pathway to close coverage gaps, improve survival, and preserve human capital.
 keywords:
   - nutrition in emergencies
   - humanitarian action
@@ -30,6 +27,8 @@ format:
     fig-cap-location: bottom
     tbl-cap-location: top
     reference-location: margin
+    reference-section-title: References
+link-citations: true
 bibliography: references.bib
 csl: harvard.csl
 ---
@@ -105,7 +104,7 @@ Despite moderate investment, NiE interventions have saved lives. However, the in
 
 # Conclusion
 
-Nutrition in Emergencies is not an optional add-on but a core component of humanitarian response. The findings demonstrate that underinvestment results in preventable mortality, lost years of healthy life, and diminished human capital with long-term economic costs. By applying a Cost of Inaction framework, we show that scaling NiE coverage could yield outsized health and economic returns, particularly in displacement-affected settings.
+Nutrition in Emergencies is a core humanitarian function. Underinvestment produces preventable mortality and long-run losses in human capital. Applying a Cost of Inaction lens shows that moving from current to 95% coverage could yield outsized health and economic returns, especially in displacement-affected settings. Sequencing services—from a universal child-preventive bundle to diagnostics/treatment and maternal iron/IFA as systems allow—offers a feasible route to scale. Donors and implementers should adopt scenario-based budgets tied to readiness triggers to convert the documented inaction gap into realised survival and productivity gains.
 
 Phased intervention packages aligned with system readiness, supported by scenario-based budgeting, provide a pragmatic pathway for governments, donors, and humanitarian actors to close funding gaps and prioritise lifesaving interventions. Strengthening NiE within humanitarian appeals and coordination mechanisms is therefore urgent, both to save lives in the short term and to safeguard development gains in the long term.
 
