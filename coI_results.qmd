@@ -687,3 +687,73 @@ write_xlsx(
 
 ```
 
+```{r}
+#| label: econ-benefits-bar-chart
+#| fig-cap: "Estimated Indirect Economic Benefits from Full NiE Coverage in Two Emergency Settings (in millions USD)"
+#| fig-alt: "Grouped bar chart showing undiscounted indirect economic benefits (millions of 2015 USD) for Eta-Iota and Migration flows, across scenarios: UNICEF response, 30% coverage, 95% coverage."
+#| warning: false
+#| message: false
+
+suppressPackageStartupMessages({
+  library(tidyverse)
+  library(scales)
+  library(targets)
+})
+
+indir_raw <- tar_read(coi_indir_benefits)
+
+indir_plot <- indir_raw %>%
+  ungroup() %>%
+  filter(indicator_name_absolute %in% c(
+    "Cost of feeding a child with formula for the first 2 years",
+    "Potential future income lost due to cognitive losses",
+    "Potential future income lost due to cognitive losses (undiscounted)"
+  )) %>%
+  filter(!grepl("\\bPV\\b", indicator_name_absolute)) %>%
+  mutate(
+    across(contains("Eta-Iota"), abs),
+    across(contains("Migration"), abs)
+  ) %>%
+  pivot_longer(
+    cols = matches("Eta-Iota|Migration\\sflows"),
+    names_to = c("emergency", "scenario"),
+    names_sep = "_",
+    values_to = "usd"
+  ) %>%
+  group_by(emergency, scenario) %>%
+  summarise(usd = sum(usd, na.rm = TRUE), .groups = "drop") %>%
+  mutate(
+    musd = usd / 1e6,
+    scenario = recode(scenario,
+                      "implemented" = "UNICEF response",
+                      "30"          = "30% coverage",
+                      "95"          = "95% coverage"),
+    scenario = factor(scenario, levels = c("UNICEF response","30% coverage","95% coverage")),
+    emergency = factor(emergency, levels = c("Eta-Iota", "Migration flows"))
+  )
+
+p <- ggplot(indir_plot, aes(x = emergency, y = musd, fill = scenario)) +
+  geom_col(position = position_dodge(width = 0.7), width = 0.65) +
+  geom_text(aes(label = number(musd, accuracy = 0.1)),
+            position = position_dodge(width = 0.7), vjust = -0.35, size = 3) +
+  scale_y_continuous(
+    labels = label_number(accuracy = 0.1),
+    expand = expansion(mult = c(0, 0.08))
+  ) +
+  labs(
+    x = NULL, y = "Millions of 2015 USD", fill = NULL,
+    title = "Estimated Indirect Economic Benefits from NiE by Scenario",
+    subtitle = "Sum of avoided formula expenditure and preserved future income via EBF (undiscounted)",
+    caption = "Source: Authors’ analysis of UNICEF NiE data (2015 USD)."
+  ) +
+  theme_minimal(base_size = 11) +
+  theme(legend.position = "top")
+
+p
+
+if (!dir.exists("figures")) dir.create("figures")
+ggsave("figures/econ-benefits-bar-chart.png", p, width = 8, height = 5, dpi = 300)
+
+
+```
+
