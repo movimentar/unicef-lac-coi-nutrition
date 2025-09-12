@@ -1,0 +1,209 @@
+---
+title: "The Cost of Inaction on Nutrition in Emergencies in Latin America and the Caribbean (2020–2022)"
+subtitle: "Quantifying Human and Economic Losses to Drive Strategic Investment"
+author: "Commissioned by UNICEF LACRO • Implemented by movimentar GmbH"
+format:
+  pptx:
+    reference-doc: "templates/presentation_template.pptx"  # Optional custom theme
+editor: visual
+date: last-modified
+execute:
+  echo: false
+---
+
+## Disclaimer
+
+The views presented in this report do not necessarily reflect the official position of UNICEF or other UN agencies. Neither UNICEF nor any person acting on their behalf can be held responsible for the use of this information.
+
+---
+
+## Introduction – The Imperative for Action
+
+- LAC is the second-most disaster-prone region globally and hosts the largest per capita migration flows.
+- Nutrition in Emergencies (NiE) is life-saving and distinct from food security, yet it is systematically underfunded.
+- **Objective**: Quantify the human and economic cost of inaction on NiE and support advocacy for increased investment.
+- **Focus**: Children under five (especially under two) and pregnant and lactating women (PLW).
+
+---
+
+## Emergency Typologies (2020–2022)
+
+1.  **Natural Disasters (Eta & Iota):**
+    - Guatemala, Honduras, Nicaragua
+    - >7.5 million affected
+
+2.  **Migration Flows:**
+    - Colombia, Honduras, Peru
+    - ~7 million in need
+    - Harsh transit (e.g. Darién Gap), high-risk environments
+
+---
+
+## Methodology – Cost of Inaction Framework
+
+- Based on **Anand et al. (2012)** framework.
+- **Scenarios**: 0% (no action), implemented, 30%, and 95% coverage.
+- **Benefits**:
+    - **Constitutive (Direct)**: Lives saved, stunting averted, EBF improvements (via LiST).
+    - **Consequential (Indirect)**: BMS cost savings, future income from cognition gains.
+- **Delivery analysis**: Principal Component Analysis (PCA) and clustering.
+- **Conservative assumptions**: LiST relies on non-emergency baselines; benefits use population-average elasticities; only the EBF channel is monetized.
+
+---
+
+## Key Finding: Coverage & Funding Gaps
+
+- The analysis reveals a significant and costly gap between the implemented response and the investment required for an ideal response.
+
+| | **Eta–Iota** | **Migration Flows** |
+| :--- | :--- | :--- |
+| **Overall coverage delivered** | ~31% | ~2.7% |
+| **Funding gap** | US$31.3 million | US$96.2 million |
+| **% of ideal investment realised** | ~17% | ~14% |
+
+* **Eta–Iota Response:**
+
+  * **US\$6.51 million** spent, achieving **31% coverage**.
+  * Only **17%** of the required **US\$37.83 million** for 95% coverage was met.
+  * Resulting **funding gap**: **US\$31.32 million** (83% of ideal cost).
+
+* **Migration Flows:**
+
+  * **US\$15.09 million** spent, achieving just **2.7% coverage**.
+  * Ideal funding required for 95% coverage: **US\$111.26 million**.
+  * **Funding gap**: **US\$96.17 million** (86% of ideal cost).
+
+* **Key Insight:**
+
+  * There is a **profound underinvestment** in NiE, especially in migration contexts.
+  * Reaching even **30% coverage** in migration settings would require **\~US\$18.3 million** in additional funding—more than double the current spend.
+
+---
+
+## Key Finding: Human Cost of Inaction
+
+- **Inaction has a quantifiable human cost.** The table below illustrates the scale of preventable deaths and missed early nutrition opportunities.
+
+| | **Eta–Iota (from ~31% coverage)** | **Migration Flows (from ~2.7% coverage)** |
+| :--- | :--- | :--- |
+| **Additional deaths averted at 95%** | +158 child deaths, +116 stillbirths | +1,009 child deaths, +419 stillbirths |
+| **Additional EBF infants at 95%** | ≈+7,000 (total ~15,584) | ≈+34,000 (total ~35,874) |
+
+
+---
+
+## Key Finding: Human Cost of Inaction (cont.)
+
+* **Current NiE interventions have saved lives**, but substantial **additional human gains remain unrealised**.
+
+* In the **Eta–Iota response**, reaching 95% coverage could have prevented:
+
+  * **+158 child deaths**, **+116 stillbirths**, and supported **\~7,000 more EBF infants**.
+
+* In **migration settings** with critically low baseline coverage, scaling to 95% could have averted:
+
+  * **+1,009 child deaths**, **+419 stillbirths**, and added **\~34,000 EBF infants**.
+
+* These figures highlight a **clear opportunity for high-impact gains**, even from **modest increases in coverage**—especially in underfunded, high-risk contexts.
+
+---
+
+## Key Finding: Economic Cost of Inaction
+
+- **NiE delivers immediate household relief and long-run productivity gains.**
+
+| | **Eta–Iota** | **Migration** |
+| :--- | :--- | :--- |
+| **Total economic benefit at 95% (undiscounted)** | US$68.3 million | US$336.9 million |
+| **PV of cognition gains at 95% (3% rate)** | US$13.9 million | US$89.5 million |
+
+---
+
+## Key Finding: Economic Cost of Inaction (cont.)
+
+* **Nutrition in Emergencies yields substantial economic benefits**—both in short-term household savings and long-term productivity gains.
+
+* In **Eta–Iota contexts**, scaling to 95% coverage would increase total economic benefit from **US\$38.6m to US\$68.3m**:
+
+  * **BMS savings** rise from **US\$15.8m to US\$28.0m**.
+  * **Cognition-linked income gains** (PV at 3%) increase from **US\$7.8m to US\$13.9m**.
+
+* In **migration settings**, the return on investment is even more dramatic, with benefits rising from **US\$15.2m to US\$336.9m**:
+
+  * **BMS savings** grow from **US\$2.9m to US\$64.3m**.
+  * **Cognition-linked income gains** (PV at 3%) expand from **US\$4.0m to US\$89.5m**.
+
+* These figures show that **inaction leads to major economic losses**, especially in **fragile, low-coverage contexts** where gains from scale-up are steep.
+
+
+---
+
+## Delivery Bottlenecks
+
+- The under-delivery of services is not random but follows a predictable pattern.
+- **Cluster 1**: Standard child-preventive bundle.
+- **Cluster 2**: Diagnostics & treatment (e.g., PLW MUAC, child iron).
+- **Cluster 3**: Maternal iron/IFA core.
+
+- **Key Insight**: Gaps in Clusters 2 & 3 explain most of the inaction, reinforcing the need for a phased approach.
+
+---
+
+## Delivery Bottlenecks (cont.)
+
+* **Delivery gaps are not random**: Intervention data show predictable patterns based on operational feasibility.
+
+* **Three service clusters** emerged:
+
+  * **Cluster 1** (child-preventive bundle) is widely feasible and consistently delivered.
+  * **Clusters 2 & 3** (diagnostics, treatment, and maternal supplementation) require stronger systems and are often missing.
+
+* **Under-delivery of Clusters 2 & 3**, especially in fragile and migration settings, drives much of the inaction gap.
+
+* **Strategic implication**: Programme design must be **phased and aligned with system readiness**, not assumed scalable all at once.
+
+---
+
+## What Would 30% and 95% Deliver?
+
+**Migration (from 2.7%)**
+- **30% coverage**: ~300 additional child deaths and ~120 stillbirths averted, ~10,000 additional EBF infants supported.
+- **95% coverage**: +1,009 additional child deaths and +419 stillbirths averted, ~34,000 more EBF infants supported.
+
+**Eta–Iota (from ~31%)**
+- **95% coverage**: +158 additional child deaths and +116 stillbirths averted, ~6,800 more EBF infants supported.
+
+---
+
+## Strategic Recommendations
+
+1.  **Phase Programming:** Start with Cluster 1, then scale to Clusters 2 and 3 when readiness triggers are met.
+2.  **Track Unique Users:** Implement privacy-preserving ID systems (e.g., PRIMES, hashed Kobo) to track individuals, not just service interactions.
+3.  **Adopt Scenario Budgets:** Tie funding appeals to the quantified returns at 30% and 95% coverage levels.
+4.  **Quantified Advocacy:** Develop a three-line CoI story for each context, linking funding gaps directly to lives and benefits forgone.
+
+---
+
+## Conclusion – Inaction Is Not Neutral
+
+* **The gap is avoidable.** Scaling to 30% or 95% coverage would save thousands of lives and support tens of thousands more infants with exclusive breastfeeding.
+
+* **Returns are high.** Even modest investments yield major gains—up to **US\$337M** in economic benefits in migration contexts alone.
+
+* **Gaps are systemic.** Bottlenecks in maternal care, diagnostics, and supply chains—not lack of will—drive under-delivery.
+
+* **Estimates are conservative.** The real human and economic costs of inaction are likely even higher.
+
+* **NiE is foundational.** It must be financed as a core, life-saving sector—**not an optional add-on.**
+
+* **Act now.** Phase delivery by readiness, budget by scenario, and anchor advocacy in one message:
+  **Money saves lives now and protects futures later.**
+
+---
+
+## Contact
+
+**Commissioned by:** UNICEF Latin America and Caribbean Regional Office
+**Implemented by:** movimentar GmbH – Project Management and Data Science
+**Email:** support@movimentar.eu
+**Web:** [www.movimentar.eu](https://www.movimentar.eu)
