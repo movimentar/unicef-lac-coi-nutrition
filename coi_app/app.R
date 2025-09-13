@@ -5,15 +5,24 @@
 suppressPackageStartupMessages({
   library(shiny); library(bslib); library(shinyvalidate)
   library(tidyverse); library(scales); library(gt); library(targets)
-  suppressWarnings(try(library(httr2),      silent = TRUE)) # optional (Gemini)
+  suppressWarnings(try(library(httr2),      silent = TRUE)) # Gemini
   suppressWarnings(try(library(commonmark), silent = TRUE)) # markdown->HTML
+  suppressWarnings(try(library(shinycssloaders), silent = TRUE)) # spinners
 })
 
 `%||%` <- function(x, y) if (is.null(x)) y else x
-as_chr     <- function(x) toString(x)                    # length-1 character
+as_chr     <- function(x) toString(x)
 fmt_dollar <- function(x) as_chr(scales::dollar(x))
 fmt_comma  <- function(x) as_chr(scales::comma(x))
 fmt_bcr    <- function(x) as_chr(ifelse(is.na(x), "—", sprintf("%.2f", x)))
+
+# If shinycssloaders is available, wrap an output in a spinner
+with_spinner_maybe <- function(x) {
+  if ("shinycssloaders" %in% loadedNamespaces())
+    shinycssloaders::withSpinner(x, type = 4)
+  else
+    x
+}
 
 # ---------- Gemini helpers (REST; header X-Goog-Api-Key) ----------
 gemini_generate_rest <- function(prompt,
@@ -59,7 +68,7 @@ gemini_generate_rest_retry <- function(..., max_retries = 5L, base_delay = 1.5){
   }
 }
 
-# ---------- narrative prompt (now includes indicator lines) ----------
+# ---------- narrative prompt (includes per-indicator lines) ----------
 build_coi_prompt <- function(p, direct_lines = character()){
   direct_block <-
     if (length(direct_lines)) {
@@ -202,9 +211,14 @@ pv_tab_5 <- if (has_pv_inputs) pv_compute_by_em(coi_dir_benefits$breastfeeding, 
 ui <- page_fluid(
   theme = bs_theme(version = 5, bootswatch = "flatly"),
   title = "CoI Explorer",
-  tags$style(HTML(".narrative{white-space:normal}.narrative p{margin-bottom:.6rem}.narrative ul{margin-left:1.2rem}")),
+  tags$style(HTML("
+    .narrative{white-space:normal}
+    .narrative p{margin-bottom:.6rem}
+    .narrative ul{margin-left:1.2rem}
+  ")),
   layout_columns(
     col_widths = c(4, 8),
+    # ---- Inputs ----
     card(
       header = "Inputs",
       selectInput("emergency","Emergency context", choices = sort(unique(coi_costs$emergency))),
@@ -223,40 +237,68 @@ ui <- page_fluid(
                                          sliderInput("cost_adj","Cost adjustment factor (×)", .25, 2.5, 1.0, .05),
                                          helpText("Proportional change to total costs (local prices/logistics).")
                         ),
-                        checkboxInput("enable_ai","Enable automated narrative (Gemini)", FALSE)
+                        checkboxInput("enable_ai","Enable automated narrative (Gemini API key required)", FALSE)
         )
       )
     ),
+    
+    # ---- Results ----
     card(
       header = "Results",
-      layout_columns(
-        col_widths = c(6,6),
-        card(card_header("Total response cost"), h4(textOutput("total_cost"), class="mt-2")),
-        card(card_header("Indirect benefits"),   h4(textOutput("indir_benefit"), class="mt-2"))
+      navset_card_tab(
+        # Dashboard tab
+        nav_panel("Dashboard", icon = icon("dashboard"),
+                  layout_columns(
+                    col_widths = c(6,6),
+                    value_box(title = "Total response cost",  value = textOutput("total_cost"),  showcase = icon("sack-dollar")),
+                    value_box(title = "Indirect benefits",    value = textOutput("indir_benefit"), showcase = icon("arrow-trend-up"))
+                  ),
+                  layout_columns(
+                    col_widths = c(6,6),
+                    value_box(title = "Direct benefits (headline)", value = textOutput("direct_headline"), showcase = icon("users")),
+                    value_box(title = "Benefit–Cost Ratio",         value = textOutput("bcr"),             showcase = icon("scale-balanced"))
+                  ),
+                  hr(),
+                  with_spinner_maybe(plotOutput("benefit_plot", height = 320))
+        ),
+        
+        # Detailed tables tab
+        nav_panel("Detailed tables", icon = icon("table-list"),
+                  h5("Planning summary"),
+                  with_spinner_maybe(gt_output("summary_gt")),
+                  conditionalPanel("input.show_dbg", hr(), h5("Debug: per-indicator anchors (30% / 95%)"),
+                                   with_spinner_maybe(gt_output("dbg_gt"))),
+                  hr(),
+                  h5("Direct benefits by indicator"),
+                  with_spinner_maybe(gt_output("direct_detail_gt")),
+                  div(class="mt-2", downloadButton("dl_direct_csv","Download indicators (CSV)"))
+        ),
+        
+        # AI Interpretation tab
+        nav_panel("Automated interpretation", icon = icon("robot"),
+                  br(),
+                  actionButton("generate_narrative", "Generate interpretation",
+                               class="btn-primary", icon = icon("wand-magic-sparkles")),
+                  hr(),
+                  with_spinner_maybe(uiOutput("narrative"))
+        )
       ),
-      layout_columns(
-        col_widths = c(6,6),
-        card(card_header("Direct benefits — headline (count)"), h4(textOutput("direct_headline"), class="mt-2")),
-        card(card_header("Benefit–Cost Ratio"),                 h4(textOutput("bcr"), class="mt-2"))
-      ),
-      hr(), plotOutput("benefit_plot", height = 320), hr(),
-      h5("Planning summary"), gt_output("summary_gt"),
-      conditionalPanel("input.show_dbg", hr(), h5("Debug: per-indicator anchors (30% / 95%)"), gt_output("dbg_gt")),
-      hr(), h5("Direct benefits by indicator"), gt_output("direct_detail_gt"),
-      div(class="mt-2", downloadButton("dl_direct_csv","Download indicators (CSV)")),
-      hr(), h5("Automated interpretation"), uiOutput("narrative"),
-      hr(), downloadButton("dl_csv","Download CSV"), downloadButton("dl_xlsx","Download XLSX")
+      hr(),
+      downloadButton("dl_csv","Download CSV"),
+      downloadButton("dl_xlsx","Download XLSX")
     )
   )
 )
 
 # ---------- Server ----------
 server <- function(input, output, session){
+  # Validation
   iv <- InputValidator$new()
   iv$add_rule("pin_children", sv_gte(0)); iv$add_rule("pin_plw", sv_gte(0))
   iv$add_rule("years", sv_between(1, 50)); iv$add_rule("study_years", sv_between(1, 50))
   iv$enable()
   
+  # PiN scale (fully reactive)
   pin_scale <- reactive({
     req(iv$is_valid())
     base <- pin_baseline %>% filter(emergency == input$emergency)
@@ -267,6 +309,7 @@ server <- function(input, output, session){
     )
   })
   
+  # Clean anchors table per emergency
   direct_anchors <- reactive({
     build_direct_anchors(coi_dir_benefits$malnutrition, coi_dir_benefits$breastfeeding, input$emergency, coi_costs)
   })
@@ -280,7 +323,7 @@ server <- function(input, output, session){
       tab_header(title = "Anchors (counts at 30% and 95% coverage)")
   })
   
-  # Per-indicator results
+  # Per-indicator results (reactive)
   direct_by_indicator <- reactive({
     da <- direct_anchors(); req(nrow(da) > 0)
     nm <- tolower(da$indicator_name)
@@ -304,7 +347,7 @@ server <- function(input, output, session){
     )
   })
   
-  # Lines for the AI prompt (top indicators)
+  # Short lines for AI prompt (top 6 indicators)
   direct_prompt_lines <- reactive({
     tb <- direct_by_indicator()
     if (!nrow(tb)) return(character(0))
@@ -317,7 +360,7 @@ server <- function(input, output, session){
       pull(line)
   })
   
-  # Headline = sum of indicator totals over planning period
+  # Headline = sum of planning-period totals
   direct_total_planning <- reactive({
     sum(direct_by_indicator()$total_planning, na.rm = TRUE)
   })
@@ -342,7 +385,7 @@ server <- function(input, output, session){
     }
   })
   
-  # Costs (simple proportional model)
+  # Costs
   cost_interp <- reactive({
     base <- coi_costs %>% filter(emergency == input$emergency); req(nrow(base) > 0)
     ideal_cost_tot <- sum(base$ideal_cost, na.rm = TRUE)
@@ -357,7 +400,7 @@ server <- function(input, output, session){
     tibble(cost_total_study = tot)
   })
   
-  # Aggregate results (per planning period)
+  # Aggregate (per planning period)
   results <- reactive({
     study_years <- input$study_years; years <- input$years
     indir_total_study <- indir_interp()$total; cost_total_study <- cost_interp()$cost_total_study[1]
@@ -372,7 +415,7 @@ server <- function(input, output, session){
     )
   })
   
-  # ---------- Outputs ----------
+  # ---- Dashboard outputs ----
   output$total_cost      <- renderText({ req(results()); fmt_dollar(round(results()$cost_total)) })
   output$indir_benefit   <- renderText({ req(results()); fmt_dollar(round(results()$indir_total)) })
   output$direct_headline <- renderText({ req(results()); fmt_comma(round(results()$direct_total)) })
@@ -389,6 +432,7 @@ server <- function(input, output, session){
       theme_minimal(base_size = 12)
   })
   
+  # ---- Tables ----
   output$summary_gt <- render_gt({
     req(results())
     tibble(
@@ -425,33 +469,50 @@ server <- function(input, output, session){
     content  = function(file) readr::write_csv(direct_by_indicator(), file)
   )
   
-  # Narrative (Markdown -> HTML) — now includes direct indicator lines
+  # ---- AI narrative (decoupled; runs only on click) ----
   output$narrative <- renderUI({
-    if (!isTRUE(input$enable_ai))
-      return(tags$p(class="text-muted narrative","Automated interpretation is disabled. Enable it in Advanced."))
-    if (!requireNamespace("httr2", quietly = TRUE) || Sys.getenv("GEMINI_API_KEY")=="")
-      return(tags$p(class="text-danger narrative","No API key found or {httr2} not installed. Set GEMINI_API_KEY and restart."))
+    tags$p(class="text-muted narrative",
+           "Click “Generate interpretation” to request a short AI narrative for the current settings.")
+  })
+  
+  observeEvent(input$generate_narrative, {
+    if (!isTRUE(input$enable_ai)) {
+      output$narrative <- renderUI(tags$p(class="text-muted narrative",
+                                          "Enable the toggle in Advanced to allow AI interpretation."))
+      return()
+    }
+    if (!requireNamespace("httr2", quietly = TRUE) || Sys.getenv("GEMINI_API_KEY")=="") {
+      output$narrative <- renderUI(tags$p(class="text-danger narrative",
+                                          "No API key found or {httr2} not installed. Set GEMINI_API_KEY and restart."))
+      return()
+    }
     
+    showNotification("Requesting narrative from Gemini…", type = "message", duration = 5)
+    
+    # Freeze current inputs/results so this doesn't keep re-running
+    res <- isolate(results())
     p <- list(
-      emergency=input$emergency, years=input$years,
-      valuation=switch(input$valuation, undisc="Undiscounted", pv3="PV (3%)", pv5="PV (5%)"),
-      pin_children=input$pin_children, pin_plw=input$pin_plw, coverage=input$coverage,
-      total_cost=results()$cost_total, indir_total=results()$indir_total,
-      direct_total=results()$direct_total, bcr=results()$bcr
+      emergency=isolate(input$emergency), years=isolate(input$years),
+      valuation=switch(isolate(input$valuation), undisc="Undiscounted", pv3="PV (3%)", pv5="PV (5%)"),
+      pin_children=isolate(input$pin_children), pin_plw=isolate(input$pin_plw),
+      coverage=isolate(input$coverage),
+      total_cost=res$cost_total, indir_total=res$indir_total,
+      direct_total=res$direct_total, bcr=res$bcr
     )
     
     txt <- gemini_generate_rest_retry(
-      prompt = build_coi_prompt(p, direct_lines = direct_prompt_lines()),
+      prompt = build_coi_prompt(p, direct_lines = isolate(direct_prompt_lines())),
       model  = "gemini-2.5-flash", temperature = 0.2, max_tokens = 700, thinking_budget = 0
     )
     
-    if (requireNamespace("commonmark", quietly = TRUE))
-      HTML(sprintf('<div class="narrative">%s</div>', commonmark::markdown_html(txt)))
-    else
-      tags$div(class="narrative", style="white-space:pre-wrap;", txt)
+    if (requireNamespace("commonmark", quietly = TRUE)) {
+      output$narrative <- renderUI(HTML(sprintf('<div class="narrative">%s</div>', commonmark::markdown_html(txt))))
+    } else {
+      output$narrative <- renderUI(tags$div(class="narrative", style="white-space:pre-wrap;", txt))
+    }
   })
   
-  # Downloads (summary)
+  # ---- Downloads (summary) ----
   summary_df <- reactive({
     tibble(
       emergency = input$emergency,
