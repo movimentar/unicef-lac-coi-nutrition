@@ -23,7 +23,8 @@ packages <- c(
   "forecast",
   "tseries",
   "wpp2022",
-  "devtools"
+  "devtools",
+  "MetBrewer"
 )
 
 # Custom package (source: https://github.com/PPgp/wpp2022/tree/main)

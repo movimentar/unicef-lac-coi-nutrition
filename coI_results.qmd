@@ -725,35 +725,42 @@ indir_plot <- indir_raw %>%
   mutate(
     musd = usd / 1e6,
     scenario = recode(scenario,
-                      "implemented" = "UNICEF response",
-                      "30"          = "30% coverage",
-                      "95"          = "95% coverage"),
-    scenario = factor(scenario, levels = c("UNICEF response","30% coverage","95% coverage")),
+      "implemented" = "Current UNICEF Response",
+      "30"        = "30% Coverage",
+      "95"        = "95% Coverage"),
+    scenario = factor(scenario, levels = c("Current UNICEF Response", "30% Coverage", "95% Coverage")),
     emergency = factor(emergency, levels = c("Eta-Iota", "Migration flows"))
   )
 
 p <- ggplot(indir_plot, aes(x = emergency, y = musd, fill = scenario)) +
-  geom_col(position = position_dodge(width = 0.7), width = 0.65) +
-  geom_text(aes(label = number(musd, accuracy = 0.1)),
-            position = position_dodge(width = 0.7), vjust = -0.35, size = 3) +
+  geom_col(position = position_dodge(width = 0.8), width = 0.7) +
+  geom_text(aes(label = number(musd, accuracy = 1)),
+    position = position_dodge(width = 0.8), vjust = -0.5, size = 5, fontface = "bold") +
   scale_y_continuous(
-    labels = label_number(accuracy = 0.1),
-    expand = expansion(mult = c(0, 0.08))
+    labels = label_number(accuracy = 1),
+    limits = c(0, 400),
+    expand = expansion(mult = c(0, 0.05))
   ) +
   labs(
-    x = NULL, y = "Millions of 2015 USD", fill = NULL,
-    title = "Estimated Indirect Economic Benefits from NiE by Scenario",
-    subtitle = "Sum of avoided formula expenditure and preserved future income via EBF (undiscounted)",
-    caption = "Source: Authors’ analysis of UNICEF NiE data (2015 USD)."
+    x = NULL, y = "Millions of USD (2015, Undiscounted)", fill = "Scenario",
+    title = "Hundreds of Millions in Benefits Forgone: The Economic Cost of Underfunding NiE",
+    subtitle = "The economic benefits of interventions span two periods: avoided formula costs during\na child's first two years (0–24 months), and increased lifetime earnings projected from 2038–2080.",
+    caption = "Source: UNICEF CoI Study. Indirect benefits include avoided formula costs and increased lifetime earnings."
   ) +
-  theme_minimal(base_size = 11) +
-  theme(legend.position = "top")
-
+  scale_fill_manual(values = c("#A6CEE3", "#1F78B4", "#029ee2")) +
+  theme_minimal(base_size = 17) +
+  theme(
+    legend.position = "bottom",
+    legend.title = element_text(size = 13),
+    axis.text = element_text(size = 15),
+    axis.title.y = element_text(size = 15),
+    plot.title = element_text(size = 18, face = "bold"),
+    plot.subtitle = element_text(size = 15),
+    axis.text.x = element_text(angle = 0, hjust = .5)
+  )
 p
 
 if (!dir.exists("figures")) dir.create("figures")
-ggsave("figures/econ-benefits-bar-chart.png", p, width = 8, height = 5, dpi = 300)
-
-
+ggsave("figures/econ-benefits-bar-chart.png", p, width = 6, height = 5, dpi = 300)
 ```
 
