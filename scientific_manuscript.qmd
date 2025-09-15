@@ -1,14 +1,14 @@
 ---
 title: "The Cost of Inaction on Nutrition in Emergencies in Latin America and the Caribbean: A Multi-Country Quantitative Assessment"
 author:
-  - name: "Eduardo Wirthmann Ferreira (movimentar GmbH)"
+  - name: "Eduardo Wirthmann Ferreira"
     affiliation: "movimentar GmbH"
-    email: "support@movimentar.eu"
+    orcid: "https://orcid.org/0009-0002-8024-5157"
+  - name: "movimentar GmbH"
+    affiliation: "movimentar GmbH"
+    orcid: "https://orcid.org/0009-0003-6417-6005"
 abstract: |-
-  This multi-country study, commissioned by UNICEF Latin America and Caribbean Regional Office (LACRO), quantifies the human and economic costs of under-delivery of nutrition-specific services during emergencies (2020–2022). Using a Cost of Inaction framework, we compare four coverage scenarios—0% (no action), implemented, 30%, and 95%—for two crisis typologies: the Eta–Iota hurricane response and regional migration flows. Direct benefits (stillbirths and under-five deaths averted; changes in wasting, stunting, and exclusive breastfeeding) were estimated using the Lives Saved Tool (LiST). Indirect benefits monetise exclusive-breastfeeding gains as avoided household expenditure on breast-milk substitutes and preserved future income linked to cognition. Costs were standardised to constant 2015 USD, with present values for cognition calculated from a 2022 base year at 3–5% real discount rates. 
-  Implemented coverage averaged ~31% in Eta–Iota settings and ~2.7% in migration contexts, with expenditures representing only 17% and 14% of the investment required for 95% coverage, respectively. Scaling to 95% coverage would avert additional stillbirths and child deaths and increase exclusive breastfeeding substantially. Undiscounted indirect benefits would rise to ~US$68.3 million (Eta–Iota) and ~US$336.9 million (migration). Principal component and cluster analyses identify a pragmatic sequencing of services—from universally feasible child-preventive functions to diagnostics/treatment and maternal iron/IFA dependent on system readiness.
-  
-  Underinvestment in Nutrition in Emergencies generates measurable and avoidable losses. Scenario-based budgets and phased packages aligned with readiness triggers provide a practical pathway to close coverage gaps, improve survival, and preserve human capital.
+  The Latin America and Caribbean (LAC) region, marked by high disaster susceptibility and substantial migration flows, faces critical challenges in delivering nutrition-specific services during crises. Nutrition in Emergencies (NiE) is systematically underfunded, with large gaps between implemented responses and ideal coverage. This multi-country study, commissioned by UNICEF LACRO, quantifies the human and economic costs of inaction across two emergency typologies (2020–2022): the Eta–Iota hurricanes in Central America and regional migration flows. Adapting the Anand et al. (2012) Cost of Inaction (CoI) framework, we define inaction as the net benefit forgone when a feasible “ideal” NiE package—benchmarked at 95% coverage of People in Need (PiN)—is not delivered. Using the Lives Saved Tool (LiST) and R-based economic models, we estimate constitutive benefits (stillbirths and under-five deaths averted; changes in wasting, stunting, and exclusive breastfeeding) and consequential benefits (avoided household expenditure on breast-milk substitutes and preserved future income via cognition) across 0%, implemented, 30%, and 95% coverage scenarios. Implemented coverage averaged ~31% in Eta–Iota settings and ~2.7% in migration contexts, with expenditures representing only ~17% and ~14% of investment required for 95% coverage, respectively. Scaling to 95% coverage would avert additional stillbirths and child deaths and substantially increase exclusive breastfeeding. Undiscounted indirect benefits would rise to ~US$68.3 million (Eta–Iota) and ~US$336.9 million (migration); present values (3–5% real, base 2022) confirm strong economic returns. Principal component and cluster analyses identify a pragmatic sequencing of services—from a universally feasible child-preventive bundle to diagnostics/treatment and maternal iron/IFA dependent on system readiness. The inaction gap is large, measurable, and avoidable; scenario-based budgets and phased packages aligned with readiness triggers provide a practical pathway to close coverage gaps, improve survival, and preserve human capital.
 keywords:
   - nutrition in emergencies
   - humanitarian action
@@ -33,22 +33,42 @@ bibliography: references.bib
 csl: harvard.csl
 ---
 
-
-> **Plain language summary:**  Under‑funding nutrition services during crises in Latin America and the Caribbean results in preventable child deaths and lost economic potential. Using scenarios from “no response” to “near‑universal coverage”, we estimate how many deaths could be averted and what financial benefits families and societies could gain, particularly through higher exclusive‑breastfeeding. We also identify which services are most feasible to start first, and which require stronger health systems.
+> **Plain language summary.** Under-funding nutrition services in LAC emergencies leads to preventable child deaths and foregone economic potential. Comparing scenarios from “no response” to “near-universal coverage,” we estimate how many deaths could be averted and what financial benefits families and societies can gain—particularly via higher exclusive breastfeeding. We also identify which services are feasible to start first and which require stronger systems.
 
 # Introduction
 
-Latin America and the Caribbean is the world’s second most disaster-prone region and hosts some of the largest per-capita migration flows globally. Crises triggered by climate events and displacement interact with chronic vulnerabilities, especially among children under five and pregnant or lactating women (PLW). Nutrition in Emergencies (NiE), a life-saving component of humanitarian action, remains critically underfunded and often conflated with food security. Unlike food assistance, NiE delivers targeted preventive and therapeutic services to mitigate acute malnutrition and safeguard maternal and child health. In 2020–2022, the nutrition sector received as little as 1.6% of required funds in major emergencies (@OCHAFTS2022). This study quantifies the consequences of under-delivery using a Cost of Inaction (CoI) lens (@Anand2001) to inform humanitarian programming, monitoring and evaluation.
+The Latin America and Caribbean (LAC) region is among the most disaster-prone globally and hosts some of the largest per-capita migration flows. Crises driven by climate events and displacement interact with structural vulnerabilities, especially for children under five and pregnant or lactating women (PLW). While food security interventions address access to food, **Nutrition in Emergencies (NiE)** delivers targeted preventive and therapeutic services (e.g., IYCF, micronutrients, screening/treatment of acute malnutrition) essential to mitigate morbidity and mortality. Yet NiE is systematically underfunded; in several major emergencies, nutrition received as little as 1.6% of required funds (@OCHAFTS2022). This article applies a **Cost of Inaction (CoI)** lens (@Anand2012) to quantify forgone benefits and inform policy, building on evidence for the health and economic impacts of early nutrition (@Black2013; @Horton2010; @Bhutta2013).
 
 # Methods
 
-We adapted a CoI framework to estimate forgone benefits under four scenarios: no action (0%), current implementation, moderate scale-up (30%), and ideal (95%) coverage. Direct (constitutive) benefits include lives saved and reduced malnutrition, modelled through the Lives Saved Tool (LiST) (@Walker2013). Indirect (consequential) benefits include household cost savings on breast-milk substitutes (BMS) and preserved income from cognition gains linked to exclusive breastfeeding (EBF) (e.g., @Victora2016). Programme cost data were compiled from UNICEF country offices and standardised to constant 2015 USD. Principal components analysis (PCA) and cluster analysis identified patterns in delivery feasibility across countries and crises. Full model assumptions and sensitivity checks are provided in Supplementary Materials, and minimum standards references follow Sphere guidance (@Sphere2018).
+## Framework and scenarios
+
+We adapted the CoI framework (@Anand2012), defining **inaction** as the net benefit forgone by not undertaking a feasible **ideal action**. Here, ideal action is a standards-aligned NiE package targeted to People in Need (PiN) at **95% coverage** (Sphere minimum standards; @Sphere2018). We model four scenarios: **0% (no action)**, **implemented (observed)**, **30%**, and **95%** coverage.
+
+## Direct (constitutive) benefits
+
+We used the **Lives Saved Tool (LiST)** to estimate changes in stillbirths, under-five mortality, wasting, stunting, and **exclusive breastfeeding (EBF)** under each scenario (@Walker2013). For migration responses, Venezuelan baselines were used as a proxy where migrant data were incomplete.
+
+## Indirect (consequential) benefits and costs
+
+From LiST-derived additional EBF infants, we monetised two pathways: (i) **avoided household expenditure on breast-milk substitutes (BMS)**, and (ii) **preserved future income via cognition** (earnings uplift linked to EBF; @Victora2016; consistent with @Walters2019). Monetary values are in **constant 2015 USD**. Present values (PV) for cognition use a **2022 base year** at **3–5% real**. The economic benefits of interventions span two periods: avoided formula costs during the child's first two years (0–24 months), and increased lifetime earnings projected from 2038–2080.
+
+Programme delivery **costs** were compiled from UNICEF country offices; where necessary, we used median unit costs by intervention and context. We constructed **implemented** and **ideal** (95%) cost envelopes to benchmark financing gaps.
+
+## Data, settings, and analysis
+
+Two emergency typologies (2020–2022) were analysed: **Eta–Iota hurricanes** (Guatemala, Honduras, Nicaragua) and **regional migration flows** (Colombia, Honduras, Peru). Principal Components Analysis (PCA) and hierarchical clustering explored **delivery patterns** (feasibility clusters). Full assumptions, sensitivity checks, and reproducible R code are available (see *Research data & code*).
+
+## Limitations
+
+LiST uses national baselines that may understate emergency-period risks; migration baselines rely on proxy populations. Intervention costs depend on reporting by UNICEF country offices (COs); missingness was handled conservatively via medians. Indirect economic benefits were limited to the EBF channel to avoid double counting with health outcomes—yielding **conservative** estimates.
 
 # Results
 
-## Funding and Coverage Gaps
+## Coverage and financing gaps (2020–2022)
 
-In the Eta/Iota hurricane response, implemented coverage was ~31%, while migration settings saw only ~2.7% coverage. Estimated investments for 95% coverage were US\$37.8 million and US\$111.3 million, respectively, but actual spending reached only 17% and 14% of those targets.
+Implemented coverage averaged **\~31%** in Eta–Iota and **\~2.7%** in migration contexts. Reaching 95% coverage would require **US\$37.8m** (Eta–Iota) and **US\$111.3m** (migration), while actual spending represented only **\~17%** and **\~14%** of those needs, respectively.
+
 
 ::: {.table-caption #tbl-funding-summary}
 **Table 1. Summary of NiE funding and coverage by crisis context**
@@ -61,7 +81,10 @@ In the Eta/Iota hurricane response, implemented coverage was ~31%, while migrati
 *Source: Authors’ calculations from UNICEF LACRO data.*
 :::
 
-## Human Cost of Inaction
+
+Table 1 highlights substantial operational deficits. In the Eta–Iota response, less than one-third of children in need were reached, leaving a funding gap >US\$31m. In migration contexts, implemented coverage was <3% against need, with a shortfall near US\$100m. These gaps make explicit why downstream health and economic gains remain unrealised.
+
+## Human cost of inaction (constitutive benefits)
 
 ::: {.table-caption #tbl-direct-benefits}
 **Table 2. Estimated direct benefits in child malnutrition and mortality cases prevented by nutrition response scenario per emergency using the LiST model (2020–2022)**
@@ -76,59 +99,65 @@ In the Eta/Iota hurricane response, implemented coverage was ~31%, while migrati
 *Source: Authors’ calculations using LiST (@Walker2013).*
 :::
 
-## Economic Cost of Inaction
+The **0% coverage** column provides the counterfactual burden in the absence of nutrition action. The **UNICEF response** columns show cases **averted** with observed coverage (e.g., 224 under-5 deaths averted in Eta–Iota; 244 in migration). Scaling to **95% coverage** would avert **an additional 643** (867–224) child deaths in Eta–Iota and **762** (1006–244) in migration. The same pattern holds for wasting: the averted caseload at 95% is roughly **2–3.5×** the implemented response. In short, the headroom for impact is large and actionable.
 
-![Estimated Indirect Economic Benefits from Full NiE Coverage in Two Emergency Settings (in millions USD)](figures/econ-benefits-bar-chart.png){#fig-economic-benefits width=80%}
+## Economic cost of inaction (consequential benefits)
 
-**Figure 1**: Estimated indirect economic benefits from exclusive breastfeeding and reduced formula reliance. Source: Authors’ analysis of UNICEF NiE data (constant 2015 USD); EBF–cognition linkage informed by @Victora2016.
+```{r}
+#| label: fig-economic-benefits
+#| fig-cap: "Estimated indirect economic benefits from EBF and reduced BMS (millions of constant 2015 USD). Indirect benefits increase sharply with coverage, combining household BMS savings and cognition-linked income preservation."
+#| echo: false
+#| out.width: "80%"
+#| fig.align: "center"
 
-## Service Delivery Patterns
+knitr::include_graphics("figures/econ-benefits-bar-chart.png")
+```
 
-![PCA Biplot: NiE Service Delivery Components](figures/pca-biplot.png){#fig-pca-biplot width=75%}
+Figure 1 shows **non-linear gains** in indirect benefits as coverage rises, driven by (i) avoided BMS spending in the first 24 months and (ii) preserved earnings from cognition gains as today’s infants enter the workforce (2038–2080). The steep gradient from 30%→95% indicates that once foundational delivery is in place, marginal increases in coverage yield **disproportionately large** economic returns.
 
-**Figure 2**: Principal component analysis (PCA) biplot showing variation in NiE delivery service clusters by feasibility and implementation across country contexts.
+## Service delivery patterns
 
-Three core service clusters were identified:
+```{r}
+#| label: fig-pca-biplot
+#| fig-cap: "PCA biplot of intervention delivery components across country–context responses. Numeric labels denote intervention IDs (see Supplementary Table S1). Three feasibility clusters emerge: Cluster 1 (child-preventive bundle), Cluster 2 (diagnostics/treatment), Cluster 3 (maternal iron/IFA core)."
+#| echo: false
+#| out.width: "75%"
+#| fig.align: "center"
 
-* **Cluster 1**: Standard child-preventive bundle (feasible in all settings).
-* **Cluster 2**: Diagnostics and treatment (dependent on functional systems).
-* **Cluster 3**: Maternal iron/IFA interventions (limited to stable ANC platforms).
+knitr::include_graphics("figures/pca-biplot.png")
+```
+
+Figure 2 summarises co-delivery patterns. The **numeric codes** tag the underlying **NiE intervention IDs** (mapping in **Supplementary Table S1**). Cluster 1 groups universally feasible child-preventive actions; Clusters 2–3 require stronger systems (screen→refer→treat, reliable commodities, ANC linkages) and are the **first to degrade** under operational stress—explaining much of the inaction gap in migration corridors.
 
 # Discussion
 
-Despite moderate investment, NiE interventions have saved lives. However, the inaction gap remains vast. High returns to scale in migration settings suggest that even modest increases in funding could yield outsized health and economic returns. Service clustering highlights the need for phased implementation aligned with system readiness. The CoI framework usefully articulates missed opportunities and informs humanitarian decision-making (@Anand2001).
+Three findings stand out. **First**, the measured **inaction gap** is large and tractable: moving from implemented to **30% or 95%** coverage yields substantial, accelerating **health** and **economic** returns. **Second**, **returns to NiE investment** align with global evidence that early nutrition is among the highest-value health investments (@Horton2010; @Bhutta2013; @Black2013). **Third**, under-delivery is **patterned**, not random: services demanding robust screen-refer-treat pathways and ANC linkages (Clusters 2–3) are the first to falter in fragile and highly mobile contexts—strongly arguing for **phased** design and **readiness triggers**.
 
-**Implications for humanitarian action.** Results support (i) prioritising universally feasible preventive services for rapid start-up; (ii) scaling diagnostics/treatment as system functionality allows; and (iii) integrating maternal services where antenatal platforms are stable. Scenario-based budgeting can improve appeal design and donor engagement, consistent with sector standards (@Sphere2018).
+**Implications.** Phase services deliberately: institutionalise **Cluster 1** everywhere; scale **Cluster 2** once supply/referral readiness is proven; add **Cluster 3** where ANC platforms are stable. Funding requests should be **scenario-based** (implemented→30%→95%) and tie asks to **quantified returns** (lives saved, EBF gains, PV of income preserved). Position NiE distinctly (not conflated with food security), referencing **Sphere** standards (@Sphere2018) and **FTS** resource gaps (@OCHAFTS2022).
 
-**Limitations.** LiST may under-detect effects for some maternal/neonatal outcomes where intervention coverage is low or clustered. Economic proxies rely on literature-based links between EBF and cognition; country-specific earnings paths introduce uncertainty addressed through sensitivity analysis.
+**Limitations.** Estimates likely **understate** true benefits: LiST baselines may be conservative for acute emergencies; EBF monetisation excludes other plausible spillovers. Cost medians smooth local price variability.
 
 # Conclusion
 
-Nutrition in Emergencies is a core humanitarian function. Underinvestment produces preventable mortality and long-run losses in human capital. Applying a Cost of Inaction lens shows that moving from current to 95% coverage could yield outsized health and economic returns, especially in displacement-affected settings. Sequencing services—from a universal child-preventive bundle to diagnostics/treatment and maternal iron/IFA as systems allow—offers a feasible route to scale. Donors and implementers should adopt scenario-based budgets tied to readiness triggers to convert the documented inaction gap into realised survival and productivity gains.
+NiE is a **core humanitarian function**. Underinvestment produces **preventable mortality** and **foregone human capital**. A CoI lens shows that scaling to **95% coverage** can deliver outsized, policy-relevant returns—especially in displacement-affected settings. A **phased package**, tied to **readiness triggers** and backed by **scenario-based budgeting**, offers a feasible route to close the gap and convert avoidable losses into **survival and productivity gains**.
 
-Phased intervention packages aligned with system readiness, supported by scenario-based budgeting, provide a pragmatic pathway for governments, donors, and humanitarian actors to close funding gaps and prioritise lifesaving interventions. Strengthening NiE within humanitarian appeals and coordination mechanisms is therefore urgent, both to save lives in the short term and to safeguard development gains in the long term.
+# Recommendations
 
-Future work should deepen the evidence base by integrating real-time implementation data, expanding to additional crisis contexts, and refining economic valuation approaches. Doing so will strengthen the case for sustainable financing of NiE as a central pillar of humanitarian action in Latin America and the Caribbean and beyond.
-
-
+1. **Programme design (phase deliberately):** Institutionalise Cluster 1; scale Clusters 2–3 when trigger thresholds are met (screening coverage, stock reliability, referral completion).
+2. **Measurement (track users and pathways):** Move beyond service contacts to privacy-preserving **unique-user** tracking across the **screen→refer→treat** cascade.
+3. **Financing (scenario-based budgets):** Present costed options at implemented, 30%, and 95% coverage with **health and PV** returns; seek **multi-year, flexible** envelopes.
+4. **Advocacy (quantified narrative):** Standardise a “three-line CoI story” per context: **funding gap → preventable deaths → EBF gains & PV**.
 
 # Declarations
 
-**Ethics approval and consent to participate.** Not applicable; the study relied on secondary programme data and modelled estimates.
-
-**Consent for publication.** Not applicable.
-
-**Availability of data and materials.** Aggregated data and code used to generate tables and figures are available upon reasonable request; selected replication outputs can be shared as supplementary files. Replication materials (aggregated data, R scripts for analysis and figure generation) are available at https://github.com/movimentar/unicef-lac-coi-nutrition. Sensitive program-level microdata cannot be shared publicly but can be made available upon request subject to UNICEF approval.
-
-**Competing interests.** The authors declare no competing interests.
-
-**Funding.** This work was commissioned by UNICEF LACRO. The funder had no role in the interpretation of findings or the decision to submit the article.
-
-**Authors’ contributions.** Conceptualisation, methodology, formal analysis, visualisation, and writing were led by the authors; all authors reviewed and approved the final manuscript.
-
-**Acknowledgements.** We thank UNICEF country office teams for data sharing and colleagues for feedback on earlier drafts.
+**Ethics approval and consent to participate:** Not applicable (secondary programme data and modelled estimates).
+**Consent for publication:** Not applicable.
+**Availability of data and materials (research data & code):** Aggregated data and replication code are archived at: [https://github.com/movimentar/unicef-lac-coi-nutrition](https://github.com/movimentar/unicef-lac-coi-nutrition). The repository documents the analysis pipeline, inputs (metadata), and generated tables/figures.
+**Competing interests:** The author declares no competing interests.
+**Funding:** Commissioned by UNICEF LACRO; the funder had no role in interpretation or the decision to submit.
+**Authors’ contributions:** Conceptualisation, methodology, formal analysis, visualisation, writing—original draft & review/editing.
+**Acknowledgements:** The author thanks UNICEF LACRO and the UNICEF country office teams (Guatemala, Honduras, Nicaragua, Colombia, Peru) for data provision and feedback. Thanks to colleagues at movimentar GmbH for contributions to the broader study (Saul Gámez, Alejandra Toledo, Annalena Oeffner Ferreira, Camila Campillo, Carolina Clemens, Luisa Martins). Additional professional inputs and literature curation were supported by the project’s structured review (see Supplementary Materials). Any errors remain the author’s.
+**Use of AI-assisted tools:** Drafting and documentation benefited from human-supervised use of **Gemini 2.5 Pro**, **Google NotebookLM**, **ChatGPT 5 Pro**, **Elicit**, and **DeepL** for literature triage, wording suggestions, and code comment improvements. The author reviewed and verified all content and is responsible for the manuscript.
+**Author identifiers:** Eduardo Wirthmann Ferreira (ORCID: 0009-0002-8024-5157). Institutional ORCID: movimentar GmbH (ORCID: 0009-0003-6417-6005).
 
 # References
-
-
-
