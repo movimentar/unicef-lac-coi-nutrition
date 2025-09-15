@@ -1,0 +1,213 @@
+/* www/styles.css
+   UNICEF-style, clean + accessible theme for the CoI Explorer
+   ------------------------------------------------------------------ */
+
+/* ---------- Brand tokens ---------- */
+:root{
+  --unicef-cyan: #1CABE2;
+  --unicef-cyan-600: #1598c2;
+  --slate-900: #202428;
+  --slate-700: #4a5056;
+  --slate-500: #6c757d;
+  --slate-200: #e9ecef;
+  --bg: #f8f9fa;
+  --white: #fff;
+  --radius: 12px;
+  --shadow: 0 6px 18px rgba(0,0,0,.06);
+}
+
+/* ---------- Global typography & base ---------- */
+html { scroll-behavior: smooth; }
+body{
+  font-family: 'Lato', system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  background-color: var(--bg);
+  color: var(--slate-900);
+  line-height: 1.45;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+h1,h2,h3,h4,h5{ color: var(--slate-900); font-weight: 700; }
+h6{ color: var(--slate-700); font-weight: 600; }
+small, .text-muted{ color: var(--slate-500) !important; }
+
+/* Improve focus visibility for keyboard users */
+:focus-visible{
+  outline: 3px solid var(--unicef-cyan);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+/* ---------- Header: UNICEF logo + title ---------- */
+.logo-container{
+  display:flex; align-items:center; gap:16px;
+  padding: 10px 0 18px 0; margin-bottom: 6px;
+  border-bottom: 1px solid var(--slate-200);
+}
+.logo-container img{ height:40px; width:auto; display:block; }
+.logo-container .title{
+  font-size: clamp(1.35rem, 1.1rem + 0.8vw, 1.9rem);
+  font-weight: 800;
+  letter-spacing:.2px;
+}
+
+/* ---------- Cards & layout polish ---------- */
+.card{
+  border-radius: var(--radius) !important;
+  border: 1px solid var(--slate-200) !important;
+  box-shadow: var(--shadow);
+  background: var(--white);
+}
+.card-header{
+  background: linear-gradient(180deg, #fff, #fafbfc);
+  border-bottom: 1px solid var(--slate-200);
+  border-top-left-radius: var(--radius);
+  border-top-right-radius: var(--radius);
+  font-weight: 700;
+}
+
+/* ---------- Value boxes (bslib) ---------- */
+.bslib-value-box{
+  border-radius: var(--radius);
+  border: 1px solid var(--slate-200);
+  box-shadow: var(--shadow);
+  padding: 14px 16px;
+  background: #fff;
+}
+.bslib-value-box .value-box-title{
+  font-size: .9rem; font-weight: 800; letter-spacing:.3px;
+  color: var(--slate-700); text-transform: uppercase;
+  opacity: .9;
+}
+.bslib-value-box .value-box-value{
+  font-size: clamp(1.2rem, 1rem + 1.2vw, 2rem) !important;
+  font-weight: 800; color: var(--slate-900);
+}
+.bslib-value-box .value-box-showcase svg{
+  color: var(--unicef-cyan) !important;
+}
+
+/* ---------- Buttons (brand primary) ---------- */
+.btn-primary{
+  background-color: var(--unicef-cyan) !important;
+  border-color: var(--unicef-cyan) !important;
+  color: #00344d !important;
+  font-weight: 700;
+}
+.btn-primary:hover,
+.btn-primary:focus{
+  background-color: var(--unicef-cyan-600) !important;
+  border-color: var(--unicef-cyan-600) !important;
+}
+
+/* ---------- Sidebar inputs polish ---------- */
+.form-label{ font-weight: 700; color: var(--slate-700); }
+.form-control, .form-select{
+  border-radius: 10px !important;
+  border-color: var(--slate-200);
+}
+.form-control:focus, .form-select:focus{
+  border-color: var(--unicef-cyan);
+  box-shadow: 0 0 0 .2rem rgba(28,171,226,.15);
+}
+
+/* ---------- Nav tabs (bslib navset_card_tab) ---------- */
+.nav-tabs .nav-link{
+  font-weight: 700;
+  color: var(--slate-700);
+  border: none;
+  border-bottom: 2px solid transparent;
+  border-radius: 0;
+}
+.nav-tabs .nav-link:hover{ color: var(--slate-900); }
+.nav-tabs .nav-link.active{
+  color: var(--slate-900);
+  border-bottom-color: var(--unicef-cyan);
+}
+
+/* ---------- Plot area ---------- */
+#benefit_plot{
+  background: #fff;
+  border-radius: var(--radius);
+}
+
+/* ---------- Tables (gt) ---------- */
+.gt_table{
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  border: 1px solid var(--slate-200);
+  overflow: hidden;
+}
+.gt_table .gt_heading{ background: #fafbfc; }
+.gt_table .gt_col_headings{ background: #fafbfc; }
+.gt_table .gt_row{ border-color: #f1f3f5; }
+.gt_table .gt_stub{ font-weight: 700; }
+.gt_table .gt_group_heading{
+  background:#f4f7f9; color:#1f2a33; font-weight:800;
+}
+/* Make wide tables scroll nicely on small screens */
+.gt_table{ display:block; overflow-x:auto; }
+
+/* ---------- AI narrative panel ---------- */
+.narrative{
+  white-space: normal;
+  background-color: #fcfdff;
+  padding: 16px 18px;
+  border-radius: 10px;
+  border: 1px solid var(--slate-200);
+  box-shadow: var(--shadow);
+}
+.narrative p{ margin: 0 0 .65rem 0; }
+.narrative ul, .narrative ol{ padding-left: 1.25rem; margin-bottom: .6rem; }
+.narrative li + li{ margin-top: .25rem; }
+.narrative blockquote{
+  margin: .6rem 0; padding: .6rem .9rem;
+  border-left: 4px solid var(--unicef-cyan);
+  background: #eef9fe;
+  border-radius: 6px;
+}
+
+/* ---------- Footer (movimentar + repo) ---------- */
+.footer{
+  margin-top: 20px; padding-top: 14px;
+  border-top: 1px solid var(--slate-200);
+  display:flex; gap:12px; justify-content:space-between; align-items:center;
+  opacity:.9; flex-wrap: wrap;
+}
+.footer-logo{ height: 24px; width:auto; }
+.footer a{
+  text-decoration: none; color: var(--slate-700);
+  font-size: .95rem; font-weight: 700;
+}
+.footer a:hover{ color: var(--slate-900); text-decoration: underline; }
+
+/* ---------- Spinners (shinycssloaders) ---------- */
+.load-container .loading-spinner{ filter: hue-rotate(170deg) saturate(110%); }
+
+/* ---------- Utilities ---------- */
+.kpi{ font-weight:800; color: var(--slate-900); }
+.badge-cyan{
+  background: rgba(28,171,226,.12);
+  color: var(--unicef-cyan); font-weight:800;
+  border-radius: 999px; padding: .25rem .6rem;
+}
+
+/* ---------- Mobile tweaks ---------- */
+@media (max-width: 992px){
+  .logo-container{ flex-direction: row; gap: 12px; }
+  .footer{ gap:8px; }
+  .bslib-value-box{ padding: 12px 14px; }
+}
+
+/* ---------- Print (for browser print-to-PDF; not Rmd) ---------- */
+@media print{
+  .sidebar, .accordion, .btn, .nav, .footer{ display:none !important; }
+  body{ background: #fff; }
+  .card, .gt_table{ box-shadow: none !important; border-color: #ddd !important; }
+}
+
+/* Style the main title with UNICEF cyan */
+.logo-container .title {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #1CABE2; /* This is the UNICEF cyan color */
+}

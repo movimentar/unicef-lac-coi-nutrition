@@ -1,0 +1,197 @@
+---
+title: "Cost of Inaction Simulation Report"
+date: "`r format(Sys.Date(), '%d %B %Y')`"
+output:
+  html_document:
+    theme: flatly
+    self_contained: true
+    toc: true
+    toc_float: true
+params:
+  summary_df: NA
+  results: NA
+  direct_df: NA
+  narrative_html: NA   # <- optional: raw HTML string from Gemini
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
+library(tidyverse)
+library(scales)
+library(gt)
+UNICEF_CYAN <- "#1CABE2"
+
+fmt_dollar <- function(x) dollar(round(x, 0))
+fmt_comma  <- function(x) comma(round(x, 0))
+```
+
+<style>
+  body { font-family: 'Lato', sans-serif; padding: 2em; }
+  .main-container { max-width: 1100px; margin: auto; }
+  .print-button { float: right; padding: 8px 12px; background-color: #1CABE2; color: white; border-radius: 5px; text-decoration: none; }
+  @media print { .print-button { display: none; } }
+  .kpi-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin: 10px 0 24px 0; }
+  .kpi { background: #f8f9fa; border: 1px solid #e5e7eb; border-radius: 8px; padding: 14px 16px; }
+  .kpi h3 { margin: 0 0 6px 0; font-size: 0.95rem; font-weight: 700; color: #6b7280; }
+  .kpi .val { font-size: 1.6rem; font-weight: 800; color: #111827; }
+  .note { font-size: 0.92rem; color: #6b7280; }
+  .callout { border-left: 4px solid #1CABE2; background: #f0f9ff; padding: 10px 14px; border-radius: 6px; }
+</style>
+
+<a href="javascript:window.print()" class="print-button">
+  <i class="fa fa-print"></i> Print or Save as PDF
+</a>
+
+# Executive summary
+
+This report summarises the outputs of the **Cost of Inaction (CoI) – Nutrition in Emergencies** simulation for the selected scenario.
+
+```{r kpis}
+res <- params$results
+if (is.list(res)) {
+  bcr_txt <- if (is.na(res$bcr)) "—" else sprintf("%.2f", res$bcr)
+  htmltools::browsable(htmltools::tagList(
+    htmltools::div(class="kpi-grid",
+      htmltools::div(class="kpi",
+        htmltools::h3("Total response cost (2015 USD)"),
+        htmltools::div(class="val", fmt_dollar(res$cost_total))
+      ),
+      htmltools::div(class="kpi",
+        htmltools::h3("Indirect benefits (2015 USD)"),
+        htmltools::div(class="val", fmt_dollar(res$indir_total))
+      ),
+      htmltools::div(class="kpi",
+        htmltools::h3("Benefit–Cost Ratio"),
+        htmltools::div(class="val", bcr_txt)
+      )
+    )
+  ))
+}
+```
+
+<div class="note">
+<strong>Interpretation:</strong> Indirect benefits reflect economic value from improved nutrition outcomes.
+Direct benefits (cases averted/improved) are listed below by indicator.
+</div>
+
+---
+
+# Interpretation via artificial intelligence (Gemini)
+
+```{r ai_block, results='asis'}
+if (!is.na(params$narrative_html) && nzchar(params$narrative_html)) {
+  cat(params$narrative_html)
+} else {
+  cat('<p class="note">No AI interpretation was generated in the app for this scenario.</p>')
+}
+```
+
+---
+
+# Scenario parameters & key results
+
+```{r summary_table}
+if (is.data.frame(params$summary_df)) {
+  params$summary_df %>%
+    gt() %>%
+    tab_header(title = "Scenario parameters & key results") %>%
+    cols_align("left", columns = Item) %>%
+    cols_align("right", columns = Value)
+}
+```
+
+---
+
+# Cost vs. indirect benefits
+
+The chart below compares the **total response cost** and the **indirect (economic) benefits** over the planning period.
+
+```{r benefit_plot, fig.align='center', fig.height=4.2}
+if (is.list(res)) {
+  df <- tibble(
+    metric = factor(c("Indirect benefits", "Cost"), levels = c("Indirect benefits", "Cost")),
+    usd = c(res$indir_total, res$cost_total)
+  )
+  ggplot(df, aes(x = metric, y = usd, fill = metric)) +
+    geom_col(width = 0.6, show.legend = FALSE) +
+    scale_fill_manual(values = c("Indirect benefits" = UNICEF_CYAN, "Cost" = "#6c757d")) +
+    scale_y_continuous(labels = label_dollar()) +
+    labs(x = NULL, y = "Value (2015 USD)", title = "Cost vs. benefit over the planning period") +
+    theme_minimal(base_size = 13) +
+    theme(plot.title = element_text(face = "bold"))
+}
+```
+
+---
+
+# Direct benefits
+
+## Top indicators (planning period)
+
+```{r top_indicators}
+dd <- params$direct_df
+if (is.data.frame(dd) && nrow(dd)) {
+  top <- dd %>% arrange(desc(total_planning)) %>% slice_head(n = 10) %>%
+    select(indicator_category, indicator_name, total_planning, per_year)
+  top %>%
+    mutate(total_planning = comma(total_planning),
+           per_year = comma(per_year)) %>%
+    gt() %>%
+    tab_header(title = "Top indicators by total cases averted / improved") %>%
+    cols_label(
+      indicator_category = "Category",
+      indicator_name = "Indicator",
+      total_planning = "Total over period",
+      per_year = "Per year (avg)"
+    ) %>%
+    cols_align("center", columns = c(total_planning, per_year))
+}
+```
+
+## By category
+
+```{r category_bars, fig.height=3.8}
+if (is.data.frame(dd) && nrow(dd)) {
+  cat_sum <- dd %>%
+    group_by(indicator_category) %>%
+    summarise(total = sum(total_planning, na.rm = TRUE), .groups = "drop")
+  ggplot(cat_sum, aes(reorder(indicator_category, total), total)) +
+    geom_col(fill = UNICEF_CYAN, width = 0.6) +
+    coord_flip() +
+    scale_y_continuous(labels = comma) +
+    labs(x = NULL, y = "Total cases over period", title = "Direct benefits by category") +
+    theme_minimal(base_size = 12) +
+    theme(plot.title = element_text(face = "bold"))
+}
+```
+
+## Full indicator table
+
+```{r direct_table}
+if (is.data.frame(dd) && nrow(dd)) {
+  dd %>%
+    gt(groupname_col = "indicator_category", rowname_col = "indicator_name") %>%
+    tab_header(title = "Estimated direct benefits by indicator") %>%
+    cols_hide(columns = c(study_total)) %>%
+    cols_label(per_year = "Per year", total_planning = "Total over period") %>%
+    fmt_number(columns = c(per_year, total_planning), decimals = 0) %>%
+    tab_options(table.font.size = "small")
+}
+```
+
+---
+
+# Methods (short)
+
+<div class="callout">
+<ul>
+<li><strong>Coverage interpolation:</strong> results are interpolated piece-wise linearly between 0→30→95% anchors.</li>
+<li><strong>PiN scaling:</strong> indicators tied to children or PLW are scaled by the user-supplied People in Need (PiN).</li>
+<li><strong>Annualisation & planning period:</strong> study totals are annualised using the study duration and scaled to the planning years.</li>
+<li><strong>Costs:</strong> proportional to coverage and PiN; an optional factor can adjust median costs.</li>
+<li><strong>Economic benefits:</strong> two periods are modelled — <em>avoided formula costs during 0–24 months</em> and <em>increased lifetime earnings projected from 2038–2080</em>. PV options discount future earnings.</li>
+</ul>
+</div>
+
+*Report generated on* `r format(Sys.time(), "%Y-%m-%d %H:%M")`.
+

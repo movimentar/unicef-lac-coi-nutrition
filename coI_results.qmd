@@ -5,7 +5,7 @@ date: "`r format(Sys.time(), '%d %B %Y')`"
 execute:
   echo: false  # Do not display code in the output
 format:
-  docx: # Change to docx to get the word version
+  html: # Change to docx to get the word version
     toc: true
     toc-depth: 2
 ---
@@ -760,7 +760,7 @@ p <- ggplot(indir_plot, aes(x = emergency, y = musd, fill = scenario)) +
   )
 p
 
-if (!dir.exists("figures")) dir.create("figures")
-ggsave("figures/econ-benefits-bar-chart.png", p, width = 6, height = 5, dpi = 300)
+# if (!dir.exists("figures")) dir.create("figures")
+# ggsave("figures/econ-benefits-bar-chart.png", p, width = 6, height = 5, dpi = 300)
 ```
 
