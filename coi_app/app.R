@@ -305,7 +305,7 @@ ui <- page_fluid(
         "How long-term economic benefits are valued. Note: economic benefits span two periods:
 avoided formula costs during 0–24 months, and increased lifetime earnings projected for 2038–2080."
       ),
-      checkboxInput("show_dbg","Show anchors/debug", FALSE),
+      
       accordion(
         open = FALSE,
         accordion_panel("Advanced Settings",
