@@ -1,0 +1,8 @@
+# config.yml
+
+default:
+  gemini_api_key: !expr Sys.getenv("GEMINI_API_KEY", "key_not_set")
+  gemini_model: "gemini-2.5-flash"
+
+shinyapps:
+  gemini_model: "gemini-2.5-pro" # Example: use a more powerful model in production

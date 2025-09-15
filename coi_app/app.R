@@ -12,6 +12,9 @@ suppressPackageStartupMessages({
   suppressWarnings(try(library(writexl),    silent = TRUE))   # XLSX
 })
 
+# # Use config package to safely store environment variables
+config <- config::get()
+
 # ---------- Small helpers ----------
 `%||%` <- function(x, y) if (is.null(x)) y else x
 as_chr     <- function(x) toString(x)
@@ -29,7 +32,7 @@ gemini_generate_rest <- function(prompt,
                                  model = c("gemini-2.5-flash","gemini-2.5-pro","gemini-2.0-flash"),
                                  max_tokens = 700L, temperature = 0.2,
                                  thinking_budget = NULL,
-                                 api_key = Sys.getenv("GEMINI_API_KEY"),
+                                 api_key = config$gemini_api_key, # Get API key from config,
                                  verbose = FALSE) {
   model <- match.arg(model)
   if (!nzchar(api_key)) stop("GEMINI_API_KEY not set.")
