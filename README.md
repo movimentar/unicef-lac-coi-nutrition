@@ -31,7 +31,11 @@ This repository is built using the [`targets`](https://books.ropenspec.org/targe
 
 The following diagram illustrates the flow of data from raw sources to final report outputs. This visual provides a high-level overview of the entire analytical process, showing how raw data is cleaned, modelled, and aggregated to produce key findings and tables. The purple block highlights the **modelling stage**, which uses the Lives Saved Tool (LiST).
 
-<img src="images/data_pipeline.png" alt="Data Pipeline" class="small-image">
+
+
+<div align="center">   
+ <img src="images/data_pipeline.png" alt="Data Pipeline" width="30%">
+</div>
 
 ### System requirements
 
