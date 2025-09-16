@@ -16,7 +16,7 @@ suppressPackageStartupMessages({
 # ---------- Small helpers ----------
 `%||%` <- function(x, y) if (is.null(x)) y else x
 as_chr     <- function(x) toString(x)
-fmt_dollar <- function(x) as_chr(scales::dollar(round(x, 2))) # show cents
+fmt_dollar <- function(x) as_chr(scales::dollar(round(x, 2)))
 fmt_comma  <- function(x) as_chr(scales::comma(round(x, 0)))
 fmt_bcr    <- function(x) as_chr(ifelse(is.na(x), "—", sprintf("%.2f", x)))
 with_spinner_maybe <- function(x) {
@@ -24,7 +24,6 @@ with_spinner_maybe <- function(x) {
     shinycssloaders::withSpinner(x, type = 6, color = "#1CABE2")
   else x
 }
-# Natural sort for IDs like "5-b", "10", "12-a" etc.
 mixed_order <- function(ids_chr){
   num <- suppressWarnings(as.integer(stringr::str_extract(ids_chr, "^[0-9]+")))
   suf <- stringr::str_to_lower(stringr::str_replace_na(stringr::str_extract(ids_chr, "(?<=-)[A-Za-z]+"), ""))
@@ -47,24 +46,19 @@ gemini_generate_rest <- function(prompt,
   )
   if (!is.null(thinking_budget) && grepl("^gemini-2\\.5", model))
     body$generationConfig$thinkingConfig <- list(thinkingBudget = as.integer(thinking_budget))
-  
   resp <- httr2::request(endpoint) |>
     httr2::req_headers("Content-Type"="application/json","X-Goog-Api-Key"=api_key) |>
     httr2::req_body_json(body) |>
     httr2::req_timeout(30) |>
     httr2::req_perform()
-  
   httr2::resp_check_status(resp)
   out <- httr2::resp_body_json(resp, simplifyVector = FALSE)
-  
   if (!is.null(out$promptFeedback$blockReason))
     return(sprintf("Response blocked (blockReason: %s).", out$promptFeedback$blockReason))
-  
-  texts <- unlist(lapply(out$candidates %||% list(), function(cand){
-    if (is.null(cand$content$parts)) character(0)
-    else unlist(lapply(cand$content$parts, function(p) p$text %||% NULL), use.names = FALSE)
+  texts <- unlist(lapply(out$candidates %||% list(), function(c){
+    if (is.null(c$content$parts)) character(0)
+    else unlist(lapply(c$content$parts, function(p) p$text %||% NULL), use.names = FALSE)
   }), use.names = FALSE)
-  
   if (!length(texts)) return("Gemini returned no text.")
   paste(texts, collapse = "\n\n")
 }
@@ -95,7 +89,6 @@ gemini_generate_rest_retry <- function(..., max_retries = 5L, base_delay = 1.5){
     Sys.sleep(base_delay * (2^(i-1)) * runif(1, .8, 1.2))
   }
 }
-# Safer prompt builder
 build_coi_prompt <- function(p, indicator_lines = NULL){
   hdr <- paste0(
     "You are a Cost of Inaction Assistant. Write a concise narrative (150–220 words) in British English, ",
@@ -141,7 +134,7 @@ load_from_rds_or_targets <- function(name, use_targets_fallback = TRUE, store = 
 # ---------- Study objects ----------
 intervention_list      <- load_from_rds_or_targets("intervention_list")
 coi_costs              <- load_from_rds_or_targets("coi_costs")
-coverage_costs         <- load_from_rds_or_targets("coverage_costs")     # for ideal_delivered baseline
+coverage_costs         <- load_from_rds_or_targets("coverage_costs")
 median_costs_cleaned   <- load_from_rds_or_targets("median_costs_cleaned")
 coi_dir_benefits       <- load_from_rds_or_targets("coi_dir_benefits")
 coi_indir_benefits     <- load_from_rds_or_targets("coi_indir_benefits")
@@ -195,13 +188,20 @@ indir_tbl_undisc <- coi_indir_benefits %>%
                names_to = c("emergency","anchor"), names_sep = "_",
                values_to = "value")
 
-# ---------- Emergency choices (union across datasets) ----------
-emergencies_available <- sort(unique(na.omit(c(
+# ---------- Emergency choices ----------
+# Normalise names and make sure both core contexts are present
+normalise_em <- function(x){
+  x <- gsub("–|—", "-", x)           # en/em dash -> hyphen
+  x <- trimws(x)
+  x
+}
+emergencies_available <- sort(unique(na.omit(normalise_em(c(
   as.character(coi_costs$emergency),
   as.character(coverage_costs$emergency),
   as.character(median_costs_cleaned$emergency),
-  as.character(indir_tbl_undisc$emergency)
-))))
+  as.character(indir_tbl_undisc$emergency),
+  c("Eta-Iota","Migration flows")   # ensure both appear even if some tables miss one
+)))))
 
 # ---------- PV (optional) ----------
 EARNINGS_UPLIFT <- 2.62 * 0.01067
@@ -237,7 +237,6 @@ ui <- page_fluid(
     tags$link(rel = "stylesheet",
               href = "https://fonts.googleapis.com/css2?family=Lato:wght@400;700;800&display=swap"),
     tags$script(src = "script.js"),
-    # Keep only sidebar scrollable (prevents stretching of main cards)
     tags$style(HTML("
       .bslib-sidebar-layout > .sidebar {
         position: sticky; top: 0; height: calc(100vh - 0px);
@@ -263,7 +262,7 @@ ui <- page_fluid(
         shinyWidgets::autonumericInput(
           inputId = "pin_children",
           label   = "PiN — Children 0–59 months",
-          value   = 100000,
+          value   = 2134243,          # overwritten by observer, also shown on first load
           digitGroupSeparator = ",",
           decimalCharacter    = ".",
           decimalPlaces       = 0,
@@ -275,7 +274,7 @@ ui <- page_fluid(
         shinyWidgets::autonumericInput(
           inputId = "pin_plw",
           label   = "PiN — PLW",
-          value   = 40000,
+          value   = 946245,           # overwritten by observer, also shown on first load
           digitGroupSeparator = ",",
           decimalCharacter    = ".",
           decimalPlaces       = 0,
@@ -296,11 +295,9 @@ ui <- page_fluid(
                      c("Undiscounted"="undisc","PV (3%)"="pv3","PV (5%)"="pv5"), selected="undisc"),
         "How long-term economic benefits are valued."
       ),
-      
       accordion(
         open = FALSE,
         accordion_panel("Advanced settings: NiE package & unit costs", icon = icon("sliders"),
-                        # Package selection
                         div(class="nie-list",
                             tooltip(
                               checkboxGroupInput("intervention_package", "NiE package (included items)", choices = NULL),
@@ -311,8 +308,7 @@ ui <- page_fluid(
                         h5("Unit-cost override (per intervention)"),
                         helpText(
                           "Edit the unit cost used for calculations. If empty, the default ",
-                          tags$em("median per-person cost"),
-                          " from the study is used."
+                          tags$em("median per-person cost"), " from the study is used."
                         ),
                         selectInput("uc_sel", "Intervention", choices = NULL),
                         shinyWidgets::autonumericInput(
@@ -338,7 +334,6 @@ ui <- page_fluid(
                  shiny::icon("github"), "Study Repository")
       )
     ),
-    
     navset_card_tab(
       title = "Results",
       nav_panel("Dashboard", icon = icon("dashboard"),
@@ -360,7 +355,7 @@ ui <- page_fluid(
                       showcase = icon("arrow-trend-up"),
                       color = "primary"
                     ),
-                    "Monetised long-term economic benefits (undiscounted or PV at the chosen rate) attributable to the interventions."
+                    "Monetised long-term economic benefits (undiscounted or PV) attributable to the interventions."
                   )
                 ),
                 layout_columns(
@@ -371,7 +366,7 @@ ui <- page_fluid(
                       value = textOutput("direct_headline"),
                       showcase = icon("users")
                     ),
-                    "Total count of direct outcomes (e.g., cases averted or improved) over the planning period, aggregated across indicators."
+                    "Total direct outcomes (e.g., cases averted or improved) over the planning period."
                   ),
                   tooltip(
                     value_box(
@@ -379,7 +374,7 @@ ui <- page_fluid(
                       value = textOutput("bcr"),
                       showcase = icon("scale-balanced")
                     ),
-                    "Indirect Benefits divided by Total Response Cost. Values > 1 mean benefits exceed costs."
+                    "Indirect Benefits divided by Total Response Cost. >1 means benefits exceed costs."
                   )
                 ),
                 hr(),
@@ -391,10 +386,9 @@ ui <- page_fluid(
                          "Note: Costs use study median unit costs combined with your coverage and PiN inputs; ",
                          "results may differ from published report totals when the package is customised or unit-cost overrides are applied.")
                   ),
-                  "Comparison of total indirect benefits versus total programme cost over the planning period (USD)."
+                  "Comparison of total indirect benefits versus total programme cost (USD)."
                 )
       ),
-      
       nav_panel("Detailed Tables", icon = icon("table-list"),
                 h5("Planning Summary"),
                 gt_output("summary_gt"),
@@ -402,7 +396,6 @@ ui <- page_fluid(
                 h5("Direct benefits by indicator"),
                 gt_output("direct_detail_gt")
       ),
-      
       nav_panel("AI Interpretation", icon = icon("robot"),
                 actionButton("generate_narrative", "Generate Interpretation",
                              class="btn-primary", icon = icon("wand-magic-sparkles")),
@@ -410,7 +403,6 @@ ui <- page_fluid(
                 hr(),
                 with_spinner_maybe(uiOutput("narrative"))
       ),
-      
       nav_panel("Downloads & Report", icon = icon("download"),
                 br(), p("Download the raw summary data for the current scenario."),
                 downloadButton("dl_xlsx","Summary (XLSX)"),
@@ -425,62 +417,62 @@ ui <- page_fluid(
 
 # ---------- Server ----------
 server <- function(input, output, session){
-  # --- Validation
+  # Validation
   iv <- InputValidator$new()
-  iv$add_rule("pin_children", sv_gte(0)); iv$add_rule("pin_plw", sv_gte(0))
   iv$add_rule("years", sv_between(1, 50))
   iv$enable()
   
+  # Parse autonumeric values safely
   parse_num <- function(x) suppressWarnings(as.numeric(gsub(",", "", x)))
-  
   pin_children_val <- reactive(parse_num(input$pin_children))
   pin_plw_val      <- reactive(parse_num(input$pin_plw))
   
-  
-  # --- Auto-set PiN defaults on emergency change (study-aligned)
-  # Hard fallback numbers (from study narrative you shared) used only if baseline missing
-  fallback_pin <- tibble::tibble(
-    emergency = c("Eta-Iota", "Migration flows"),
-    children  = c(27528, 59216),
-    plw       = c(NA_real_, NA_real_) # will keep existing PLW if NA
+  # Study "Interventions needed" defaults
+  pin_defaults <- tribble(
+    ~emergency,         ~pin_children, ~pin_plw,
+    "Eta-Iota",         2134243,       946245,
+    "Migration flows",  4850943,       2026811
   )
   
+  # On emergency change (AND on app load), set PiN defaults from study
   observeEvent(input$emergency, {
-    base <- pin_baseline %>% filter(emergency == input$emergency)
-    fb   <- fallback_pin     %>% filter(emergency == input$emergency)
-    
-    # Children default
-    pin_ch_default <- if (nrow(base) && is.finite(base$baseline_children) && base$baseline_children > 0)
-      round(base$baseline_children) else (if (nrow(fb) && is.finite(fb$children)) fb$children else input$pin_children)
-    
-    # PLW default
-    pin_plw_default <- if (nrow(base) && is.finite(base$baseline_plw) && base$baseline_plw > 0)
-      round(base$baseline_plw) else (if (nrow(fb) && is.finite(fb$plw)) fb$plw else input$pin_plw)
-    
-    updateNumericInput(session, "pin_children", value = pin_ch_default)
-    if (is.finite(pin_plw_default)) updateNumericInput(session, "pin_plw", value = pin_plw_default)
-  }, ignoreInit = TRUE, priority = 1)
+    em <- normalise_em(input$emergency)
+    def <- pin_defaults %>% filter(emergency == em)
+    if (nrow(def)) {
+      shinyWidgets::updateAutonumericInput(session, "pin_children", value = def$pin_children)
+      shinyWidgets::updateAutonumericInput(session, "pin_plw",      value = def$pin_plw)
+    } else {
+      # fall back to dataset baselines if present
+      base <- pin_baseline %>% filter(emergency == em)
+      if (nrow(base)) {
+        shinyWidgets::updateAutonumericInput(session, "pin_children", value = round(base$baseline_children))
+        shinyWidgets::updateAutonumericInput(session, "pin_plw",      value = round(base$baseline_plw))
+      }
+    }
+  }, ignoreInit = FALSE)  # <- run at startup too
   
-  # --- PiN scaling
+  # PiN scaling (use parsed numerics)
   pin_scale <- reactive({
-    base <- pin_baseline %>% filter(emergency == input$emergency)
-    if (!nrow(base)) return(list(children=1, plw=1))
+    base <- pin_baseline %>% filter(emergency == normalise_em(input$emergency))
+    ch <- pin_children_val(); pw <- pin_plw_val()
+    if (!nrow(base) || !is.finite(ch) || !is.finite(pw))
+      return(list(children=1, plw=1))
     list(
-      children = ifelse(base$baseline_children > 0, input$pin_children / base$baseline_children, 1),
-      plw      = ifelse(base$baseline_plw      > 0, input$pin_plw      / base$baseline_plw, 1)
+      children = ifelse(base$baseline_children > 0, ch / base$baseline_children, 1),
+      plw      = ifelse(base$baseline_plw      > 0, pw / base$baseline_plw,      1)
     )
   })
   
-  # --- Direct anchors for selected emergency
+  # Direct anchors for selected emergency
   direct_anchors <- reactive({
-    build_direct_anchors(coi_dir_benefits$malnutrition, coi_dir_benefits$breastfeeding, input$emergency)
+    build_direct_anchors(coi_dir_benefits$malnutrition, coi_dir_benefits$breastfeeding, normalise_em(input$emergency))
   })
   
-  # --- Available interventions (names + IDs; single row per intervention)
+  # Interventions (names + IDs; one row per intervention)
   interventions_tbl <- reactive({
-    # Representative 'ideal_delivered' per intervention (ignore country)
     base <- coverage_costs %>%
-      filter(emergency == input$emergency) %>%
+      mutate(emergency = normalise_em(emergency)) %>%
+      filter(emergency == normalise_em(input$emergency)) %>%
       mutate(intervention_id = as.character(intervention_id)) %>%
       group_by(intervention_id) %>%
       summarise(
@@ -488,39 +480,32 @@ server <- function(input, output, session){
         ideal_delivered   = suppressWarnings(dplyr::first(na.omit(ideal_delivered))),
         .groups = "drop"
       )
-    
     med <- median_costs_cleaned %>%
-      filter(emergency == input$emergency) %>%
+      mutate(emergency = normalise_em(emergency)) %>%
+      filter(emergency == normalise_em(input$emergency)) %>%
       mutate(intervention_id = as.character(intervention_id)) %>%
       select(intervention_id, median_cost_person)
-    
     out <- base %>% left_join(med, by = "intervention_id")
     out$ideal_delivered    <- dplyr::coalesce(out$ideal_delivered, 0)
     out$median_cost_person <- dplyr::coalesce(out$median_cost_person, 0)
-    
     out[mixed_order(out$intervention_id), , drop = FALSE]
   })
   
-  # Populate the package checkbox and override selector
+  # Populate package & override selector
   observeEvent(interventions_tbl(), {
     it <- interventions_tbl()
+    if (!nrow(it)) return()
     choices <- setNames(it$intervention_id, it$intervention_name)
     updateCheckboxGroupInput(session, "intervention_package",
-                             choices = choices,
-                             selected = it$intervention_id)
-    updateSelectInput(session, "uc_sel",
-                      choices = choices,
-                      selected = it$intervention_id[1])
-    # Seed default note & numeric
+                             choices = choices, selected = it$intervention_id)
+    updateSelectInput(session, "uc_sel", choices = choices, selected = it$intervention_id[1])
     def <- it %>% slice(1)
-    shinyjs::html(id = "uc_default_note",
-                  html = sprintf("Default (study) unit cost for this intervention: %s",
-                                 fmt_dollar(def$median_cost_person)))
-    shinyWidgets::updateAutonumericInput(session, "uc_val",
-                                         value = round(def$median_cost_person, 2))
+    shinyjs::html("uc_default_note",
+                  sprintf("Default (study) unit cost for this intervention: %s", fmt_dollar(def$median_cost_person)))
+    shinyWidgets::updateAutonumericInput(session, "uc_val", value = round(def$median_cost_person, 2))
   }, ignoreInit = FALSE)
   
-  # --- Override handling
+  # Overrides
   .overrides <- reactiveVal(list())
   overrides  <- reactive(.overrides())
   
@@ -529,8 +514,7 @@ server <- function(input, output, session){
     row <- it %>% filter(intervention_id == input$uc_sel) %>% slice(1)
     if (nrow(row)) {
       shinyjs::html("uc_default_note",
-                    sprintf("Default (study) unit cost for this intervention: %s",
-                            fmt_dollar(row$median_cost_person)))
+                    sprintf("Default (study) unit cost for this intervention: %s", fmt_dollar(row$median_cost_person)))
       val <- overrides()[[row$intervention_id]] %||% row$median_cost_person
       shinyWidgets::updateAutonumericInput(session, "uc_val", value = round(val, 2))
     }
@@ -551,7 +535,7 @@ server <- function(input, output, session){
     showNotification("All overrides cleared.", type = "message", duration = 2)
   })
   
-  # --- Per-indicator results (interpolated, PiN-scaled, annualised, planning period)
+  # Direct benefits by indicator
   direct_by_indicator <- reactive({
     da <- direct_anchors(); req(nrow(da) > 0)
     nm <- tolower(da$indicator_name)
@@ -559,7 +543,7 @@ server <- function(input, output, session){
     scale_vec <- ifelse(is_plw, pin_scale()$plw, pin_scale()$children)
     cov <- as.numeric(input$coverage)
     y30 <- as.numeric(da$`30`); y95 <- as.numeric(da$`95`); y0 <- 0
-    y_cov <- if (cov <= 30) { y0 + (y30 - y0) * (cov / 30) } else { y30 + (y95 - y30) * ((cov - 30) / (95 - 30)) }
+    y_cov <- if (cov <= 30) (y0 + (y30 - y0) * (cov/30)) else (y30 + (y95 - y30) * ((cov-30)/(95-30)))
     study_total <- as.numeric(y_cov) * as.numeric(scale_vec)
     yrs_study <- 3; yrs_plan <- ifelse(is.finite(input$years) && input$years>0, input$years, 1)
     per_year       <- study_total / yrs_study
@@ -574,7 +558,7 @@ server <- function(input, output, session){
   })
   direct_total_planning <- reactive(sum(direct_by_indicator()$total_planning, na.rm = TRUE))
   
-  # --- Indirect benefits
+  # Indirect benefits
   interp_3pt <- function(y0, y30, y95, x){
     if (is.na(x)) return(NA_real_)
     if (x <= 30)  return(y0 + (y30 - y0) * x/30)
@@ -587,25 +571,31 @@ server <- function(input, output, session){
   indir_interp <- reactive({
     agg_scale <- mean(c(pin_scale()$children, pin_scale()$plw), na.rm = TRUE)
     if (input$valuation == "undisc"){
-      anchors <- indir_tbl_undisc %>% filter(emergency == input$emergency) %>%
-        pivot_wider(names_from = anchor, values_from = value) %>% mutate(`0` = 0)
+      anchors <- indir_tbl_undisc %>%
+        mutate(emergency = normalise_em(emergency)) %>%
+        filter(emergency == normalise_em(input$emergency)) %>%
+        pivot_wider(names_from = anchor, values_from = value) %>%
+        mutate(`0` = 0)
+      if (!nrow(anchors)) return(tibble(total = 0))
       val <- anchors %>% mutate(
-        value_cov   = pmap_dbl(list(`0`,`30`,`95`), ~ interp_3pt(..1, ..2, ..3, input$coverage)),
+        value_cov    = pmap_dbl(list(`0`,`30`,`95`), ~ interp_3pt(..1, ..2, ..3, input$coverage)),
         value_scaled = value_cov * agg_scale
       )
       tibble(total = sum(val$value_scaled, na.rm = TRUE))
     } else {
       if (!has_pv_inputs) return(tibble(total = NA_real_))
       pv_tab <- if (input$valuation=="pv3") pv_tab_3 else pv_tab_5
-      row <- pv_tab %>% filter(emergency == input$emergency); req(nrow(row)>0)
+      row <- pv_tab %>% filter(emergency == normalise_em(input$emergency))
+      if (!nrow(row)) return(tibble(total = 0))
       y0 <- 0; y30 <- ifelse(is.finite(row$pv_30), row$pv_30, row$pv_impl); y95 <- row$pv_95
       tibble(total = as.numeric(interp_3pt(y0, y30, y95, input$coverage)) * agg_scale)
     }
   })
   
-  # --- Cost engine using unit-costs (median_costs_cleaned) + overrides
+  # Costs (unit costs + overrides)
   unit_prices_tbl <- reactive({
     it <- interventions_tbl()
+    if (!nrow(it)) return(it %>% mutate(override=NA_real_, final_unit_cost=0, ideal_delivered=0))
     sel <- input$intervention_package %||% it$intervention_id
     ov <- overrides()
     it %>%
@@ -622,19 +612,19 @@ server <- function(input, output, session){
     if (!nrow(tbl)) return(tibble(cost_total_study = 0))
     ideal_total_100 <- sum(tbl$final_unit_cost * tbl$ideal_delivered, na.rm = TRUE)
     cost_at_95      <- ideal_total_100 * 0.95
-    cost_per_pct    <- if (cost_at_95 > 0) cost_at_95 / 95 else 0
+    cost_per_pct    <- if (isTRUE(is.finite(cost_at_95)) && cost_at_95 > 0) cost_at_95 / 95 else 0
     coverage_cost   <- cost_per_pct * as.numeric(input$coverage)
     pin_factor      <- mean(c(pin_scale()$children, pin_scale()$plw), na.rm = TRUE)
     tibble(cost_total_study = coverage_cost * pin_factor)
   })
   
-  # --- Aggregate results (per planning period)
+  # Aggregate results
   results <- reactive({
-    indir_total_study <- indir_interp()$total
-    cost_total_study  <- cost_interp()$cost_total_study[1]
+    indir_total_study <- as.numeric(indir_interp()$total %||% 0)
+    cost_total_study  <- as.numeric(cost_interp()$cost_total_study[1] %||% 0)
     indir_total <- annualise(indir_total_study, 3) * input$years
     cost_total  <- annualise(cost_total_study,  3) * input$years
-    bcr <- ifelse(cost_total>0, indir_total/cost_total, NA_real_)
+    bcr <- ifelse(isTRUE(cost_total > 0), indir_total/cost_total, NA_real_)
     list(
       direct_total = direct_total_planning(),
       indir_total  = indir_total,
@@ -643,18 +633,17 @@ server <- function(input, output, session){
     )
   })
   
-  # --- Dashboard outputs
-  output$total_cost      <- renderText({ req(results()); fmt_dollar(results()$cost_total) })
-  output$indir_benefit   <- renderText({ req(results()); fmt_dollar(results()$indir_total) })
-  output$direct_headline <- renderText({ req(results()); fmt_comma(results()$direct_total) })
-  output$bcr             <- renderText({ req(results()); fmt_bcr(results()$bcr) })
+  # Dashboard outputs
+  output$total_cost      <- renderText({ fmt_dollar((results()$cost_total) %||% 0) })
+  output$indir_benefit   <- renderText({ fmt_dollar((results()$indir_total) %||% 0) })
+  output$direct_headline <- renderText({ fmt_comma((results()$direct_total) %||% 0) })
+  output$bcr             <- renderText({ fmt_bcr(results()$bcr) })
   
   UNICEF_CYAN <- "#1CABE2"
   output$benefit_plot <- renderPlot({
-    req(results())
     df <- tibble(
       metric = factor(c("Indirect benefits","Cost"), levels = c("Indirect benefits","Cost")),
-      usd = c(results()$indir_total, results()$cost_total)
+      usd = c((results()$indir_total) %||% 0, (results()$cost_total) %||% 0)
     )
     ggplot(df, aes(metric, usd, fill = metric)) +
       geom_col(width = 0.6, show.legend = FALSE) +
@@ -668,31 +657,30 @@ server <- function(input, output, session){
             axis.text=element_text(size=8))
   }, res = 144)
   
-  # --- Detailed tables
+  # Detailed tables
   summary_gt_df <- reactive({
-    req(results())
     tibble(
       Item = c("Emergency","PiN — Children 0–59m","PiN — PLW","Target coverage (%)",
                "Valuation (indirect benefits)","Planning period (years)",
-               "Total response cost (USD)","Indirect benefits (USD)","Direct benefits — headline (count)","Benefit–Cost Ratio"),
+               "Total response cost (USD)","Indirect benefits (USD)",
+               "Direct benefits — headline (count)","Benefit–Cost Ratio"),
       Value = c(
-        input$emergency, fmt_comma(input$pin_children), fmt_comma(input$pin_plw), paste0(input$coverage,"%"),
+        input$emergency,
+        fmt_comma(pin_children_val()), fmt_comma(pin_plw_val()), paste0(input$coverage,"%"),
         switch(input$valuation, undisc="Undiscounted", pv3="PV (3%)", pv5="PV (5%)"),
         input$years,
-        fmt_dollar(results()$cost_total), fmt_dollar(results()$indir_total),
-        fmt_comma(results()$direct_total), fmt_bcr(results()$bcr)
+        fmt_dollar((results()$cost_total) %||% 0), fmt_dollar((results()$indir_total) %||% 0),
+        fmt_comma((results()$direct_total) %||% 0), fmt_bcr(results()$bcr)
       )
     )
   })
   output$summary_gt <- render_gt({
-    summary_gt_df() %>%
-      gt() %>% tab_header(title="CoI Planning Summary") %>%
+    summary_gt_df() %>% gt() %>% tab_header(title="CoI Planning Summary") %>%
       cols_align("left", columns = Item) %>% cols_align("center", columns = Value)
   })
   output$direct_detail_gt <- render_gt({
     tb <- direct_by_indicator(); req(nrow(tb) > 0)
-    tb %>%
-      gt(groupname_col = "indicator_category", rowname_col = "indicator_name") %>%
+    tb %>% gt(groupname_col = "indicator_category", rowname_col = "indicator_name") %>%
       tab_header(title = "Direct benefits by indicator") %>%
       cols_hide(columns = c(study_total)) %>%
       cols_label(per_year = "Per year (count)", total_planning = "Planning period (count)") %>%
@@ -702,18 +690,12 @@ server <- function(input, output, session){
   
   # --- AI interpretation
   narrative_html <- reactiveVal(NULL)
-  
-  # Reset AI narrative whenever inputs/overrides change
   observeEvent(
-    list(
-      input$emergency, input$pin_children, input$pin_plw, input$coverage,
-      input$years, input$valuation, input$intervention_package,
-      input$uc_val, input$uc_apply, input$uc_reset_all
-    ),
-    { narrative_html(NULL) },
-    ignoreInit = TRUE
+    list(input$emergency, input$pin_children, input$pin_plw, input$coverage,
+         input$years, input$valuation, input$intervention_package,
+         input$uc_val, input$uc_apply, input$uc_reset_all),
+    { narrative_html(NULL) }, ignoreInit = TRUE
   )
-  
   observeEvent(input$generate_narrative, {
     if (!requireNamespace("httr2", quietly = TRUE) || Sys.getenv("GEMINI_API_KEY")=="") {
       narrative_html(tags$p(class="text-danger narrative",
@@ -730,7 +712,7 @@ server <- function(input, output, session){
     p <- list(
       emergency = inputs$emergency, years = inputs$years,
       valuation = switch(inputs$valuation, undisc="Undiscounted", pv3="PV (3%)", pv5="PV (5%)"),
-      pin_children = inputs$pin_children, pin_plw = inputs$pin_plw, coverage = inputs$coverage,
+      pin_children = pin_children_val(), pin_plw = pin_plw_val(), coverage = inputs$coverage,
       total_cost = res$cost_total, indir_total = res$indir_total,
       direct_total = res$direct_total, bcr = res$bcr
     )
@@ -762,14 +744,14 @@ server <- function(input, output, session){
   summary_df_export <- reactive({
     tibble(
       emergency              = input$emergency,
-      pin_children_u5        = input$pin_children,
-      pin_plw                = input$pin_plw,
+      pin_children_u5        = pin_children_val(),
+      pin_plw                = pin_plw_val(),
       coverage_pct           = input$coverage,
       valuation              = input$valuation,
       planning_years         = input$years,
-      total_cost_usd         = round(results()$cost_total, 2),
-      indirect_benefit_usd   = round(results()$indir_total, 2),
-      direct_benefit_count   = round(results()$direct_total),
+      total_cost_usd         = round((results()$cost_total) %||% 0, 2),
+      indirect_benefit_usd   = round((results()$indir_total) %||% 0, 2),
+      direct_benefit_count   = round((results()$direct_total) %||% 0),
       bcr                    = round(results()$bcr, 3)
     )
   })
