@@ -11,18 +11,85 @@ params:
   summary_df: NA
   results: NA
   direct_df: NA
-  narrative_html: NA   # <- optional: raw HTML string from Gemini
+  narrative_html: NA   # optional HTML string from Gemini
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
+
 library(tidyverse)
 library(scales)
 library(gt)
-UNICEF_CYAN <- "#1CABE2"
+library(htmltools)
 
-fmt_dollar <- function(x) dollar(round(x, 0))
-fmt_comma  <- function(x) comma(round(x, 0))
+options(dplyr.summarise.inform = FALSE)
+
+UNICEF_CYAN <- "#1CABE2"
+fmt_dollar <- function(x) if (is.null(x) || all(is.na(x))) "—" else dollar(round(x, 0))
+fmt_comma  <- function(x) if (is.null(x) || all(is.na(x))) "—" else comma(round(x, 0))
+
+# Clean labels and display order for summary table
+label_map <- c(
+  emergency               = "Emergency",
+  pin_children_u5         = "PiN — Children 0–59m",
+  pin_plw                 = "PiN — PLW",
+  coverage_pct            = "Target coverage (%)",
+  valuation               = "Valuation (indirect benefits)",
+  planning_years          = "Planning period (years)",
+  total_cost_usd          = "Total response cost (2015 USD)",
+  indirect_benefit_usd    = "Indirect benefits (2015 USD)",
+  direct_benefit_count    = "Direct benefits — headline (count)",
+  bcr                     = "Benefit–Cost Ratio"
+)
+display_order <- names(label_map)
+
+# Safely coerce summary_df (1-row tibble) into key–value with nice labels & formatting
+ensure_kv <- function(df){
+  if (!is.data.frame(df) || nrow(df) == 0) return(NULL)
+  row <- df %>% slice(1)
+
+  # ensure character values for non-numeric fields and keep numerics as-is
+  vals <- map(names(row), function(nm) row[[nm]][[1]])
+
+  pretty_value <- function(key, v){
+    # format by field, not by text patterns (avoids $ on direct_benefit_count)
+    if (key %in% c("total_cost_usd","indirect_benefit_usd")) {
+      return(dollar(round(as.numeric(v), 2)))
+    }
+    if (key %in% c("pin_children_u5","pin_plw","planning_years","direct_benefit_count")) {
+      return(comma(round(as.numeric(v), 0)))
+    }
+    if (key == "coverage_pct") {
+      return(paste0(round(as.numeric(v), 0), "%"))
+    }
+    if (key == "bcr") {
+      n <- suppressWarnings(as.numeric(v))
+      return(if (is.na(n)) "—" else sprintf("%.2f", n))
+    }
+    if (key == "valuation") {
+      return(dplyr::recode(as.character(v),
+                           undisc = "Undiscounted",
+                           pv3    = "PV (3%)",
+                           pv5    = "PV (5%)",
+                           .default = as.character(v)))
+    }
+    as.character(v)
+  }
+
+  kv <- tibble(
+    key   = names(row),
+    Item  = dplyr::recode(names(row), !!!label_map, .default = names(row)),
+    Value = map2_chr(names(row), vals, pretty_value)
+  )
+
+  # order nicely: known keys first, then anything extra
+  kv <- kv %>%
+    mutate(order = match(key, display_order)) %>%
+    arrange(is.na(order), order, Item) %>%
+    select(Item, Value)
+
+  kv
+}
 ```
 
 <style>
@@ -49,23 +116,25 @@ This report summarises the outputs of the **Cost of Inaction (CoI) – Nutrition
 ```{r kpis}
 res <- params$results
 if (is.list(res)) {
-  bcr_txt <- if (is.na(res$bcr)) "—" else sprintf("%.2f", res$bcr)
-  htmltools::browsable(htmltools::tagList(
-    htmltools::div(class="kpi-grid",
-      htmltools::div(class="kpi",
-        htmltools::h3("Total response cost (2015 USD)"),
-        htmltools::div(class="val", fmt_dollar(res$cost_total))
+  bcr_txt <- if (is.null(res$bcr) || is.na(res$bcr)) "—" else sprintf("%.2f", res$bcr)
+  browsable(tagList(
+    div(class="kpi-grid",
+      div(class="kpi",
+        h3("Total response cost (2015 USD)"),
+        div(class="val", fmt_dollar(res$cost_total))
       ),
-      htmltools::div(class="kpi",
-        htmltools::h3("Indirect benefits (2015 USD)"),
-        htmltools::div(class="val", fmt_dollar(res$indir_total))
+      div(class="kpi",
+        h3("Indirect benefits (2015 USD)"),
+        div(class="val", fmt_dollar(res$indir_total))
       ),
-      htmltools::div(class="kpi",
-        htmltools::h3("Benefit–Cost Ratio"),
-        htmltools::div(class="val", bcr_txt)
+      div(class="kpi",
+        h3("Benefit–Cost Ratio"),
+        div(class="val", bcr_txt)
       )
     )
   ))
+} else {
+  HTML('<p class="note">No results were provided to the report.</p>')
 }
 ```
 
@@ -74,13 +143,21 @@ if (is.list(res)) {
 Direct benefits (cases averted/improved) are listed below by indicator.
 </div>
 
+<div class="callout" style="margin-top:8px">
+  The figures in this simulation may differ from those published in the study report.
+  Results reflect the scenario inputs selected in the app (coverage, People in Need,
+  package composition and any unit-cost overrides) and are scaled to the chosen planning period.
+</div>
+
+
 ---
 
 # Interpretation via artificial intelligence (Gemini)
 
 ```{r ai_block, results='asis'}
-if (!is.na(params$narrative_html) && nzchar(params$narrative_html)) {
-  cat(params$narrative_html)
+nh <- params$narrative_html
+if (is.character(nh) && nzchar(nh)) {
+  cat(nh)
 } else {
   cat('<p class="note">No AI interpretation was generated in the app for this scenario.</p>')
 }
@@ -91,12 +168,15 @@ if (!is.na(params$narrative_html) && nzchar(params$narrative_html)) {
 # Scenario parameters & key results
 
 ```{r summary_table}
-if (is.data.frame(params$summary_df)) {
-  params$summary_df %>%
+df <- ensure_kv(params$summary_df)
+if (is.data.frame(df) && nrow(df)) {
+  df %>%
     gt() %>%
     tab_header(title = "Scenario parameters & key results") %>%
-    cols_align("left", columns = Item) %>%
+    cols_align("left",  columns = Item) %>%
     cols_align("right", columns = Value)
+} else {
+  HTML('<p class="note">Summary parameters were not provided.</p>')
 }
 ```
 
@@ -107,18 +187,21 @@ if (is.data.frame(params$summary_df)) {
 The chart below compares the **total response cost** and the **indirect (economic) benefits** over the planning period.
 
 ```{r benefit_plot, fig.align='center', fig.height=4.2}
-if (is.list(res)) {
-  df <- tibble(
-    metric = factor(c("Indirect benefits", "Cost"), levels = c("Indirect benefits", "Cost")),
-    usd = c(res$indir_total, res$cost_total)
+if (is.list(res) && all(c("indir_total","cost_total") %in% names(res))) {
+  df_plot <- tibble(
+    metric = factor(c("Indirect benefits", "Cost"),
+                    levels = c("Indirect benefits", "Cost")),
+    usd = c(res$indir_total %||% NA_real_, res$cost_total %||% NA_real_)
   )
-  ggplot(df, aes(x = metric, y = usd, fill = metric)) +
-    geom_col(width = 0.6, show.legend = FALSE) +
+  ggplot(df_plot, aes(x = metric, y = usd, fill = metric)) +
+    geom_col(width = 0.6, show.legend = FALSE, na.rm = TRUE) +
     scale_fill_manual(values = c("Indirect benefits" = UNICEF_CYAN, "Cost" = "#6c757d")) +
     scale_y_continuous(labels = label_dollar()) +
     labs(x = NULL, y = "Value (2015 USD)", title = "Cost vs. benefit over the planning period") +
     theme_minimal(base_size = 13) +
     theme(plot.title = element_text(face = "bold"))
+} else {
+  HTML('<p class="note">Insufficient data to plot costs and benefits.</p>')
 }
 ```
 
@@ -145,6 +228,8 @@ if (is.data.frame(dd) && nrow(dd)) {
       per_year = "Per year (avg)"
     ) %>%
     cols_align("center", columns = c(total_planning, per_year))
+} else {
+  HTML('<p class="note">No direct indicator table was provided.</p>')
 }
 ```
 
@@ -187,9 +272,9 @@ if (is.data.frame(dd) && nrow(dd)) {
 <ul>
 <li><strong>Coverage interpolation:</strong> results are interpolated piece-wise linearly between 0→30→95% anchors.</li>
 <li><strong>PiN scaling:</strong> indicators tied to children or PLW are scaled by the user-supplied People in Need (PiN).</li>
-<li><strong>Annualisation & planning period:</strong> study totals are annualised using the study duration and scaled to the planning years.</li>
-<li><strong>Costs:</strong> proportional to coverage and PiN; an optional factor can adjust median costs.</li>
-<li><strong>Economic benefits:</strong> two periods are modelled — <em>avoided formula costs during 0–24 months</em> and <em>increased lifetime earnings projected from 2038–2080</em>. PV options discount future earnings.</li>
+<li><strong>Annualisation & planning period:</strong> totals are annualised with the study duration and scaled to the planning years.</li>
+<li><strong>Costs:</strong> proportional to coverage and PiN; unit-cost overrides, if any, are applied per intervention.</li>
+<li><strong>Economic benefits:</strong> avoided formula costs (0–24 months) and projected lifetime earnings (2038–2080); optional PV discounting.</li>
 </ul>
 </div>
 
