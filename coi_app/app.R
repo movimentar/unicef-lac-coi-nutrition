@@ -65,7 +65,7 @@ gemini_generate_rest <- function(prompt,
     else unlist(lapply(cand$content$parts, function(p) p$text %||% NULL), use.names = FALSE)
   }), use.names = FALSE)
   
-  if (!length(texts)) { if (verbose) str(out, max.level = 2); return("Gemini returned no text.") }
+  if (!length(texts)) return("Gemini returned no text.")
   paste(texts, collapse = "\n\n")
 }
 safe_condition_message <- function(x){
@@ -95,7 +95,7 @@ gemini_generate_rest_retry <- function(..., max_retries = 5L, base_delay = 1.5){
     Sys.sleep(base_delay * (2^(i-1)) * runif(1, .8, 1.2))
   }
 }
-# Safer prompt builder (no inline ifs inside paste/sprintf)
+# Safer prompt builder
 build_coi_prompt <- function(p, indicator_lines = NULL){
   hdr <- paste0(
     "You are a Cost of Inaction Assistant. Write a concise narrative (150–220 words) in British English, ",
@@ -106,8 +106,7 @@ build_coi_prompt <- function(p, indicator_lines = NULL){
     "• Direct benefits (headline): %s\n• Benefit–Cost Ratio: %s\n"
   )
   mid <- if (!is.null(indicator_lines) && length(indicator_lines) > 0)
-    paste0("\nKey direct indicators:\n", paste(indicator_lines, collapse = "\n"), "\n")
-  else ""
+    paste0("\nKey direct indicators:\n", paste(indicator_lines, collapse = "\n"), "\n") else ""
   tail <- paste0(
     "\nInstructions\n- Be precise, neutral; avoid hype.\n- Translate numbers to planning implications.\n",
     "- Do not invent data; flag uncertainty briefly.\n- Finish with 3–5 bullet recommendations."
@@ -196,6 +195,14 @@ indir_tbl_undisc <- coi_indir_benefits %>%
                names_to = c("emergency","anchor"), names_sep = "_",
                values_to = "value")
 
+# ---------- Emergency choices (union across datasets) ----------
+emergencies_available <- sort(unique(na.omit(c(
+  as.character(coi_costs$emergency),
+  as.character(coverage_costs$emergency),
+  as.character(median_costs_cleaned$emergency),
+  as.character(indir_tbl_undisc$emergency)
+))))
+
 # ---------- PV (optional) ----------
 EARNINGS_UPLIFT <- 2.62 * 0.01067
 has_pv_inputs <- !(is.null(gni_forecast) || is.null(income_share))
@@ -249,15 +256,31 @@ ui <- page_fluid(
       id = "app_sidebar",
       title = "Scenario Inputs",
       tooltip(
-        selectInput("emergency","Emergency context", choices = sort(unique(coi_costs$emergency))),
+        selectInput("emergency","Emergency context", choices = emergencies_available),
         "Select the emergency archetype to set baseline conditions."
       ),
       tooltip(
-        numericInput("pin_children","PiN — Children 0–59 months", 100000, min=0, step=1000),
+        shinyWidgets::autonumericInput(
+          inputId = "pin_children",
+          label   = "PiN — Children 0–59 months",
+          value   = 100000,
+          digitGroupSeparator = ",",
+          decimalCharacter    = ".",
+          decimalPlaces       = 0,
+          minimumValue        = 0
+        ),
         "People in Need (PiN): estimated number of children requiring nutrition assistance."
       ),
       tooltip(
-        numericInput("pin_plw","PiN — PLW", 40000, min=0, step=1000),
+        shinyWidgets::autonumericInput(
+          inputId = "pin_plw",
+          label   = "PiN — PLW",
+          value   = 40000,
+          digitGroupSeparator = ",",
+          decimalCharacter    = ".",
+          decimalPlaces       = 0,
+          minimumValue        = 0
+        ),
         "People in Need (PiN): estimated number of pregnant & lactating women requiring assistance."
       ),
       tooltip(
@@ -367,7 +390,6 @@ ui <- page_fluid(
                        p(class = "text-muted small",
                          "Note: Costs use study median unit costs combined with your coverage and PiN inputs; ",
                          "results may differ from published report totals when the package is customised or unit-cost overrides are applied.")
-                       
                   ),
                   "Comparison of total indirect benefits versus total programme cost over the planning period (USD)."
                 )
@@ -409,6 +431,36 @@ server <- function(input, output, session){
   iv$add_rule("years", sv_between(1, 50))
   iv$enable()
   
+  parse_num <- function(x) suppressWarnings(as.numeric(gsub(",", "", x)))
+  
+  pin_children_val <- reactive(parse_num(input$pin_children))
+  pin_plw_val      <- reactive(parse_num(input$pin_plw))
+  
+  
+  # --- Auto-set PiN defaults on emergency change (study-aligned)
+  # Hard fallback numbers (from study narrative you shared) used only if baseline missing
+  fallback_pin <- tibble::tibble(
+    emergency = c("Eta-Iota", "Migration flows"),
+    children  = c(27528, 59216),
+    plw       = c(NA_real_, NA_real_) # will keep existing PLW if NA
+  )
+  
+  observeEvent(input$emergency, {
+    base <- pin_baseline %>% filter(emergency == input$emergency)
+    fb   <- fallback_pin     %>% filter(emergency == input$emergency)
+    
+    # Children default
+    pin_ch_default <- if (nrow(base) && is.finite(base$baseline_children) && base$baseline_children > 0)
+      round(base$baseline_children) else (if (nrow(fb) && is.finite(fb$children)) fb$children else input$pin_children)
+    
+    # PLW default
+    pin_plw_default <- if (nrow(base) && is.finite(base$baseline_plw) && base$baseline_plw > 0)
+      round(base$baseline_plw) else (if (nrow(fb) && is.finite(fb$plw)) fb$plw else input$pin_plw)
+    
+    updateNumericInput(session, "pin_children", value = pin_ch_default)
+    if (is.finite(pin_plw_default)) updateNumericInput(session, "pin_plw", value = pin_plw_default)
+  }, ignoreInit = TRUE, priority = 1)
+  
   # --- PiN scaling
   pin_scale <- reactive({
     base <- pin_baseline %>% filter(emergency == input$emergency)
@@ -443,8 +495,8 @@ server <- function(input, output, session){
       select(intervention_id, median_cost_person)
     
     out <- base %>% left_join(med, by = "intervention_id")
-    out$ideal_delivered   <- dplyr::coalesce(out$ideal_delivered, 0)
-    out$median_cost_person<- dplyr::coalesce(out$median_cost_person, 0)
+    out$ideal_delivered    <- dplyr::coalesce(out$ideal_delivered, 0)
+    out$median_cost_person <- dplyr::coalesce(out$median_cost_person, 0)
     
     out[mixed_order(out$intervention_id), , drop = FALSE]
   })
@@ -468,7 +520,7 @@ server <- function(input, output, session){
                                          value = round(def$median_cost_person, 2))
   }, ignoreInit = FALSE)
   
-  # When override dropdown changes, refresh the default note & numeric value
+  # --- Override handling
   .overrides <- reactiveVal(list())
   overrides  <- reactive(.overrides())
   
@@ -648,7 +700,7 @@ server <- function(input, output, session){
       cols_align("center", columns = c(per_year, total_planning))
   })
   
-  # --- AI interpretation (button)
+  # --- AI interpretation
   narrative_html <- reactiveVal(NULL)
   
   # Reset AI narrative whenever inputs/overrides change
