@@ -10,6 +10,7 @@ suppressPackageStartupMessages({
   suppressWarnings(try(library(shinycssloaders), silent = TRUE)) # spinners
   suppressWarnings(try(library(rmarkdown),  silent = TRUE))   # HTML report
   suppressWarnings(try(library(writexl),    silent = TRUE))   # XLSX
+  suppressWarnings(try(library(shinyWidgets), silent = TRUE)) # autonumericInput
 })
 
 # ---------- Small helpers ----------
@@ -23,12 +24,10 @@ with_spinner_maybe <- function(x) {
     shinycssloaders::withSpinner(x, type = 6, color = "#1CABE2")
   else x
 }
-
 # Natural sort for IDs like "5-b", "10", "12-a" etc.
 mixed_order <- function(ids_chr){
   num <- suppressWarnings(as.integer(stringr::str_extract(ids_chr, "^[0-9]+")))
   suf <- stringr::str_to_lower(stringr::str_replace_na(stringr::str_extract(ids_chr, "(?<=-)[A-Za-z]+"), ""))
-  # Empty suffix first, then a, b, c...
   order(num, nchar(suf) > 0, suf)
 }
 
@@ -61,15 +60,14 @@ gemini_generate_rest <- function(prompt,
   if (!is.null(out$promptFeedback$blockReason))
     return(sprintf("Response blocked (blockReason: %s).", out$promptFeedback$blockReason))
   
-  texts <- unlist(lapply(out$candidates %||% list(), \(c){
-    if (is.null(c$content$parts)) character(0)
-    else unlist(lapply(c$content$parts, \(p) p$text %||% NULL), use.names = FALSE)
+  texts <- unlist(lapply(out$candidates %||% list(), function(cand){
+    if (is.null(cand$content$parts)) character(0)
+    else unlist(lapply(cand$content$parts, function(p) p$text %||% NULL), use.names = FALSE)
   }), use.names = FALSE)
   
   if (!length(texts)) { if (verbose) str(out, max.level = 2); return("Gemini returned no text.") }
   paste(texts, collapse = "\n\n")
 }
-
 safe_condition_message <- function(x){
   if (inherits(x, "try-error")) {
     cond <- attr(x, "condition")
@@ -82,7 +80,6 @@ safe_condition_message <- function(x){
     "Unknown error."
   }
 }
-
 gemini_generate_rest_retry <- function(..., max_retries = 5L, base_delay = 1.5){
   i <- 0L
   repeat {
@@ -98,20 +95,25 @@ gemini_generate_rest_retry <- function(..., max_retries = 5L, base_delay = 1.5){
     Sys.sleep(base_delay * (2^(i-1)) * runif(1, .8, 1.2))
   }
 }
-
+# Safer prompt builder (no inline ifs inside paste/sprintf)
 build_coi_prompt <- function(p, indicator_lines = NULL){
-  sprintf(paste(
-    "You are a Cost of Inaction Assistant. Write a concise narrative (150–220 words) in British English,",
+  hdr <- paste0(
+    "You are a Cost of Inaction Assistant. Write a concise narrative (150–220 words) in British English, ",
     "then 3–5 bullet key messages. Use ONLY the numbers supplied. Begin with a brief disclaimer.\n\n",
     "Context\n• Emergency: %s\n• Planning period: %d year(s)\n• Valuation: %s\n",
     "Inputs\n• PiN children 0–59m: %s\n• PiN PLW: %s\n• Coverage: %d%%\n",
     "Results (2015 USD)\n• Total cost: %s\n• Indirect economic benefits: %s\n",
-    "• Direct benefits (headline): %s\n• Benefit–Cost Ratio: %s\n",
-    if (length(indicator_lines)) "\nKey direct indicators:\n" else "",
-    paste(indicator_lines, collapse = "\n"),
-    "\n\nInstructions\n- Be precise, neutral; avoid hype.\n- Translate numbers to planning implications.\n",
-    "- Do not invent data; flag uncertainty briefly.\n- Finish with 3–5 bullet recommendations.",
-    sep = ""),
+    "• Direct benefits (headline): %s\n• Benefit–Cost Ratio: %s\n"
+  )
+  mid <- if (!is.null(indicator_lines) && length(indicator_lines) > 0)
+    paste0("\nKey direct indicators:\n", paste(indicator_lines, collapse = "\n"), "\n")
+  else ""
+  tail <- paste0(
+    "\nInstructions\n- Be precise, neutral; avoid hype.\n- Translate numbers to planning implications.\n",
+    "- Do not invent data; flag uncertainty briefly.\n- Finish with 3–5 bullet recommendations."
+  )
+  sprintf(
+    paste0(hdr, mid, tail),
     p$emergency, as.integer(p$years), p$valuation,
     comma(round(p$pin_children)), comma(round(p$pin_plw)), as.integer(p$coverage),
     dollar(round(p$total_cost)),  dollar(round(p$indir_total)),
@@ -230,21 +232,16 @@ ui <- page_fluid(
     tags$script(src = "script.js"),
     # Keep only sidebar scrollable (prevents stretching of main cards)
     tags$style(HTML("
-      /* Make only the left sidebar scroll; keep main content steady */
-      .bslib-sidebar-layout > .sidebar { 
-        position: sticky; 
-        top: 0;
-        height: calc(100vh - 0px); 
-        overflow-y: auto; 
-        padding-right: .25rem;
+      .bslib-sidebar-layout > .sidebar {
+        position: sticky; top: 0; height: calc(100vh - 0px);
+        overflow-y: auto; padding-right: .25rem;
       }
-      /* Nicer checkbox list for long names */
       .nie-list .form-check { margin-bottom: .35rem; }
       .nie-list label { white-space: normal; }
     "))
   ),
   div(class = "logo-container",
-      tags$img(src = "united-nations-childrens-fund-unicef-vector-logo.png", height = "40"), 
+      tags$img(src = "unicef_logo.png", height = "40"),
       tags$div(class="title", "Cost of Inaction Explorer - Nutrition in Emergencies")
   ),
   layout_sidebar(
@@ -280,7 +277,6 @@ ui <- page_fluid(
       accordion(
         open = FALSE,
         accordion_panel("Advanced settings: NiE package & unit costs", icon = icon("sliders"),
-                        
                         # Package selection
                         div(class="nie-list",
                             tooltip(
@@ -295,9 +291,15 @@ ui <- page_fluid(
                           tags$em("median per-person cost"),
                           " from the study is used."
                         ),
-                        # Pick an intervention (from the currently selected package) and override its unit cost
                         selectInput("uc_sel", "Intervention", choices = NULL),
-                        numericInput("uc_val", "Unit cost (USD / beneficiary)", value = NA, min = 0, step = 0.01),
+                        shinyWidgets::autonumericInput(
+                          inputId = "uc_val",
+                          label   = "Unit cost (USD / beneficiary)",
+                          value   = NA,
+                          decimalCharacter      = ".",
+                          digitGroupSeparator   = ",",
+                          decimalPlaces         = 2
+                        ),
                         fluidRow(
                           column(6, actionButton("uc_apply", "Apply", class="btn-primary")),
                           column(6, actionButton("uc_reset_all", "Reset all", class="btn-secondary"))
@@ -361,7 +363,11 @@ ui <- page_fluid(
                 tooltip(
                   card(full_screen = TRUE,
                        card_header("Cost vs. Benefit Analysis"),
-                       with_spinner_maybe(plotOutput("benefit_plot", height = "320px"))
+                       with_spinner_maybe(plotOutput("benefit_plot", height = "320px")),
+                       p(class = "text-muted small",
+                         "Note: Costs use study median unit costs combined with your coverage and PiN inputs; ",
+                         "results may differ from published report totals when the package is customised or unit-cost overrides are applied.")
+                       
                   ),
                   "Comparison of total indirect benefits versus total programme cost over the planning period (USD)."
                 )
@@ -420,85 +426,84 @@ server <- function(input, output, session){
   
   # --- Available interventions (names + IDs; single row per intervention)
   interventions_tbl <- reactive({
-    # Take a representative 'ideal_delivered' per intervention (ignore country)
+    # Representative 'ideal_delivered' per intervention (ignore country)
     base <- coverage_costs %>%
       filter(emergency == input$emergency) %>%
       mutate(intervention_id = as.character(intervention_id)) %>%
       group_by(intervention_id) %>%
       summarise(
         intervention_name = dplyr::first(na.omit(intervention_name)),
-        ideal_delivered   = dplyr::first(na.omit(ideal_delivered)),
+        ideal_delivered   = suppressWarnings(dplyr::first(na.omit(ideal_delivered))),
         .groups = "drop"
       )
-    # join the study medians for this emergency
+    
     med <- median_costs_cleaned %>%
       filter(emergency == input$emergency) %>%
       mutate(intervention_id = as.character(intervention_id)) %>%
       select(intervention_id, median_cost_person)
+    
     out <- base %>% left_join(med, by = "intervention_id")
-    # natural order
+    out$ideal_delivered   <- dplyr::coalesce(out$ideal_delivered, 0)
+    out$median_cost_person<- dplyr::coalesce(out$median_cost_person, 0)
+    
     out[mixed_order(out$intervention_id), , drop = FALSE]
   })
   
-  # Populate the package checkbox (labels = names only; values = IDs)
+  # Populate the package checkbox and override selector
   observeEvent(interventions_tbl(), {
     it <- interventions_tbl()
-    choices <- setNames(it$intervention_id, it$intervention_name)  # labels: names only
+    choices <- setNames(it$intervention_id, it$intervention_name)
     updateCheckboxGroupInput(session, "intervention_package",
                              choices = choices,
-                             selected = it$intervention_id   # all checked by default
-    )
-    # Also populate the override dropdown with the same order
+                             selected = it$intervention_id)
     updateSelectInput(session, "uc_sel",
-                      choices = setNames(it$intervention_id, it$intervention_name),
-                      selected = it$intervention_id[1]
-    )
-    # Seed default-note
+                      choices = choices,
+                      selected = it$intervention_id[1])
+    # Seed default note & numeric
     def <- it %>% slice(1)
-    txt <- sprintf("Default (study) unit cost for this intervention: %s", fmt_dollar(def$median_cost_person))
-    shinyjs::html(id = "uc_default_note", html = txt)
-    # Prefill numeric with default (rounded 2 d.p.)
-    updateNumericInput(session, "uc_val", value = round(def$median_cost_person, 2))
+    shinyjs::html(id = "uc_default_note",
+                  html = sprintf("Default (study) unit cost for this intervention: %s",
+                                 fmt_dollar(def$median_cost_person)))
+    shinyWidgets::updateAutonumericInput(session, "uc_val",
+                                         value = round(def$median_cost_person, 2))
   }, ignoreInit = FALSE)
   
   # When override dropdown changes, refresh the default note & numeric value
+  .overrides <- reactiveVal(list())
+  overrides  <- reactive(.overrides())
+  
   observeEvent(input$uc_sel, {
-    it <- interventions_tbl()
+    it  <- interventions_tbl()
     row <- it %>% filter(intervention_id == input$uc_sel) %>% slice(1)
     if (nrow(row)) {
-      shinyjs::html("uc_default_note", sprintf("Default (study) unit cost for this intervention: %s", fmt_dollar(row$median_cost_person)))
-      # If there's an existing user override, show it; else default
+      shinyjs::html("uc_default_note",
+                    sprintf("Default (study) unit cost for this intervention: %s",
+                            fmt_dollar(row$median_cost_person)))
       val <- overrides()[[row$intervention_id]] %||% row$median_cost_person
-      updateNumericInput(session, "uc_val", value = round(val, 2))
+      shinyWidgets::updateAutonumericInput(session, "uc_val", value = round(val, 2))
     }
   })
   
-  # Store overrides as a named list
-  .overrides <- reactiveVal(list())
-  overrides <- reactive(.overrides())
-  
   observeEvent(input$uc_apply, {
-    req(input$uc_sel, is.finite(input$uc_val))
+    req(input$uc_sel, !is.null(input$uc_val))
     cur <- overrides()
-    cur[[input$uc_sel]] <- as.numeric(input$uc_val)
+    cur[[input$uc_sel]] <- as.numeric(gsub(",", "", input$uc_val))
     .overrides(cur)
     showNotification("Override saved for selected intervention.", type = "message", duration = 2)
   })
   observeEvent(input$uc_reset_all, {
     .overrides(list())
-    # reset numeric to default of current selection
-    it <- interventions_tbl()
+    it  <- interventions_tbl()
     row <- it %>% filter(intervention_id == input$uc_sel) %>% slice(1)
-    if (nrow(row)) updateNumericInput(session, "uc_val", value = round(row$median_cost_person, 2))
+    if (nrow(row)) shinyWidgets::updateAutonumericInput(session, "uc_val", value = round(row$median_cost_person, 2))
     showNotification("All overrides cleared.", type = "message", duration = 2)
   })
   
   # --- Per-indicator results (interpolated, PiN-scaled, annualised, planning period)
   direct_by_indicator <- reactive({
-    da <- direct_anchors()
-    req(nrow(da) > 0)
+    da <- direct_anchors(); req(nrow(da) > 0)
     nm <- tolower(da$indicator_name)
-    is_plw <- grepl("maternal|stillbirth", nm)   # PLW-oriented indicators
+    is_plw <- grepl("maternal|stillbirth", nm)
     scale_vec <- ifelse(is_plw, pin_scale()$plw, pin_scale()$children)
     cov <- as.numeric(input$coverage)
     y30 <- as.numeric(da$`30`); y95 <- as.numeric(da$`95`); y0 <- 0
@@ -515,7 +520,6 @@ server <- function(input, output, session){
       total_planning     = round(total_planning)
     ) %>% arrange(indicator_category, desc(total_planning))
   })
-  
   direct_total_planning <- reactive(sum(direct_by_indicator()$total_planning, na.rm = TRUE))
   
   # --- Indirect benefits
@@ -528,7 +532,6 @@ server <- function(input, output, session){
   annualise <- function(total_over_study, study_years = 3){
     ifelse(is.finite(study_years) && study_years > 0, total_over_study / study_years, total_over_study)
   }
-  
   indir_interp <- reactive({
     agg_scale <- mean(c(pin_scale()$children, pin_scale()$plw), na.rm = TRUE)
     if (input$valuation == "undisc"){
@@ -549,29 +552,27 @@ server <- function(input, output, session){
   })
   
   # --- Cost engine using unit-costs (median_costs_cleaned) + overrides
-  # Build the effective unit price table for selected package
   unit_prices_tbl <- reactive({
     it <- interventions_tbl()
     sel <- input$intervention_package %||% it$intervention_id
-    it <- it %>% filter(intervention_id %in% sel)
     ov <- overrides()
     it %>%
+      filter(intervention_id %in% sel) %>%
       mutate(
-        override = map_dbl(intervention_id, ~ as.numeric(ov[[.x]] %||% NA_real_)),
-        final_unit_cost = ifelse(is.finite(override), override, median_cost_person)
+        override        = map_dbl(intervention_id, ~ as.numeric(ov[[.x]] %||% NA_real_)),
+        final_unit_cost = ifelse(is.finite(override), override, median_cost_person),
+        final_unit_cost = dplyr::coalesce(final_unit_cost, 0),
+        ideal_delivered = dplyr::coalesce(ideal_delivered, 0)
       )
   })
-  
-  # Costs proportional to coverage, scaled by PiN; using ideal_delivered baseline per intervention
   cost_interp <- reactive({
     tbl <- unit_prices_tbl()
-    req(nrow(tbl) > 0)
-    # Total ideal cost for 100% (sum of unit * ideal_delivered over selected items)
+    if (!nrow(tbl)) return(tibble(cost_total_study = 0))
     ideal_total_100 <- sum(tbl$final_unit_cost * tbl$ideal_delivered, na.rm = TRUE)
-    cost_at_95 <- ideal_total_100 * 0.95
-    cost_per_pct <- if (cost_at_95 > 0) cost_at_95 / 95 else 0
-    coverage_cost <- cost_per_pct * as.numeric(input$coverage)
-    pin_factor <- mean(c(pin_scale()$children, pin_scale()$plw), na.rm = TRUE)
+    cost_at_95      <- ideal_total_100 * 0.95
+    cost_per_pct    <- if (cost_at_95 > 0) cost_at_95 / 95 else 0
+    coverage_cost   <- cost_per_pct * as.numeric(input$coverage)
+    pin_factor      <- mean(c(pin_scale()$children, pin_scale()$plw), na.rm = TRUE)
     tibble(cost_total_study = coverage_cost * pin_factor)
   })
   
@@ -610,7 +611,9 @@ server <- function(input, output, session){
       scale_y_continuous(labels = label_dollar(), expand = expansion(mult = c(0, 0.12))) +
       labs(x = NULL, y = "USD", title = "Costs and indirect benefits over the planning period") +
       theme_minimal(base_size = 16) +
-      theme(plot.title=element_text(size=13, face="bold"), axis.title.y=element_text(size=8), axis.text=element_text(size=8))
+      theme(plot.title=element_text(size=13, face="bold"),
+            axis.title.y=element_text(size=8),
+            axis.text=element_text(size=8))
   }, res = 144)
   
   # --- Detailed tables
@@ -623,7 +626,7 @@ server <- function(input, output, session){
       Value = c(
         input$emergency, fmt_comma(input$pin_children), fmt_comma(input$pin_plw), paste0(input$coverage,"%"),
         switch(input$valuation, undisc="Undiscounted", pv3="PV (3%)", pv5="PV (5%)"),
-        input$years, 
+        input$years,
         fmt_dollar(results()$cost_total), fmt_dollar(results()$indir_total),
         fmt_comma(results()$direct_total), fmt_bcr(results()$bcr)
       )
@@ -648,23 +651,14 @@ server <- function(input, output, session){
   # --- AI interpretation (button)
   narrative_html <- reactiveVal(NULL)
   
-  # Reset the AI interpretation whenever any user-controlled parameter changes
+  # Reset AI narrative whenever inputs/overrides change
   observeEvent(
     list(
-      input$emergency,
-      input$pin_children,
-      input$pin_plw,
-      input$coverage,
-      input$years,
-      input$valuation,
-      input$intervention_package,  # NiE package items
-      input$uc_val,                # number typed in the override box
-      input$uc_apply,              # override applied
-      input$uc_reset_all           # overrides cleared
+      input$emergency, input$pin_children, input$pin_plw, input$coverage,
+      input$years, input$valuation, input$intervention_package,
+      input$uc_val, input$uc_apply, input$uc_reset_all
     ),
-    {
-      narrative_html(NULL)  # go back to the default "Click to generate…" message
-    },
+    { narrative_html(NULL) },
     ignoreInit = TRUE
   )
   
@@ -676,9 +670,9 @@ server <- function(input, output, session){
     }
     id <- showNotification("Requesting narrative from Gemini API…", type = "message", duration = NULL)
     on.exit(removeNotification(id), add = TRUE)
-    res   <- isolate(results())
-    dir_df<- isolate(direct_by_indicator())
-    inputs<- isolate(reactiveValuesToList(input))
+    res    <- isolate(results())
+    dir_df <- isolate(direct_by_indicator())
+    inputs <- isolate(reactiveValuesToList(input))
     top3 <- dir_df %>% arrange(desc(total_planning)) %>% slice_head(n = 3) %>%
       transmute(line = sprintf("• %s: %s", indicator_name, scales::comma(total_planning))) %>% pull(line)
     p <- list(
@@ -753,7 +747,7 @@ server <- function(input, output, session){
       )
       incProgress(0.5, detail = "Knitting report")
       rmarkdown::render(
-        input = "report.Rmd",          # <- keep your improved report_html.Rmd name here if different
+        input = "report.Rmd",
         output_file = output_file,
         params = params,
         envir = new.env(parent = globalenv()),
