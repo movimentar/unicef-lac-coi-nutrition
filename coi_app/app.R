@@ -110,21 +110,31 @@ build_coi_prompt <- function(p, indicator_lines = NULL){
   )
 }
 
-# ---------- Load data (RDS first; fallback to {targets}) ----------
+# ---------- Load data (prefer RDS; only use {targets} if a store actually exists) ----------
 rds_dir <- file.path(getwd(), "data")
-load_from_rds_or_targets <- function(name, use_targets_fallback = TRUE, store = "_targets"){
+
+load_from_rds_or_targets <- function(name, store = "_targets") {
   rds_path <- file.path(rds_dir, paste0(name, ".rds"))
+  
+  # 1) If an RDS exists, use it
   if (file.exists(rds_path)) return(readRDS(rds_path))
-  if (use_targets_fallback){
-    if (!requireNamespace("targets", quietly = TRUE)) stop("{targets} not installed.")
-    if (!dir.exists(store)) {
-      alt <- file.path("..","_targets")
-      if (dir.exists(alt)) store <- alt else stop(sprintf("Targets store '%s' missing.", store))
+  
+  # 2) Only try {targets} when a store is really present (local dev)
+  store_exists <- dir.exists(store) || dir.exists(file.path("..", store))
+  if (store_exists) {
+    if (!requireNamespace("targets", quietly = TRUE)) {
+      stop("{targets} not installed and data/", name, ".rds not found.")
     }
+    if (!dir.exists(store)) store <- file.path("..", store)
     targets::tar_config_set(store = store)
     return(targets::tar_read_raw(name))
   }
-  stop(sprintf("Data object '%s' not found and no fallback.", name))
+  
+  # 3) Friendly error for deployment environments
+  stop(sprintf(
+    "Data object '%s' not found. Please include 'data/%s.rds' in the app bundle.",
+    name, name
+  ))
 }
 
 # ---------- Study objects ----------
@@ -757,3 +767,15 @@ server <- function(input, output, session){
 }
 
 shinyApp(ui, server)
+
+# ## Before deployment and after tar_make()
+# saveRDS(targets::tar_read_raw("intervention_list"),    "data/intervention_list.rds")
+# saveRDS(targets::tar_read_raw("coi_costs"),            "data/coi_costs.rds")
+# saveRDS(targets::tar_read_raw("coverage_costs"),       "data/coverage_costs.rds")
+# saveRDS(targets::tar_read_raw("median_costs_cleaned"), "data/median_costs_cleaned.rds")
+# saveRDS(targets::tar_read_raw("coi_dir_benefits"),     "data/coi_dir_benefits.rds")
+# saveRDS(targets::tar_read_raw("coi_indir_benefits"),   "data/coi_indir_benefits.rds")
+# # Optional:
+# # saveRDS(targets::tar_read_raw("gni_forecast"), "data/gni_forecast.rds")
+# # saveRDS(targets::tar_read_raw("income_share"), "data/income_share.rds")
+
