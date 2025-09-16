@@ -319,22 +319,51 @@ ui <- page_fluid(
       nav_panel("Dashboard", icon = icon("dashboard"),
                 layout_columns(
                   col_widths = c(6,6),
-                  value_box(title = "Total Response Cost",  value = textOutput("total_cost"),
-                            showcase = icon("sack-dollar"), color = "secondary"),
-                  value_box(title = "Indirect Benefits",    value = textOutput("indir_benefit"),
-                            showcase = icon("arrow-trend-up"), color = "primary")
+                  tooltip(
+                    value_box(
+                      title = "Total Response Cost",
+                      value = textOutput("total_cost"),
+                      showcase = icon("sack-dollar"),
+                      color = "secondary"
+                    ),
+                    "All programme costs over the selected planning period, after applying coverage, PiN scaling and any unit-cost overrides."
+                  ),
+                  tooltip(
+                    value_box(
+                      title = "Indirect Benefits",
+                      value = textOutput("indir_benefit"),
+                      showcase = icon("arrow-trend-up"),
+                      color = "primary"
+                    ),
+                    "Monetised long-term economic benefits (undiscounted or PV at the chosen rate) attributable to the interventions."
+                  )
                 ),
                 layout_columns(
                   col_widths = c(6,6),
-                  value_box(title = "Direct Benefits (Cases Averted / Improved)",
-                            value = textOutput("direct_headline"), showcase = icon("users")),
-                  value_box(title = "Benefit–Cost Ratio",
-                            value = textOutput("bcr"), showcase = icon("scale-balanced"))
+                  tooltip(
+                    value_box(
+                      title = "Direct Benefits (Cases Averted / Improved)",
+                      value = textOutput("direct_headline"),
+                      showcase = icon("users")
+                    ),
+                    "Total count of direct outcomes (e.g., cases averted or improved) over the planning period, aggregated across indicators."
+                  ),
+                  tooltip(
+                    value_box(
+                      title = "Benefit–Cost Ratio",
+                      value = textOutput("bcr"),
+                      showcase = icon("scale-balanced")
+                    ),
+                    "Indirect Benefits divided by Total Response Cost. Values > 1 mean benefits exceed costs."
+                  )
                 ),
                 hr(),
-                card(full_screen = TRUE,
-                     card_header("Cost vs. Benefit Analysis"),
-                     with_spinner_maybe(plotOutput("benefit_plot", height = "320px"))
+                tooltip(
+                  card(full_screen = TRUE,
+                       card_header("Cost vs. Benefit Analysis"),
+                       with_spinner_maybe(plotOutput("benefit_plot", height = "320px"))
+                  ),
+                  "Comparison of total indirect benefits versus total programme cost over the planning period (USD)."
                 )
       ),
       
@@ -618,6 +647,27 @@ server <- function(input, output, session){
   
   # --- AI interpretation (button)
   narrative_html <- reactiveVal(NULL)
+  
+  # Reset the AI interpretation whenever any user-controlled parameter changes
+  observeEvent(
+    list(
+      input$emergency,
+      input$pin_children,
+      input$pin_plw,
+      input$coverage,
+      input$years,
+      input$valuation,
+      input$intervention_package,  # NiE package items
+      input$uc_val,                # number typed in the override box
+      input$uc_apply,              # override applied
+      input$uc_reset_all           # overrides cleared
+    ),
+    {
+      narrative_html(NULL)  # go back to the default "Click to generate…" message
+    },
+    ignoreInit = TRUE
+  )
+  
   observeEvent(input$generate_narrative, {
     if (!requireNamespace("httr2", quietly = TRUE) || Sys.getenv("GEMINI_API_KEY")=="") {
       narrative_html(tags$p(class="text-danger narrative",
