@@ -11,7 +11,7 @@ Migration flows, particularly from Venezuela and Central America, have added com
 
 This repository has not been officially endorsed by UNICEF. The views, opinions, findings, and conclusions expressed in this repository and its files are those of movimentar GmbH and do not necessarily reflect the official policies or positions of UNICEF, its member states, or other affiliated United Nations agencies. The responsibility for the views and interpretations presented rests solely with movimentar GmbH.
 
-Any publication or dissemination on UNICEF's official platforms is managed directly by UNICEF, in accordance with its institutional procedures.
+Any publication or dissemination on UNICEF's official platforms is managed directly by UNICEF, in accordance with its institutional procedures. This repository is being shared by movimentar GmbH to promote auditing of findings, public access to the research and facilitate its use by UNICEF staff, other partners and researchers.
 
 ---
 
