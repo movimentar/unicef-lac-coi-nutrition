@@ -107,7 +107,8 @@ build_coi_prompt <- function(p, indicator_lines = NULL){
     paste0("\nKey direct indicators:\n", paste(indicator_lines, collapse = "\n"), "\n") else ""
   tail <- paste0(
     "\nInstructions\n- Be precise, neutral; avoid hype.\n- Translate numbers to planning implications.\n",
-    "- Do not invent data; flag uncertainty briefly.\n- Finish with 3–5 bullet recommendations."
+    "- Do not invent data; flag uncertainty briefly.\n- Finish with 3–5 bullet recommendations.",
+    "Mention that monetised economic benefits from the interventions include near-term savings (avoided formula costs during the child's first two years) and long-term gains from increased lifetime earnings, which are projected for the period 2038–2080."
   )
   sprintf(
     paste0(hdr, mid, tail),
@@ -402,7 +403,7 @@ ui <- page_fluid(
                  "Note: Costs use study median unit costs combined with your coverage and PiN inputs; ",
                  "results may differ from published report totals when the package is customised or unit-cost overrides are applied.")
           ),
-          "Comparison of total indirect benefits versus total programme cost over the planning period (USD)."
+          "Comparison of total indirect benefits versus total programme cost over the planning period (USD). Monetised economic benefits from the interventions include near-term savings (avoided formula costs during the child's first two years) and long-term gains from increased lifetime earnings, which are projected for the period 2038–2080."
         )
       ),
       nav_panel(
