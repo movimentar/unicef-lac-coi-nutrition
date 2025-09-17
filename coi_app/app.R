@@ -289,6 +289,22 @@ ui <- page_fluid(
       tags$img(src = "unicef_logo.png"),
       tags$div(class="title", "NutriValue - A cost of inaction explorer for nutrition in emergencies")
   ),
+  
+  # --- Global disclaimer (place this directly after the logo header) ---
+  div(
+    id   = "disclaimer",
+    class = "disclaimer disclaimer--xs", 
+    tags$p(
+      tags$strong("Disclaimer: "),
+      "This tool was developed by movimentar GmbH under a study commissioned by UNICEF’s Latin America and Caribbean Regional Office (LACRO). It has not been formally reviewed or endorsed by UNICEF.
+
+The analyses, views, findings and conclusions are those of movimentar GmbH and do not necessarily reflect the policies or positions of UNICEF, its Executive Board, Member States, or any United Nations entity. Responsibility for any errors or omissions rests solely with the authors.
+
+Publication or dissemination on UNICEF’s official platforms is determined exclusively by UNICEF and is subject to its internal procedures.
+
+This tool and repository are provided for information and planning purposes. Results are model-based and may differ from figures in official UNICEF publications or country reports; no warranty is given as to completeness or accuracy."
+    )
+  ),
   layout_sidebar(
     sidebar = sidebar(
       id = "app_sidebar",

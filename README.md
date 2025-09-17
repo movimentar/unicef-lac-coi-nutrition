@@ -9,9 +9,11 @@ Migration flows, particularly from Venezuela and Central America, have added com
 ---
 ## Disclaimer
 
-This repository has not been officially endorsed by UNICEF. The views, opinions, findings, and conclusions expressed in this repository and its files are those of movimentar GmbH and do not necessarily reflect the official policies or positions of UNICEF, its member states, or other affiliated United Nations agencies. The responsibility for the views and interpretations presented rests solely with movimentar GmbH.
+This repository was developed by movimentar GmbH under a study commissioned by UNICEF’s Latin America and Caribbean Regional Office (LACRO). It has not been formally reviewed or endorsed by UNICEF. The analyses, views, findings and conclusions are those of movimentar GmbH and do not necessarily reflect the policies or positions of UNICEF, its Executive Board, Member States, or any United Nations entity. Responsibility for any errors or omissions rests solely with movimentar GmbH.
 
-Any publication or dissemination on UNICEF's official platforms is managed directly by UNICEF, in accordance with its institutional procedures. This repository is being shared by movimentar GmbH to promote auditing of findings, public access to the research and facilitate its use by UNICEF staff, other partners and researchers.
+Publication or dissemination on UNICEF’s official platforms is determined exclusively by UNICEF and is subject to its internal procedures.
+
+This tool and repository are provided for information and planning purposes. Results are model-based and may differ from figures in official UNICEF publications or country reports; no warranty is given as to completeness or accuracy.
 
 ---
 

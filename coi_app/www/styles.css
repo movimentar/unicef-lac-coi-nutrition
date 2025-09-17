@@ -57,6 +57,7 @@ small, .text-muted{ color: var(--slate-500) !important; }
   color: var(--unicef-cyan);
 }
 
+
 /* ---------- Cards & layout polish ---------- */
 .card{
   border-radius: var(--radius) !important;
@@ -311,3 +312,18 @@ small, .text-muted{ color: var(--slate-500) !important; }
   align-items: center;
   gap: 20px;
 }
+
+/* Put this near the very bottom of styles.css */
+.disclaimer.disclaimer--xs{
+  font-size: 0.78rem !important;  /* ~12.5px on a 16px base */
+  line-height: 1.45;
+  color: var(--slate-700);
+}
+
+@media (min-width: 992px){
+  .disclaimer.disclaimer--xs{
+    font-size: 0.72rem !important; /* ~11.5px on larger screens */
+  }
+}
+
+
