@@ -286,7 +286,6 @@ ui <- page_fluid(
     "))
   ),
   div(class = "logo-container",
-      tags$img(src = "unicef_logo.png"),
       tags$div(class="title", "NutriValue - A cost of inaction explorer for nutrition in emergencies")
   ),
   
