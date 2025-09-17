@@ -252,16 +252,32 @@ pin_defaults <- tibble::tibble(
   pin_plw      = c( 946245, 2026811)
 )
 
+### Read the Google Analytics ID from the environment variable
+GA_MEASUREMENT_ID <- Sys.getenv("GA_MEASUREMENT_ID")
+
 # ---------- UI ----------
 ui <- page_fluid(
   theme = bs_theme(version = 5, bootswatch = "flatly", primary = "#1CABE2",
                    "font-family-sans-serif" = "'Lato', sans-serif"),
   useShinyjs(),
   tags$head(
+    
+    # Google Analytics 4 (gtag.js) script
+    # This uiOutput will be empty until the user consents
+    uiOutput("google_analytics_script"),
+    
     tags$link(rel = "stylesheet", type = "text/css", href = "styles.css"),
     tags$link(rel = "stylesheet",
               href = "https://fonts.googleapis.com/css2?family=Lato:wght@400;700;800&display=swap"),
     tags$script(src = "script.js"),
+    
+    # This banner will be shown at the bottom of the page and will be hidden once accepted.
+    div(id = "gdpr-banner",
+        class = "gdpr-banner-class",
+        "This site uses cookies for analytics. By continuing to use this site, you agree to our use of cookies.",
+        actionButton("accept_cookies", "Accept", class = "btn-primary btn-sm")
+    ),
+    
     tags$style(HTML("
       .bslib-sidebar-layout > .sidebar { position: sticky; top: 0; height: calc(100vh - 0px);
         overflow-y: auto; padding-right: .25rem; }
@@ -442,6 +458,33 @@ ui <- page_fluid(
 
 # ---------- Server ----------
 server <- function(input, output, session){
+  
+  # This reactive value will track if the user has consented
+  cookies_accepted <- reactiveVal(FALSE)
+  
+  # When the user clicks "Accept", hide the banner and set the reactive value to TRUE
+  observeEvent(input$accept_cookies, {
+    shinyjs::hide("gdpr-banner")
+    cookies_accepted(TRUE)
+  })
+  
+  # This output conditionally renders the Google Analytics script
+  output$google_analytics_script <- renderUI({
+    # The script is only rendered if the user has accepted AND a measurement ID is available
+    req(cookies_accepted() == TRUE)
+    req(nzchar(GA_MEASUREMENT_ID))
+    
+    tags$head(
+      tags$script(async = NA, src = sprintf("https://www.googletagmanager.com/gtag/js?id=%s", GA_MEASUREMENT_ID)),
+      tags$script(HTML(sprintf("
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', '%s');
+      ", GA_MEASUREMENT_ID)))
+    )
+  })
+  
   # --- Validation
   iv <- InputValidator$new()
   iv$add_rule("pin_children", sv_gte(0)); iv$add_rule("pin_plw", sv_gte(0))
@@ -694,47 +737,77 @@ server <- function(input, output, session){
       cols_align("center", columns = c(per_year, total_planning))
   })
   
-  # --- AI interpretation
+  # --- AI interpretation (now lock button + centered progress modal)
   narrative_html <- reactiveVal(NULL)
   observeEvent(list(input$emergency, input$pin_children, input$pin_plw, input$coverage,
                     input$years, input$valuation, input$intervention_package,
                     input$uc_val, input$uc_apply, input$uc_reset_all),
-               { narrative_html(NULL) }, ignoreInit = TRUE)
+               { 
+                 narrative_html(NULL) 
+                 shinyjs::html("generate_narrative",
+                               '<i class="fa-solid fa-wand-magic-sparkles" aria-hidden="true"></i> Generate Interpretation'
+                 )
+                 
+               }, ignoreInit = TRUE)
   
   observeEvent(input$generate_narrative, {
+    btn_id <- "generate_narrative"
+    # Block further clicks + show busy state
+    shinyjs::disable(btn_id)
+    shinyjs::html(btn_id, '<i class="fa-solid fa-spinner fa-spin" aria-hidden="true"></i> Generating…')
+    # Always restore button at the end
+    on.exit({
+      shinyjs::enable(btn_id)
+      shinyjs::html(btn_id, '<i class="fa-solid fa-pen-to-square" aria-hidden="true"></i> Update summary')
+    }, add = TRUE)
+    
+    # Guardrails for missing API key/deps
     if (!requireNamespace("httr2", quietly = TRUE) || Sys.getenv("GEMINI_API_KEY")=="") {
       narrative_html(tags$p(class="text-danger narrative",
                             "No API key found or {httr2} not installed. Set GEMINI_API_KEY and try again."))
       return(invisible())
     }
-    id <- showNotification("Requesting narrative from Gemini API…", type = "message", duration = NULL)
-    on.exit(removeNotification(id), add = TRUE)
-    res    <- isolate(results())
-    dir_df <- isolate(direct_by_indicator())
-    top3 <- dir_df %>% arrange(desc(total_planning)) %>% slice_head(n = 3) %>%
-      transmute(line = sprintf("• %s: %s", indicator_name, scales::comma(total_planning))) %>% pull(line)
-    p <- list(
-      emergency = norm_em(input$emergency), years = input$years,
-      valuation = switch(input$valuation, undisc="Undiscounted", pv3="PV (3%)", pv5="PV (5%)"),
-      pin_children = pin_children_val(), pin_plw = pin_plw_val(), coverage = input$coverage,
-      total_cost = res$cost_total, indir_total = res$indir_total,
-      direct_total = res$direct_total, bcr = res$bcr
-    )
-    txt <- gemini_generate_rest_retry(
-      prompt = build_coi_prompt(p, indicator_lines = top3),
-      model = "gemini-2.5-flash", temperature = 0.2, max_tokens = 700, thinking_budget = 0
-    )
-    if (grepl("^(Gemini call failed:|Response blocked|Gemini returned no text)", txt, ignore.case = TRUE)) {
-      showNotification(txt, type = "error", duration = 6)
-      narrative_html(tags$p(class="text-danger narrative", txt))
-      return(invisible())
-    }
-    if (requireNamespace("commonmark", quietly = TRUE)) {
-      narrative_html(HTML(sprintf('<div class="narrative">%s</div>', commonmark::markdown_html(txt))))
-    } else {
-      narrative_html(tags$div(class="narrative", style="white-space:pre-wrap;", txt))
-    }
+    
+    # Centered modal progress bar
+    withProgress(message = "Generating AI interpretation…", value = 0, {
+      incProgress(0.25, detail = "Preparing inputs")
+      
+      res    <- isolate(results())
+      dir_df <- isolate(direct_by_indicator())
+      top3 <- dir_df %>% arrange(desc(total_planning)) %>% slice_head(n = 3) %>%
+        transmute(line = sprintf("• %s: %s", indicator_name, scales::comma(total_planning))) %>% pull(line)
+      
+      p <- list(
+        emergency = norm_em(input$emergency), years = input$years,
+        valuation = switch(input$valuation, undisc="Undiscounted", pv3="PV (3%)", pv5="PV (5%)"),
+        pin_children = pin_children_val(), pin_plw = pin_plw_val(), coverage = input$coverage,
+        total_cost = res$cost_total, indir_total = res$indir_total,
+        direct_total = res$direct_total, bcr = res$bcr
+      )
+      
+      incProgress(0.45, detail = "Contacting the model")
+      
+      txt <- gemini_generate_rest_retry(
+        prompt = build_coi_prompt(p, indicator_lines = top3),
+        model = "gemini-2.5-flash", temperature = 0.2, max_tokens = 700, thinking_budget = 0
+      )
+      
+      incProgress(0.25, detail = "Formatting output")
+      
+      if (grepl("^(Gemini call failed:|Response blocked|Gemini returned no text)", txt, ignore.case = TRUE)) {
+        showNotification(txt, type = "error", duration = 6)
+        narrative_html(tags$p(class="text-danger narrative", txt))
+        return(invisible())
+      }
+      
+      if (requireNamespace("commonmark", quietly = TRUE)) {
+        narrative_html(HTML(sprintf('<div class="narrative">%s</div>', commonmark::markdown_html(txt))))
+      } else {
+        narrative_html(tags$div(class="narrative", style="white-space:pre-wrap;", txt))
+      }
+    })
   })
+  
   output$narrative <- renderUI({
     narrative_html() %||% tags$p(class="text-muted narrative",
                                  "Click “Generate Interpretation” to obtain a short narrative.")
@@ -815,4 +888,3 @@ shinyApp(ui, server)
 # # Optional:
 # # saveRDS(targets::tar_read_raw("gni_forecast"), "data/gni_forecast.rds")
 # # saveRDS(targets::tar_read_raw("income_share"), "data/income_share.rds")
-

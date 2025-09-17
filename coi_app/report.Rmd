@@ -186,7 +186,7 @@ if (is.data.frame(df) && nrow(df)) {
 
 The chart below compares the **total response cost** and the **indirect (economic) benefits** over the planning period.
 
-```{r benefit_plot, fig.align='center', fig.height=4.2}
+```{r benefit_plot, fig.align='center'}
 if (is.list(res) && all(c("indir_total","cost_total") %in% names(res))) {
   df_plot <- tibble(
     metric = factor(c("Indirect benefits", "Cost"),
