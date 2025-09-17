@@ -8,6 +8,8 @@ Migration flows, particularly from Venezuela and Central America, have added com
 
 For project documentation, see the [project workspace](https://movimentar.eu.teamwork.com/app/projects/536205/).
 
+The web application Cost of Inaction Explorer - Nutrition in Emergencies is available at [https://movimentar.shinyapps.io/nutrivalue/](https://movimentar.shinyapps.io/nutrivalue/).
+
 ---
 
 ## Methodological framework
