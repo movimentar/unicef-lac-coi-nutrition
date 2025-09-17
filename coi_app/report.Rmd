@@ -278,5 +278,14 @@ if (is.data.frame(dd) && nrow(dd)) {
 </ul>
 </div>
 
+---
+<div class="callout" style="margin-top:8px">
+  <strong>Disclaimer:</strong> This tool developed based on the study commissioned by the UNICEF Latin America and Caribbean Regional Office (LACRO) and implemented by movimentar GmbH. It has not been officially endorsed by UNICEF.
+
+The views, opinions, findings, and conclusions expressed here are those of movimentar GmbH and do not necessarily reflect the official policies or positions of UNICEF, its member states, or other affiliated United Nations agencies. The responsibility for the views and interpretations presented rests solely with the authors.
+
+Any publication or dissemination on UNICEF's official platforms is managed directly by UNICEF, in accordance with its institutional procedures. This repository is being shared by movimentar GmbH to facilitate its use by UNICEF staff, other partners and researchers.
+</div>
+
 *Report generated on* `r format(Sys.time(), "%Y-%m-%d %H:%M")`.
 
