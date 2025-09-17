@@ -6,6 +6,12 @@
 :root{
   --unicef-cyan: #1CABE2;
   --unicef-cyan-600: #1598c2;
+  --cyan-ink-1: #0b5b77;   /* dark cyan for icons/text */
+  --cyan-ink-2: #094e67;
+  --cyan-bg-1: #eef9fe;    /* very light cyan tints for cards */
+  --cyan-bg-2: #e7f4fb;
+  --cyan-border: #cbeaf6;
+
   --slate-900: #202428;
   --slate-700: #4a5056;
   --slate-500: #6c757d;
@@ -48,6 +54,7 @@ small, .text-muted{ color: var(--slate-500) !important; }
   font-size: clamp(1.35rem, 1.1rem + 0.8vw, 1.9rem);
   font-weight: 800;
   letter-spacing:.2px;
+  color: var(--unicef-cyan);
 }
 
 /* ---------- Cards & layout polish ---------- */
@@ -72,7 +79,20 @@ small, .text-muted{ color: var(--slate-500) !important; }
   box-shadow: var(--shadow);
   padding: 14px 16px;
   background: #fff;
+  position: relative;
+  overflow: hidden;
 }
+
+/* Light UNICEF-cyan backgrounds using bslib's color= argument */
+.bslib-value-box.bg-primary{
+  background: linear-gradient(180deg, var(--cyan-bg-1), var(--cyan-bg-2));
+  border-color: var(--cyan-border);
+}
+.bslib-value-box.bg-secondary{
+  background: linear-gradient(180deg, #f7fbfe, #f1f8fd);
+  border-color: #dbeff9;
+}
+
 .bslib-value-box .value-box-title{
   font-size: .9rem; font-weight: 800; letter-spacing:.3px;
   color: var(--slate-700); text-transform: uppercase;
@@ -82,9 +102,24 @@ small, .text-muted{ color: var(--slate-500) !important; }
   font-size: clamp(1.2rem, 1rem + 1.2vw, 2rem) !important;
   font-weight: 800; color: var(--slate-900);
 }
-.bslib-value-box .value-box-showcase svg{
-  color: var(--unicef-cyan) !important;
+
+/* Force showcase icons to dark cyan (covers Font Awesome & SVG) */
+.bslib-value-box .value-box-showcase{
+  color: var(--cyan-ink-1) !important; /* inheritance for <i> */
 }
+.bslib-value-box .value-box-showcase i,
+.bslib-value-box .value-box-showcase .fa,
+.bslib-value-box .value-box-showcase .fas,
+.bslib-value-box .value-box-showcase .far,
+.bslib-value-box .value-box-showcase .fal,
+.bslib-value-box .value-box-showcase .fab,
+.bslib-value-box .value-box-showcase svg{
+  color: var(--cyan-ink-1) !important;
+  fill:  var(--cyan-ink-1) !important;
+}
+
+/* Optional per-icon utility if you add class in R (we did) */
+.icon-dark-cyan{ color: var(--cyan-ink-1) !important; }
 
 /* ---------- Buttons (brand primary) ---------- */
 .btn-primary{
@@ -205,9 +240,47 @@ small, .text-muted{ color: var(--slate-500) !important; }
   .card, .gt_table{ box-shadow: none !important; border-color: #ddd !important; }
 }
 
-/* Style the main title with UNICEF cyan */
-.logo-container .title {
-  font-size: 1.8rem;
-  font-weight: 700;
-  color: #1CABE2; /* This is the UNICEF cyan color */
+/* Force UNICEF cyan on value-box icons */
+.bslib-value-box .value-box-showcase,
+.bslib-value-box.bg-primary .value-box-showcase,
+.bslib-value-box.bg-secondary .value-box-showcase {
+  color: var(--unicef-cyan) !important;  /* #1CABE2 */
 }
+
+/* Make both Font Awesome <i> and inline SVGs use that color */
+.bslib-value-box .value-box-showcase i,
+.bslib-value-box .value-box-showcase .fa,
+.bslib-value-box .value-box-showcase .fas,
+.bslib-value-box .value-box-showcase .far,
+.bslib-value-box .value-box-showcase .fal,
+.bslib-value-box .value-box-showcase .fab,
+.bslib-value-box .value-box-showcase svg,
+.bslib-value-box .value-box-showcase svg path {
+  color: inherit !important;
+  fill:  currentColor !important;
+}
+
+/* UNICEF cyan + soft opacity on value-box icons */
+.bslib-value-box .value-box-showcase,
+.bslib-value-box.bg-primary .value-box-showcase,
+.bslib-value-box.bg-secondary .value-box-showcase {
+  color: var(--unicef-cyan) !important;   /* #1CABE2 */
+  opacity: 0.8 !important;                /* soften the icon */
+}
+
+/* Ensure FA <i> and inline SVGs inherit both color + alpha */
+.bslib-value-box .value-box-showcase i,
+.bslib-value-box .value-box-showcase .fa,
+.bslib-value-box .value-box-showcase svg,
+.bslib-value-box .value-box-showcase svg path {
+  color: inherit !important;
+  fill:  currentColor !important;
+  opacity: inherit !important;
+}
+
+/* (Optional) hover: pop to full strength */
+.bslib-value-box:hover .value-box-showcase {
+  opacity: 1 !important;
+}
+
+

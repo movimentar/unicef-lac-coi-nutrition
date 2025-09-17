@@ -32,6 +32,14 @@ mixed_order <- function(ids_chr){
 norm_em <- function(x) stringr::str_replace_all(x, "[\u2013\u2014]", "-") # en/em dash -> hyphen
 parse_num <- function(x) suppressWarnings(as.numeric(gsub(",", "", x)))
 
+tab_title <- function(text, fa, tip, placement = "bottom") {
+  bslib::tooltip(
+    tagList(shiny::icon(fa), htmltools::span(text)),
+    tip,
+    placement = placement
+  )
+}
+
 # ---------- Gemini (optional) ----------
 gemini_generate_rest <- function(prompt,
                                  model = c("gemini-2.5-flash","gemini-2.5-pro","gemini-2.0-flash"),
@@ -261,7 +269,7 @@ ui <- page_fluid(
     "))
   ),
   div(class = "logo-container",
-      tags$img(src = "unicef_logo.png", height = "40"),
+      tags$img(src = "unicef_logo.png"),
       tags$div(class="title", "Cost of Inaction Explorer - Nutrition in Emergencies")
   ),
   layout_sidebar(
@@ -338,66 +346,94 @@ ui <- page_fluid(
     ),
     navset_card_tab(
       title = "Results",
-      nav_panel("Dashboard", icon = icon("dashboard"),
-                layout_columns(
-                  col_widths = c(6,6),
-                  tooltip(
-                    value_box(title = "Total Response Cost",
-                              value = textOutput("total_cost"),
-                              showcase = icon("sack-dollar"), color = "secondary"),
-                    "All programme costs over the selected planning period, after applying coverage, PiN scaling and any unit-cost overrides."
-                  ),
-                  tooltip(
-                    value_box(title = "Indirect Benefits",
-                              value = textOutput("indir_benefit"),
-                              showcase = icon("arrow-trend-up"), color = "primary"),
-                    "Monetised long-term economic benefits (undiscounted or PV at the chosen rate) attributable to the interventions."
-                  )
-                ),
-                layout_columns(
-                  col_widths = c(6,6),
-                  tooltip(
-                    value_box(title = "Direct Benefits (Cases Averted / Improved)",
-                              value = textOutput("direct_headline"),
-                              showcase = icon("users")),
-                    "Total count of direct outcomes over the planning period, aggregated across indicators."
-                  ),
-                  tooltip(
-                    value_box(title = "Benefit–Cost Ratio",
-                              value = textOutput("bcr"),
-                              showcase = icon("scale-balanced")),
-                    "Indirect Benefits divided by Total Response Cost."
-                  )
-                ),
-                hr(),
-                tooltip(
-                  card(full_screen = TRUE,
-                       card_header("Cost vs. Benefit Analysis"),
-                       with_spinner_maybe(plotOutput("benefit_plot", height = "320px")),
-                       p(class = "text-muted small",
-                         "Note: Costs use study median unit costs combined with your coverage and PiN inputs; ",
-                         "results may differ from published report totals when the package is customised or unit-cost overrides are applied.")
-                  ),
-                  "Comparison of total indirect benefits versus total programme cost over the planning period (USD)."
-                )
+      nav_panel(
+        title = tab_title(
+          "Dashboard", "dashboard",
+          "Overview: key figures and the cost vs. benefit chart."
+        ), 
+        layout_columns(
+          col_widths = c(6,6),
+          tooltip(
+            value_box(
+              title = "Total Response Cost",
+              value = textOutput("total_cost"),
+              showcase = tagAppendAttributes(icon("sack-dollar"), class = "icon-dark-cyan"),
+              color = "secondary"   # pale cyan
+            ),
+            "All programme costs over the selected planning period, after applying coverage, PiN scaling and any unit-cost overrides."
+          ),
+          tooltip(
+            value_box(
+              title = "Indirect Benefits",
+              value = textOutput("indir_benefit"),
+              showcase = icon("arrow-trend-up"),
+              color = "primary"     # stronger cyan
+            ),
+            "Monetised long-term economic benefits (undiscounted or PV at the chosen rate) attributable to the interventions."
+          )
+        ),
+        layout_columns(
+          col_widths = c(6,6),
+          tooltip(
+            value_box(
+              title = "Direct Benefits (Cases Averted / Improved)",
+              value = textOutput("direct_headline"),
+              showcase = icon("users"),
+              color = "secondary"
+            ),
+            "Total count of direct outcomes over the planning period, aggregated across indicators."
+          ),
+          tooltip(
+            value_box(
+              title = "Benefit–Cost Ratio",
+              value = textOutput("bcr"),
+              showcase = icon("scale-balanced"),
+              color = "primary"
+            ),
+            "Indirect Benefits divided by Total Response Cost."
+          )
+        ),
+        hr(),
+        tooltip(
+          card(full_screen = TRUE,
+               card_header("Cost vs. Benefit Analysis"),
+               with_spinner_maybe(plotOutput("benefit_plot", height = "320px")),
+               p(class = "text-muted small",
+                 "Note: Costs use study median unit costs combined with your coverage and PiN inputs; ",
+                 "results may differ from published report totals when the package is customised or unit-cost overrides are applied.")
+          ),
+          "Comparison of total indirect benefits versus total programme cost over the planning period (USD)."
+        )
       ),
-      nav_panel("Detailed Tables", icon = icon("table-list"),
-                h5("Planning Summary"), gt_output("summary_gt"),
-                hr(), h5("Direct benefits by indicator"), gt_output("direct_detail_gt")
+      nav_panel(
+        title = tab_title(
+          "Detailed Tables", "table-list",
+          "Planning summary and direct-benefit tables you can export."
+        ),
+        h5("Planning Summary"), gt_output("summary_gt"),
+        hr(), h5("Direct benefits by indicator"), gt_output("direct_detail_gt")
       ),
-      nav_panel("AI Interpretation", icon = icon("robot"),
-                actionButton("generate_narrative", "Generate Interpretation",
-                             class="btn-primary", icon = icon("wand-magic-sparkles")),
-                helpText("Click to generate a narrative summary for the current scenario (via Gemini)."),
-                hr(), with_spinner_maybe(uiOutput("narrative"))
+      nav_panel(
+        title = tab_title(
+          "AI Interpretation", "robot",
+          "Generate a concise narrative using your current scenario."
+        ),
+        actionButton("generate_narrative", "Generate Interpretation",
+                     class="btn-primary", icon = icon("wand-magic-sparkles")),
+        helpText("Click to generate a narrative summary for the current scenario (via Gemini)."),
+        hr(), with_spinner_maybe(uiOutput("narrative"))
       ),
-      nav_panel("Downloads & Report", icon = icon("download"),
-                br(), p("Download the raw summary data for the current scenario."),
-                downloadButton("dl_xlsx","Summary (XLSX)"),
-                downloadButton("dl_direct_xlsx","Indicators (XLSX)"),
-                hr(),
-                p("Generate a full report for the current inputs. The report opens in a new tab; you can print or save as PDF from your browser."),
-                actionButton("generate_report", "Generate HTML Report", icon = icon("file-invoice"))
+      nav_panel(
+        title = tab_title(
+          "Downloads & Report", "download",
+          "Export the data or render a printable report."
+        ),
+        br(), p("Generate a full report for the current inputs. The report opens in a new tab; you can print or save as PDF from your browser."),
+        actionButton("generate_report", "Generate Report", icon = icon("file-invoice")),
+        hr(),
+        p("Download the raw summary data for the current scenario."),
+        downloadButton("dl_xlsx","Summary (XLSX)"),
+        downloadButton("dl_direct_xlsx","Indicators (XLSX)")
       )
     )
   )
@@ -736,7 +772,7 @@ server <- function(input, output, session){
   observeEvent(input$generate_report, {
     req(results())
     narrative_str <- scalar_chr(isolate(narrative_html()))
-    withProgress(message = "Rendering HTML report…", value = 0, {
+    withProgress(message = "Rendering report…", value = 0, {
       incProgress(0.2, detail = "Preparing data")
       prefix <- paste0("reports_", session$token)
       reports_dir <- file.path(tempdir(), prefix)
