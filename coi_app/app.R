@@ -296,7 +296,13 @@ ui <- page_fluid(
     class = "disclaimer disclaimer--xs", 
     tags$p(
       tags$strong("Disclaimer: "),
-      "This tool was developed by movimentar GmbH under a study commissioned by UNICEF’s Latin America and Caribbean Regional Office (LACRO). It has not been formally reviewed or endorsed by UNICEF.
+      "This tool was developed by ",
+      tags$a(
+        href = "https://movimentar.eu",
+        target = "_blank",
+        "movimentar GmbH"
+      ),
+      " under a study commissioned by UNICEF’s Latin America and Caribbean Regional Office (LACRO). It has not been formally reviewed or endorsed by UNICEF.
 
 The analyses, views, findings and conclusions are those of movimentar GmbH and do not necessarily reflect the policies or positions of UNICEF, its Executive Board, Member States, or any United Nations entity. Responsibility for any errors or omissions rests solely with the authors.
 
