@@ -1,5 +1,5 @@
 # app.R
-# Cost of Inaction (CoI) Explorer — UNICEF COs
+# NutriValue: A Cost of Inaction (CoI) Explorer
 # movimentar GmbH
 
 suppressPackageStartupMessages({
@@ -270,7 +270,7 @@ ui <- page_fluid(
   ),
   div(class = "logo-container",
       tags$img(src = "unicef_logo.png"),
-      tags$div(class="title", "Cost of Inaction Explorer - Nutrition in Emergencies")
+      tags$div(class="title", "NutriValue - A cost of inaction explorer for nutrition in emergencies")
   ),
   layout_sidebar(
     sidebar = sidebar(
@@ -369,7 +369,7 @@ ui <- page_fluid(
               showcase = icon("arrow-trend-up"),
               color = "primary"     # stronger cyan
             ),
-            "Monetised long-term economic benefits (undiscounted or PV at the chosen rate) attributable to the interventions."
+            "Monetised economic benefits from the interventions. These include near-term savings (avoided formula costs during the child's first two years) and long-term gains from increased lifetime earnings, which are projected for the period 2038–2080."
           )
         ),
         layout_columns(
