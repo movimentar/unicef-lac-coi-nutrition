@@ -1,10 +1,17 @@
 # The cost of inaction  (CoI) on nutrition in emergencies in Latin America and the Caribbean
 
-This repository supports the study *“The Cost of Inaction on Nutrition in Emergencies in Latin America and the Caribbean (LAC)”*, implemented by **movimentar GmbH** in collaboration with **UNICEF**.
+This repository supports the study *“The Cost of Inaction on Nutrition in Emergencies in Latin America and the Caribbean (LAC)”*, implemented by **movimentar GmbH** in collaboration with **UNICEF** Latin America and Caribbean Regional Office (LACRO).
 
 The LAC region faces a high risk of natural disasters, structural poverty, inequality, and widespread violence. These factors place vulnerable populations—particularly children under five and pregnant and lactating women (PLW)—at heightened risk of malnutrition, infectious disease, and long-term developmental challenges.
 
 Migration flows, particularly from Venezuela and Central America, have added complexity to humanitarian needs. Despite the urgency, nutrition-specific interventions often receive limited funding in emergencies. This study quantifies the human and economic consequences of failing to adequately fund nutrition responses during selected emergencies in the region.
+
+---
+## Disclaimer
+
+This repository has not been officially endorsed by UNICEF. The views, opinions, findings, and conclusions expressed in this repository and its files are those of movimentar GmbH and do not necessarily reflect the official policies or positions of UNICEF, its member states, or other affiliated United Nations agencies. The responsibility for the views and interpretations presented rests solely with movimentar GmbH.
+
+Any publication or dissemination on UNICEF's official platforms is managed directly by UNICEF, in accordance with its institutional procedures.
 
 ---
 
