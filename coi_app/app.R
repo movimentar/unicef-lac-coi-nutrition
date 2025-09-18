@@ -289,7 +289,25 @@ ui <- page_fluid(
       tags$div(class="title", "NutriValue - A cost of inaction explorer for nutrition in emergencies")
   ),
   
-  # --- Global disclaimer (place this directly after the logo header) ---
+  # --- About the tool ---
+  bslib::card(
+    class = "about-card",
+    bslib::card_header(div(icon("circle-info"), "About this tool")),
+    p(strong("NutriValue — Cost of Inaction Explorer for Nutrition in Emergencies.")),
+    p("This app helps country offices and partners quickly estimate:"),
+    tags$ul(
+      tags$li("Programme costs based on your selected coverage, years, and People in Need (children 0–59 months, PLW)."),
+      tags$li("Indirect economic benefits (undiscounted or present value) from improved nutrition outcomes."),
+      tags$li("Direct outcomes by indicator (e.g., cases averted or improved)."),
+      tags$li("Customised packages: select interventions and optionally override unit costs per intervention."),
+      tags$li("Downloads: export tables or generate a printable HTML report."),
+      tags$li("Optional AI summary to convert results into a short narrative.")
+    ),
+    p(class = "text-muted small",
+      "Figures are model-based and depend on your inputs; they may differ from published report totals when the package or unit costs are customised.")
+  ),
+  
+  # --- Global disclaimer ---
   div(
     id   = "disclaimer",
     class = "disclaimer disclaimer--xs", 
