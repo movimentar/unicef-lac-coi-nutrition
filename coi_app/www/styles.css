@@ -326,4 +326,8 @@ small, .text-muted{ color: var(--slate-500) !important; }
   }
 }
 
+.about-card .card-header {
+  border-left: 4px solid var(--unicef-cyan);
+  padding-left: 10px;
+}
 
